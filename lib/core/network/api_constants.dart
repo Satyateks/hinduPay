@@ -32,7 +32,7 @@ class ApiConstants {
 
   static const String logoutUrl = '/auth/logout';
 
-  static const String profileUrlUrl = '/auth/profile';
+  static const String profileUrlUrl = 'https://dummyjson.com/users/1';
 
   // ----------------------------------------------------------
   // Pooja

@@ -4,10 +4,8 @@ import '../../../../core/errors/failures.dart';
 import '../entities/home_data.dart';
 import '../repositories/home_repository.dart';
 
-class GetHomeData {
+class GetHome {
   final HomeRepository repository;
-  GetHomeData({required this.repository});
-  Future<Either<Failure, HomeData>> call() {
-    return repository.getHomeData();
-  }
+  GetHome(this.repository);
+  Future<Either<Failure, Home>> call() {return repository.getHome();}
 }

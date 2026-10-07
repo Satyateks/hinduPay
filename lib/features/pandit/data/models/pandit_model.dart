@@ -7,6 +7,7 @@ class PanditModel extends Pandit {
     required super.specialization,
     required super.imageUrl,
     required super.rating,
+    required super.supportedPoojas,
   });
 
   factory PanditModel.fromJson(Map<String, dynamic> json) {
@@ -16,6 +17,7 @@ class PanditModel extends Pandit {
       specialization: json['specialization'] ?? '',
       imageUrl: json['image_url'] ?? '',
       rating: (json['rating'] ?? 0.0).toDouble(),
+      supportedPoojas: List<String>.from(json['supported_poojas'] ?? []),
     );
   }
 
@@ -26,6 +28,7 @@ class PanditModel extends Pandit {
       'specialization': specialization,
       'image_url': imageUrl,
       'rating': rating,
+      'supported_poojas': supportedPoojas,
     };
   }
 }

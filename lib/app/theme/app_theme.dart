@@ -129,6 +129,43 @@ class AppTheme {
       backgroundColor: AppColors.primaryOrangeDark,
     ),
   );
+  static ThemeData redTheme = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: AppColors.primaryOrange,
+      brightness: Brightness.light,
+    ),
+
+    scaffoldBackgroundColor: const Color(0xFFFFF7ED),
+
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.primaryOrange,
+      foregroundColor: Colors.white,
+      elevation: 0,
+      centerTitle: false,
+    ),
+
+    cardTheme: CardThemeData(
+      color: Colors.white,
+      elevation: 2,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+    ),
+
+    inputDecorationTheme: _inputDecoration(
+      fillColor: Colors.white,
+      borderColor: const Color(0xFFFFCC80),
+      focusedColor: AppColors.primaryOrange,
+    ),
+
+    elevatedButtonTheme: _buttonTheme(
+      backgroundColor: AppColors.primaryOrangeDark,
+    ),
+  );
 
   // ------------------------------------------------------------
   // COMMON INPUT DECORATION

@@ -1,7 +1,28 @@
 import 'package:get_it/get_it.dart';
 
+import '../../app/theme/theme_controller.dart';
 import '../../features/auth/domain/usecases/check_auth_status.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/home/data/datasources/home_remote_datasource.dart';
+import '../../features/home/data/repositories/home_repository_impl.dart';
+import '../../features/home/domain/repositories/home_repository.dart';
+import '../../features/home/domain/usecases/get_home_data.dart';
+import '../../features/home/presentation/bloc/home_bloc.dart';
+import '../../features/pandit/data/datasources/pandit_remote_datasource.dart';
+import '../../features/pandit/data/repositories/pandit_repository_impl.dart';
+import '../../features/pandit/domain/repositories/pandit_repository.dart';
+import '../../features/pandit/domain/usecases/get_pandits.dart';
+import '../../features/pandit/presentation/bloc/pandit_bloc.dart';
+import '../../features/pooja/data/datasources/pooja_remote_datasource.dart';
+import '../../features/pooja/data/repositories/pooja_repository_impl.dart';
+import '../../features/pooja/domain/usecases/get_pooja_categories.dart';
+import '../../features/pooja/domain/usecases/get_pooja_details.dart';
+import '../../features/pooja/domain/usecases/get_poojas.dart';
+import '../../features/profile/data/datasources/profile_remote_datasource.dart';
+import '../../features/profile/data/repositories/profile_repository_impl.dart';
+import '../../features/profile/domain/repositories/profile_repository.dart';
+import '../../features/profile/domain/usecases/get_user_profile.dart';
+import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../network/api_client.dart';
 import '../network/network_info.dart';
 
@@ -21,20 +42,16 @@ Future<void> setupDependencies() async {
 
   getIt.registerLazySingleton<ApiClient>(() => ApiClient());
   getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfo());
+  getIt.registerLazySingleton<ThemeController>(() => ThemeController());
 
   // ----------------------------------------------------------
   // Auth - Data
   // ----------------------------------------------------------
 
-  getIt.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSource(apiClient: getIt<ApiClient>()),
-  );
+  getIt.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSource(apiClient: getIt<ApiClient>()));
 
   getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
-      remoteDataSource: getIt<AuthRemoteDataSource>(),
-      networkInfo: getIt<NetworkInfo>(),
-    ),
+    () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>(), networkInfo: getIt<NetworkInfo>()),
   );
 
   // ----------------------------------------------------------
@@ -59,6 +76,86 @@ Future<void> setupDependencies() async {
     ),
   );
 
+
+
+
+
+
+  // ----------------------------------------------------------
+  // Profile - Data
+  // ----------------------------------------------------------
+
+  getIt.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(apiClient: getIt<ApiClient>()));
+
+  // ----------------------------------------------------------
+  // Profile - Repository
+  // ----------------------------------------------------------
+
+  getIt.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(remoteDataSource: getIt<ProfileRemoteDataSource>()));
+
+  // ----------------------------------------------------------
+  // Profile - UseCase
+  // ----------------------------------------------------------
+
+  getIt.registerLazySingleton<GetProfileDetails>(() => GetProfileDetails(repository: getIt<ProfileRepository>()));
+
+  // ----------------------------------------------------------
+  // Profile - Bloc
+  // ----------------------------------------------------------
+
+  getIt.registerFactory<ProfileBloc>(() => ProfileBloc(getProfileDetails: getIt<GetProfileDetails>()));
+
+
+
+ // ----------------------------------------------------------
+  // Pooja - Data Source
+  // ----------------------------------------------------------
+
+  getIt.registerLazySingleton<PoojaRemoteDataSource>(() => PoojaRemoteDataSourceImpl(apiClient: getIt<ApiClient>()));
+
+  // ----------------------------------------------------------
+  // Pooja - Repository
+  // ----------------------------------------------------------
+
+  getIt.registerLazySingleton<PoojaRepository>(() => PoojaRepositoryImpl(remoteDataSource: getIt<PoojaRemoteDataSource>()));
+
+  // ----------------------------------------------------------
+  // Pooja - Use Cases
+  // ----------------------------------------------------------
+
+  getIt.registerLazySingleton<GetPoojas>(() => GetPoojas(getIt<PoojaRepository>()));
+  getIt.registerLazySingleton<GetPoojaDetail>(() => GetPoojaDetail(getIt<PoojaRepository>()));
+  getIt.registerLazySingleton<GetPoojaCategories>(() => GetPoojaCategories(getIt<PoojaRepository>()));
+
+
+  // Data Source & Repository
+  getIt.registerLazySingleton<PanditRemoteDataSource>(() => PanditRemoteDataSourceImpl());
+  getIt.registerLazySingleton<PanditRepository>(() => PanditRepositoryImpl(remoteDataSource: getIt<PanditRemoteDataSource>()));
+  // UseCase
+  getIt.registerLazySingleton(() => GetPandits(repository: getIt<PanditRepository>()));
+  // Bloc
+  getIt.registerFactory(() => PanditBloc(getPandits: getIt<GetPandits>()));
+
+
+
+
+
+
+// ----------------------------------------------------------
+// Home - Data Source
+// ----------------------------------------------------------
+
+getIt.registerLazySingleton<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(apiClient: getIt<ApiClient>()));
+
+// Home - Repository
+getIt.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(remoteDataSource: getIt<HomeRemoteDataSource>()));
+
+// Home - Use Case
+getIt.registerLazySingleton<GetHome>(() => GetHome(getIt<HomeRepository>()));
+
+// Home - BLoC
+getIt.registerFactory<HomeBloc>(() => HomeBloc(getHome: getIt<GetHome>()));
+    
 }
 
 

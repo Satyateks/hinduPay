@@ -27,8 +27,8 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.status == AuthStatus.authenticated) context.go('/home');
-        else if (state.status == AuthStatus.unauthenticated) context.go('/login');
+        if (state.status == AuthStatus.authenticated) context.go('/main/home');
+        else if (state.status == AuthStatus.unauthenticated) context.go('/auth/login');
       },
       child: Scaffold(
         body: Center(

@@ -1,23 +1,39 @@
 import 'package:equatable/equatable.dart';
+import '../../domain/entities/home_data.dart';
 
-enum HomeModule { pooja, pandit, darshan, donation, shop }
+enum HomeStatus { initial, loading, success, failure }
 
 class HomeState extends Equatable {
-  final HomeModule selectedModule;
-  final int bottomNavIndex;
+  final HomeStatus status;
+  final Home? home;
+  final String? errorMessage;
 
   const HomeState({
-    this.selectedModule = HomeModule.pooja,
-    this.bottomNavIndex = 0,
+    this.status = HomeStatus.initial,
+    this.home,
+    this.errorMessage,
   });
 
-  HomeState copyWith({HomeModule? selectedModule, int? bottomNavIndex}) {
-    return HomeState(
-      selectedModule: selectedModule ?? this.selectedModule,
-      bottomNavIndex: bottomNavIndex ?? this.bottomNavIndex,
-    );
-  }
+  const HomeState.initial()
+    : status = HomeStatus.initial,
+      home = null,
+      errorMessage = null;
+
+  const HomeState.loading()
+    : status = HomeStatus.loading,
+      home = null,
+      errorMessage = null;
+
+  const HomeState.success(Home data)
+    : status = HomeStatus.success,
+      home = data,
+      errorMessage = null;
+
+  const HomeState.failure(String message)
+    : status = HomeStatus.failure,
+      home = null,
+      errorMessage = message;
 
   @override
-  List<Object?> get props => [selectedModule, bottomNavIndex];
+  List<Object?> get props => [status, home, errorMessage];
 }

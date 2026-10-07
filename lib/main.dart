@@ -50,11 +50,11 @@ ThemeData get currentTheme {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Dharmik App',
+      title: 'Hindu App',
       theme: AppTheme.lightTheme,
       darkTheme: currentTheme,// AppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      routerConfig: AppRouter.router,
+      routerConfig: appRouter,
     );
   }
 }

@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state.status == AuthStatus.otpSent) context.go('/otp', extra: state.mobile);//Navigator.of(context).pushNamed('/otp', arguments: state.mobile);
+            if (state.status == AuthStatus.otpSent) context.push('/auth/otp', extra: state.mobile);//Navigator.of(context).pushNamed('/otp', arguments: state.mobile);
             
             if (state.status == AuthStatus.failure) {
               ScaffoldMessenger.of(context).showSnackBar(

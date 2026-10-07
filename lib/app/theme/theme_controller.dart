@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/storage/local_storage.dart';
 import '../../core/storage/storage_keys.dart';
 
-enum AppThemeMode { light, dark, orange }
+enum AppThemeMode {light, dark, orange}
 
 class ThemeController extends ChangeNotifier {
   AppThemeMode _themeMode = AppThemeMode.light;
@@ -33,17 +33,21 @@ class ThemeController extends ChangeNotifier {
     await LocalStorage.write(StorageKeys.theme, mode.name);
   }
 
-  Future<void> toggleTheme() async {
+  /*Future<void> toggleTheme() async {
     switch (_themeMode) {
-      case AppThemeMode.light:
-        await setTheme(AppThemeMode.dark);
-        break;
-      case AppThemeMode.dark:
-        await setTheme(AppThemeMode.orange);
-        break;
-      case AppThemeMode.orange:
-        await setTheme(AppThemeMode.light);
-        break;
+      case AppThemeMode.light: await setTheme(AppThemeMode.dark);break;
+      case AppThemeMode.dark:await setTheme(AppThemeMode.orange);break;
+      case AppThemeMode.orange:await setTheme(AppThemeMode.light);break;
     }
+  }*/
+
+    Future<void> toggleTheme() async {
+    final themes = AppThemeMode.values;
+    final currentIndex = themes.indexOf(_themeMode);
+    final nextIndex = (currentIndex + 1) % themes.length;
+    await setTheme(themes[nextIndex]);
   }
 }
+
+
+

@@ -41,7 +41,7 @@ class _OtpPageState extends State<OtpPage> {
       body: SafeArea(
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
-            if (state.status == AuthStatus.authenticated) context.go('/home');            
+            if (state.status == AuthStatus.authenticated) context.go('/main/home');            
             if (state.status == AuthStatus.failure) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message ?? 'Invalid OTP')));
           },
           builder: (context, state) {

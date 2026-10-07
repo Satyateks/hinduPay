@@ -5,39 +5,46 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 10),
       child: Row(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Namaste 🙏',
-                  style: Theme.of(context).textTheme.titleMedium,
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary,
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: Text(
+                'ॐ',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 23,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  'Welcome to Hindu Pay',
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 10),
+
+          const Expanded(
+            child: Text(
+              'Dharmik Seva',
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
             ),
           ),
 
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.notifications_none),
+            icon: const Icon(Icons.search, size: 23),
           ),
 
-          CircleAvatar(
-            radius: 20,
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.person_outline),
-            ),
-          ),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.menu, size: 23)),
         ],
       ),
     );

@@ -7,6 +7,7 @@ import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/otp_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
+import '../../features/donation/presentation/pages/donation_list_page.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/pandit/presentation/bloc/pandit_bloc.dart';
@@ -17,264 +18,328 @@ import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/profile/presentation/bloc/profile_event.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 
-class AppRouter {
-  AppRouter._();
+import '../../main_shall.dart';
 
-  static final GoRouter router = GoRouter(
-    initialLocation: '/splash',
+final GoRouter appRouter = GoRouter(
+  initialLocation: '/splash',
 
-    routes: [
-      // Splash
-      GoRoute(
-        path: '/splash',
-        name: 'splash',
-        builder: (context, state) {
-          return BlocProvider<AuthBloc>(
-            // GetIt se bloc create karke dein
-            create: (context) => getIt<AuthBloc>(),
-            child: const SplashPage(),
-          );
-        },
-      ),
+  routes: [
+    // ----------------------------------------------------------
+    // SPLASH
+    // ----------------------------------------------------------
+    GoRoute(
+      path: '/splash',
+      name: 'splash',
+      builder: (context, state) {
+        return BlocProvider<AuthBloc>(
+          create: (_) => getIt<AuthBloc>(),
+          child: const SplashPage(),
+        );
+      },
+    ),
 
-      // Authentication
-      GoRoute(
-        path: '/login',
-        name: 'login',
-        builder: (context, state) {
-          return BlocProvider(
-            create: (_) => getIt<AuthBloc>(),
-            child: const LoginPage(),
-          );
-        },
-      ),
+    // ----------------------------------------------------------
+    // AUTH
+    // ----------------------------------------------------------
+    GoRoute(
+      path: '/auth/login',
+      name: 'login',
+      builder: (context, state) {
+        return BlocProvider<AuthBloc>(
+          create: (_) => getIt<AuthBloc>(),
+          child: const LoginPage(),
+        );
+      },
+    ),
 
-      GoRoute(
-        path: '/otp',
-        name: 'otp',
-        builder: (context, state) {
-          // final mobile = state.uri.queryParameters['mobile'] ?? '';
-          final mobile = state.extra as String? ?? '';
-          return BlocProvider(
-            create: (_) => getIt<AuthBloc>(),
-            child: OtpPage(mobile: mobile),
-          );
-        },
-      ),
+    GoRoute(
+      path: '/auth/otp',
+      name: 'otp',
+      builder: (context, state) {
+        final mobile = state.extra as String? ?? '';
+        return BlocProvider<AuthBloc>(
+          create: (_) => getIt<AuthBloc>(),
+          child: OtpPage(mobile: mobile),
+        );
+      },
+    ),
 
-      // Home
-      GoRoute(
-        path: '/home',
-        name: 'home',
-        builder: (context, state) {
-          return BlocProvider(
-            create: (_) => getIt<HomeBloc>(),
-            child: const HomePage(),
-          );
-        },
-      ),
+    // ----------------------------------------------------------
+    // MAIN APPLICATION
+    // ----------------------------------------------------------
+    StatefulShellRoute.indexedStack(
+      builder:
+          (
+            BuildContext context,
+            GoRouterState state,
+            StatefulNavigationShell navigationShell,
+          ) {
+            return MainShell(navigationShell: navigationShell);
+          },
 
-      // Pooja
-      GoRoute(
-        path: '/pooja',
-        name: 'pooja',
-        builder: (context, state) {
-         return BlocProvider(
-            create: (_) => getIt<PoojaBloc>(),
-            child: const PoojaListPage(),
-          );
-        },
-      ),
+      branches: [
+        // ------------------------------------------------------
+        // HOME
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/home',
+              name: 'home',
+              builder: (context, state) {
+                return BlocProvider<HomeBloc>(
+                  create: (_) => getIt<HomeBloc>(),
+                  child: const HomePage(),
+                );
+              },
 
-      GoRoute(
-        path: '/pooja/:id',
-        name: 'pooja-detail',
-        builder: (context, state) {
-          final poojaId = state.pathParameters['id'];
+              routes: [
+                // Optional child routes for Home
+                GoRoute(
+                  path: 'orders',
+                  name: 'home-orders',
+                  builder: (context, state) {
+                    return const _PlaceholderPage(title: 'Orders');
+                  },
+                ),
 
-          return _PlaceholderPage(title: 'Pooja Detail: $poojaId');
-        },
-      ),
+                GoRoute(
+                  path: 'order/:id',
+                  name: 'order-detail',
+                  builder: (context, state) {
+                    final orderId = state.pathParameters['id'];
 
-      GoRoute(
-        path: '/pooja/:id/booking',
-        name: 'pooja-booking',
-        builder: (context, state) {
-          final poojaId = state.pathParameters['id'];
+                    return _PlaceholderPage(title: 'Order: $orderId');
+                  },
+                ),
 
-          return _PlaceholderPage(title: 'Pooja Booking: $poojaId');
-        },
-      ),
+                GoRoute(
+                  path: 'temples',
+                  name: 'temples',
+                  builder: (context, state) {
+                    return const _PlaceholderPage(title: 'Temples');
+                  },
+                ),
 
-      // Shop
-      GoRoute(
-        path: '/shop',
-        name: 'shop',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Shop');
-        },
-      ),
+                GoRoute(
+                  path: 'temple/:id',
+                  name: 'temple-detail',
+                  builder: (context, state) {
+                    final templeId = state.pathParameters['id'];
 
-      GoRoute(
-        path: '/product/:id',
-        name: 'product-detail',
-        builder: (context, state) {
-          final productId = state.pathParameters['id'];
+                    return _PlaceholderPage(title: 'Temple: $templeId');
+                  },
+                ),
 
-          return _PlaceholderPage(title: 'Product: $productId');
-        },
-      ),
+                GoRoute(
+                  path: 'darshan',
+                  name: 'darshan',
+                  builder: (context, state) {
+                    return const _PlaceholderPage(title: 'Darshan');
+                  },
+                ),
 
-      // Cart
-      GoRoute(
-        path: '/cart',
-        name: 'cart',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Cart');
-        },
-      ),
+                GoRoute(
+                  path: 'darshan/booking',
+                  name: 'darshan-booking',
+                  builder: (context, state) {
+                    return const _PlaceholderPage(title: 'Darshan Booking');
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
 
-      // Checkout
-      GoRoute(
-        path: '/checkout',
-        name: 'checkout',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Checkout');
-        },
-      ),
+        // ------------------------------------------------------
+        // DONATION
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/donation',
+              name: 'donation',
+              builder: (context, state) {
+                return BlocProvider<PanditBloc>(
+                  create: (_) => getIt<PanditBloc>(),
+                  child: const DonateHomeScreen(),
+                );
+              },
+            ),
+          ],
+        ),
 
-      // Payment
-      GoRoute(
-        path: '/payment',
-        name: 'payment',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Payment');
-        },
-      ),
+        // ------------------------------------------------------
+        // PANDITS / ASTROLOGY
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/pandits',
+              name: 'pandits',
+              builder: (context, state) {
+                return BlocProvider<PanditBloc>(
+                  create: (_) => getIt<PanditBloc>(),
+                  child: const PanditsPage(),
+                );
+              },
 
-      GoRoute(
-        path: '/payment/success',
-        name: 'payment-success',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Payment Successful');
-        },
-      ),
+              routes: [
+                GoRoute(
+                  path: 'pandit/:id',
+                  name: 'pandit-detail',
+                  builder: (context, state) {
+                    final panditId = state.pathParameters['id'];
 
-      GoRoute(
-        path: '/payment/failed',
-        name: 'payment-failed',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Payment Failed');
-        },
-      ),
+                    return _PlaceholderPage(title: 'Pandit: $panditId');
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
 
-      // Orders
-      GoRoute(
-        path: '/orders',
-        name: 'orders',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Orders');
-        },
-      ),
+        // ------------------------------------------------------
+        // POOJA
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/pooja',
+              name: 'pooja',
+              builder: (context, state) {
+                return BlocProvider<PoojaBloc>(
+                  create: (_) => getIt<PoojaBloc>(),
+                  child: const PoojaListPage(),
+                );
+              },
 
-      GoRoute(
-        path: '/order/:id',
-        name: 'order-detail',
-        builder: (context, state) {
-          final orderId = state.pathParameters['id'];
+              routes: [
+                GoRoute(
+                  path: 'detail/:id',
+                  name: 'pooja-detail',
+                  builder: (context, state) {
+                    final poojaId = state.pathParameters['id'];
 
-          return _PlaceholderPage(title: 'Order: $orderId');
-        },
-      ),
+                    return _PlaceholderPage(title: 'Pooja Detail: $poojaId');
+                  },
+                ),
 
-      // Temple
-      GoRoute(
-        path: '/temples',
-        name: 'temples',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Temples');
-        },
-      ),
+                GoRoute(
+                  path: 'detail/:id/booking',
+                  name: 'pooja-booking',
+                  builder: (context, state) {
+                    final poojaId = state.pathParameters['id'];
 
-      GoRoute(
-        path: '/temple/:id',
-        name: 'temple-detail',
-        builder: (context, state) {
-          final templeId = state.pathParameters['id'];
+                    return _PlaceholderPage(title: 'Pooja Booking: $poojaId');
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
 
-          return _PlaceholderPage(title: 'Temple: $templeId');
-        },
-      ),
+        // ------------------------------------------------------
+        // STORE / SHOP
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/store',
+              name: 'store',
+              builder: (context, state) {
+                return const _PlaceholderPage(title: 'Store');
+              },
 
-      // Darshan
-      GoRoute(
-        path: '/darshan',
-        name: 'darshan',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Darshan');
-        },
-      ),
+              routes: [
+                GoRoute(
+                  path: 'product/:id',
+                  name: 'product-detail',
+                  builder: (context, state) {
+                    final productId = state.pathParameters['id'];
 
-      GoRoute(
-        path: '/darshan/booking',
-        name: 'darshan-booking',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Darshan Booking');
-        },
-      ),
+                    return _PlaceholderPage(title: 'Product: $productId');
+                  },
+                ),
 
-      // Pandit
-      GoRoute(
-        path: '/pandits',
-        name: 'pandits',
-        builder: (context, state) {
-        return BlocProvider(create: (_) => getIt<PanditBloc>(), child: const PanditsPage());
-        },
-      ),
+                GoRoute(
+                  path: 'cart',
+                  name: 'cart',
+                  builder: (context, state) {
+                    return const _PlaceholderPage(title: 'Cart');
+                  },
+                ),
 
-      GoRoute(
-        path: '/pandit/:id',
-        name: 'pandit-detail',
-        builder: (context, state) {
-          final panditId = state.pathParameters['id'];
+                GoRoute(
+                  path: 'checkout',
+                  name: 'checkout',
+                  builder: (context, state) {
+                    return const _PlaceholderPage(title: 'Checkout');
+                  },
+                ),
 
-          return _PlaceholderPage(title: 'Pandit: $panditId');
-        },
-      ),
+                GoRoute(
+                  path: 'payment',
+                  name: 'payment',
+                  builder: (context, state) {
+                    return const _PlaceholderPage(title: 'Payment');
+                  },
 
-      // Donation
-      GoRoute(
-        path: '/donation',
-        name: 'donation',
-        builder: (context, state) {
-          return const _PlaceholderPage(title: 'Donation');
-        },
-      ),
+                  routes: [
+                    GoRoute(
+                      path: 'success',
+                      name: 'payment-success',
+                      builder: (context, state) {
+                        return const _PlaceholderPage(
+                          title: 'Payment Successful',
+                        );
+                      },
+                    ),
 
-      // Profile
-      GoRoute(
-        path: '/profile',
-        name: 'profile',
-        builder: (context, state) {
-          return BlocProvider(
-            create: (_) => getIt<ProfileBloc>()..add(GetProfileDetailsEvent()),
-            child: const ProfilePage(),
-          );
-        },
-      ),
+                    GoRoute(
+                      path: 'failed',
+                      name: 'payment-failed',
+                      builder: (context, state) {
+                        return const _PlaceholderPage(title: 'Payment Failed');
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
 
-    ],
+        // ------------------------------------------------------
+        // PROFILE
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/profile',
+              name: 'profile',
+              builder: (context, state) {
+                return BlocProvider<ProfileBloc>(
+                  create: (_) =>
+                      getIt<ProfileBloc>()..add(GetProfileDetailsEvent()),
+                  child: const ProfilePage(),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    ),
+  ],
 
-    // 404
-    errorBuilder: (context, state) {
-      return const _PlaceholderPage(title: 'Page Not Found');
-    },
-  );
-}
+  // ------------------------------------------------------------
+  // 404 PAGE
+  // ------------------------------------------------------------
+  errorBuilder: (context, state) {
+    return const _PlaceholderPage(title: 'Page Not Found');
+  },
+);
 
-/// Temporary page.
-///
-/// Isko baad me actual screens se replace kar denge.
 class _PlaceholderPage extends StatelessWidget {
   final String title;
 
@@ -293,87 +358,3 @@ class _PlaceholderPage extends StatelessWidget {
     );
   }
 }
-
-
-
-/*Updated code 
-
-class AppRouter {
-  AppRouter._();
-
-  static final GoRouter router = GoRouter(
-    initialLocation: '/splash',
-
-    routes: [
-      GoRoute(
-        path: '/splash',
-        name: 'splash',
-        builder: (context, state) {
-          return BlocProvider(
-            create: (_) => getIt<AuthBloc>(),
-            child: const SplashPage(),
-          );
-        },
-      ),
-
-      GoRoute(
-        path: '/login',
-        name: 'login',
-        builder: (context, state) {
-          return BlocProvider(
-            create: (_) => getIt<AuthBloc>(),
-            child: const LoginPage(),
-          );
-        },
-      ),
-
-      GoRoute(
-        path: '/otp',
-        name: 'otp',
-        builder: (context, state) {
-          final mobile =
-              state.uri.queryParameters['mobile'] ?? '';
-
-          return BlocProvider(
-            create: (_) => getIt<AuthBloc>(),
-            child: OtpPage(
-              mobile: mobile,
-            ),
-          );
-        },
-      ),
-
-      GoRoute(
-        path: '/home',
-        name: 'home',
-        builder: (context, state) {
-          return const Scaffold(
-            body: Center(
-              child: Text('Home'),
-            ),
-          );
-        },
-      ),
-    ],
-
-    errorBuilder: (
-      context,
-      state,
-    ) {
-      return const Scaffold(
-        body: Center(
-          child: Text(
-            'Page Not Found',
-          ),
-        ),
-      );
-    },
-  );
-}
-*/
-
-
-
-
-
-
