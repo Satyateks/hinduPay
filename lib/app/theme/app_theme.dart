@@ -17,17 +17,17 @@ class AppTheme {
       brightness: Brightness.light,
     ),
 
-    scaffoldBackgroundColor: const Color(0xFFF8F8F8),
+    scaffoldBackgroundColor: AppColors.background,
 
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       foregroundColor: Color(0xFF212121),
       elevation: 0,
       centerTitle: false,
     ),
 
     cardTheme: CardThemeData(
-      color: Colors.white,
+      color: AppColors.surface,
       elevation: 1,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -36,7 +36,7 @@ class AppTheme {
     ),
 
     inputDecorationTheme: _inputDecoration(
-      fillColor: Colors.white,
+      fillColor: AppColors.surface,
       borderColor: Color(0xFFE0E0E0),
       focusedColor: AppColors.primaryOrange,
     ),
@@ -138,7 +138,7 @@ class AppTheme {
       brightness: Brightness.light,
     ),
 
-    scaffoldBackgroundColor: const Color(0xFFFFF7ED),
+    scaffoldBackgroundColor: AppColors.background,
 
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.primaryOrange,

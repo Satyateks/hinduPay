@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hindu_pay/app/theme/app_colors.dart';
 
 class PanditSection extends StatelessWidget {
   const PanditSection({super.key});
@@ -18,6 +19,28 @@ class PanditSection extends StatelessWidget {
           ),
         ),
 
+        _PanditCard(
+          name: 'Pandit Raj Sharma',
+          image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+          rating: '4.9',
+          reviews: '320',
+          location: 'Delhi NCR',
+          services: 'Puja • Havan • Vivah • Muhurat',
+          primary: primary,
+        ),
+
+        const SizedBox(height: 10),
+
+        _PanditCard(
+          name: 'Pandit Manoj',
+          image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+          rating: '4.9',
+          reviews: '210',
+          location: 'Delhi NCR',
+          services: 'Puja • Havan • Muhurat',
+          primary: primary,
+        ),
+        const SizedBox(height: 10),
         _PanditCard(
           name: 'Pandit Raj Sharma',
           image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
@@ -172,11 +195,12 @@ class _PanditCard extends StatelessWidget {
           const SizedBox(width: 5),
 
           SizedBox(
+            width: 80,
             height: 31,
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: primary,
+                backgroundColor:AppColors.primary,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 11),

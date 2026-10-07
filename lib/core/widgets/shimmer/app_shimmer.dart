@@ -3,7 +3,6 @@ import 'package:shimmer/shimmer.dart';
 
 class AppShimmer extends StatelessWidget {
   final Widget child;
-
   const AppShimmer({super.key, required this.child});
 
   @override
@@ -12,11 +11,7 @@ class AppShimmer extends StatelessWidget {
 
     return Shimmer.fromColors(
       baseColor: isDark ? const Color(0xFF2A2A2A) : const Color(0xFFE0E0E0),
-
-      highlightColor: isDark
-          ? const Color(0xFF3A3A3A)
-          : const Color(0xFFF5F5F5),
-
+      highlightColor: isDark ? const Color(0xFF3A3A3A): const Color(0xFFF5F5F5),
       child: child,
     );
   }

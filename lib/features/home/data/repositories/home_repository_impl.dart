@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:dartz/dartz.dart';
 
@@ -10,16 +9,14 @@ import '../datasources/home_remote_datasource.dart';
 class HomeRepositoryImpl implements HomeRepository {
   final HomeRemoteDataSource remoteDataSource;
 
-  HomeRepositoryImpl({
-    required this.remoteDataSource,
-  });
+  HomeRepositoryImpl({required this.remoteDataSource});
 
   @override
   Future<Either<Failure, Home>> getHome() async {
     try {
       final result = await remoteDataSource.getHome();
       return Right(result);
-    } on Exception {
+    } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

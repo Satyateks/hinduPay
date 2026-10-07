@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../domain/entities/home_data.dart';
 
 class TempleSection extends StatelessWidget {
@@ -9,9 +10,7 @@ class TempleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (temples.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    if (temples.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,7 +18,7 @@ class TempleSection extends StatelessWidget {
         _SectionHeader(title: 'Popular Temples', onTap: () {}),
 
         SizedBox(
-          height: 218,
+          height: 210,
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             scrollDirection: Axis.horizontal,
@@ -44,7 +43,7 @@ class _TempleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    final colors = Theme.of(context).colorScheme;
 
     return Container(
       width: 145,
@@ -64,7 +63,7 @@ class _TempleCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 100,
+            height: 110,
             width: double.infinity,
             child: Image.network(
               temple.image,
@@ -94,7 +93,7 @@ class _TempleCard extends StatelessWidget {
 
                 Row(
                   children: [
-                    Icon(Icons.location_on, size: 11, color: primary),
+                    Icon(Icons.location_on, size: 12, color:AppColors.primary),
                     const SizedBox(width: 2),
                     Expanded(
                       child: Text(
@@ -115,8 +114,8 @@ class _TempleCard extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primary,
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: colors.onSecondary,
                       elevation: 0,
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
@@ -149,7 +148,7 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
+    // final colors = Theme.of(context).colorScheme;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(10, 2, 10, 8),
@@ -159,20 +158,14 @@ class _SectionHeader extends StatelessWidget {
             title,
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
           ),
-          const Spacer(),
+          // const Spacer(),
           InkWell(
             onTap: onTap,
             child: Row(
               children: [
-                Text(
-                  'View All',
-                  style: TextStyle(
-                    color: primary,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                  ),
+                // Text('View All', style: TextStyle(color:  colors.surface,fontSize: 10,fontWeight: FontWeight.w600)),
+                Icon(Icons.chevron_right, size: 24,color:  AppColors.error,// color: colors.onSurface
                 ),
-                Icon(Icons.chevron_right, size: 17, color: primary),
               ],
             ),
           ),

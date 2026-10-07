@@ -22,25 +22,20 @@ class PoojaRemoteDataSourceImpl implements PoojaRemoteDataSource {
   @override
   Future<List<PoojaModel>> getPoojas() async {
     final response = await apiClient.get('/poojas');
-
     final List data = response.data['data'] ?? [];
-
     return data.map((json) => PoojaModel.fromJson(json)).toList();
   }
 
   @override
   Future<PoojaModel> getPoojaDetail(String id) async {
     final response = await apiClient.get('/poojas/$id');
-
     return PoojaModel.fromJson(response.data['data']);
   }
 
   @override
   Future<List<String>> getCategories() async {
     final response = await apiClient.get('/pooja/categories');
-
     final List data = response.data['data'] ?? [];
-
     return data.map((item) => item.toString()).toList();
   }
 }

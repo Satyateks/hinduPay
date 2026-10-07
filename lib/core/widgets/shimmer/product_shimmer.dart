@@ -11,13 +11,9 @@ class ProductShimmer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const ShimmerBox(width: double.infinity, height: 180, radius: 12),
-
         const SizedBox(height: 12),
-
         const ShimmerBox(width: 150, height: 16),
-
         const SizedBox(height: 8),
-
         const ShimmerBox(width: 90, height: 16),
       ],
     );

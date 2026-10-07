@@ -8,8 +8,8 @@ abstract class HomeRemoteDataSource {
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   HomeRemoteDataSourceImpl({ApiClient? apiClient}): _apiClient = apiClient ?? ApiClient();
-
-  final ApiClient _apiClient;
+  
+    final ApiClient _apiClient;
 
   @override
   Future<HomeModel> getHome() async {
@@ -32,7 +32,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         {
           'id': 't1',
           'name': 'Ram Mandir',
-          'image': 'https://example.com/ram-mandir.jpg',
+          'image': 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
           'location': 'Ayodhya, UP',
         },
         {
@@ -110,7 +110,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   Future<Map<String, dynamic>> getHomeData() async {
-   final response = await _apiClient.post(ApiConstants.loginUrl, data: {'username': 'emilys','password': 'emilyspass',});
+    final response = await _apiClient.post(ApiConstants.loginUrl);
     return Map<String, dynamic>.from(response.data['data'] ?? {});
   }
 }

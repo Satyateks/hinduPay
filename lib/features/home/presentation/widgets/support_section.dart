@@ -17,7 +17,7 @@ class SupportSection extends StatelessWidget {
         ),
 
         SizedBox(
-          height: 92,
+          height: 96,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             scrollDirection: Axis.horizontal,

@@ -1,169 +1,357 @@
 import 'package:flutter/material.dart';
-
 import '../../../../app/theme/app_colors.dart';
 import 'donation_details_page.dart';
+import 'donation_temple_list.dart';
 
-class DonateHomeScreen extends StatelessWidget {
+class DonateHomeScreen extends StatefulWidget {
   const DonateHomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<DonateHomeScreen> createState() => _DonateHomeScreenState();
+}
+
+class _DonateHomeScreenState extends State<DonateHomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String selectedTemple = 'Ram Mandir';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _searchTemple() {
+    debugPrint('Search: ${_searchController.text}');
+    // context.push('/donation/templeList');
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const TempleListScreen()),
+    );
+  }
+
+  void _useMyLocation() {
+    debugPrint('Use My Location pressed');
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const DonationDetailScreen()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
+
+      // IMPORTANT:
+      // Gesture/touch handling yahan normal rahega.
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header Stack with Background Image
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  height: 220,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage('https://images.unsplash.com/photo-1535713875002-d1d0cf377fde'), // Replace with your temple banner
-                      fit: BoxFit.cover,
+            // --------------------------------------------------
+            // HEADER + FLOATING CARD
+            // --------------------------------------------------
+            SizedBox(
+              // Stack ko fixed height di gayi hai.
+              // Design same rahega, but hit testing proper hoga.
+              height: 460,
+              width: double.infinity,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // --------------------------------------------------
+                  // HEADER
+                  // --------------------------------------------------
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 260,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Container(
+                        color: Colors.black.withOpacity(0.3),
+                        padding: const EdgeInsets.only(top: 40, left: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.arrow_back_ios,
+                                    fontWeight: FontWeight.w700,
+                                    size: 21,
+                                    color: AppColors.black,
+                                  ),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    'Daan & Seva',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      height: 1.6,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Donate to Temples',
+                              style: TextStyle(
+                                color: AppColors.darkGrey,
+                                fontSize: 24,
+                                height: 2.0,
+                                letterSpacing: 0.2,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              'Support temple maintenance rituals\n'
+                              'and community seva',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  child: Container(
-                    color: Colors.black.withOpacity(0.3),
-                    padding: const EdgeInsets.only(top: 40, left: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.8),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.arrow_back_ios, size: 14),
-                              SizedBox(width: 4),
-                              Text('Daan & Seva', style: TextStyle(fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Donate to Temples',
-                          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
-                        ),
-                        const Text(
-                          'Support temple maintenance rituals\nand community seva',
-                          style: TextStyle(color: Colors.white70, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                
-                // Floating Search Card
-                Positioned(
-                  top: 170,
-                  left: 16,
-                  right: 16,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Dharmik Seva', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        const SizedBox(height: 12),
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Search temple by name, city or deity',
-                            prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                            contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: const BorderSide(color: AppColors.borderGrey),
+
+                  // --------------------------------------------------
+                  // FLOATING SEARCH CARD
+                  // --------------------------------------------------
+                  Positioned(
+                    top: 210,
+                    left: 16,
+                    right: 16,
+
+                    // IMPORTANT:
+                    // Card khud apne complete area ko receive karega.
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(height: 12),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              _buildChip('Ram Mandir', true),
-                              _buildChip('Kashi Vishwanath', false),
-                              _buildChip('Tirupati', false),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryRed,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Dharmik Seva',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
                             ),
-                            onPressed: () {debugPrint("Button Pressed!"); // Console me check karne ke liye
-                              Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const DonationDetailScreen()),
-                              );},
-                            child: const Text('Search', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryRedLight,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.location_on, color: AppColors.primaryRed, size: 18),
-                              const SizedBox(width: 8),
-                              const Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Show temples near me', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                                    Text('Support nearby temples', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                                  ],
+
+                            const SizedBox(height: 12),
+
+                            // --------------------------------------------------
+                            // SEARCH INPUT
+                            // --------------------------------------------------
+                            TextField(
+                              controller: _searchController,
+                              enabled: true,
+                              readOnly: false,
+                              textInputAction: TextInputAction.search,
+                              onChanged: (value) {
+                                debugPrint('Input: $value');
+                              },
+                              onSubmitted: (value) {
+                                _searchTemple();
+                              },
+                              decoration: InputDecoration(
+                                hintText:
+                                    'Search temple by name, city or deity',
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                  color: Colors.grey,
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 0,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  borderSide: const BorderSide(
+                                    color: AppColors.borderGrey,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  borderSide: const BorderSide(
+                                    color: AppColors.borderGrey,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                  borderSide: const BorderSide(
+                                    color: AppColors.primaryRed,
+                                  ),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {debugPrint("Button Pressed!"); // Console me check karne ke liye
-                              Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => const DonationDetailScreen()),
-                              );},
-                                child: const Text('Use My Location', style: TextStyle(color: AppColors.primaryRed, fontSize: 11)),
-                              )
-                            ],
-                          ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // --------------------------------------------------
+                            // CHIPS
+                            // --------------------------------------------------
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  _buildChip('Ram Mandir'),
+                                  _buildChip('Kashi Vishwanath'),
+                                  _buildChip('Tirupati'),
+                                  _buildChip('Kashi Vishwanath'),
+                                  _buildChip('Tirupati'),
+                                  _buildChip('Ram Mandir'),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            // --------------------------------------------------
+                            // SEARCH BUTTON
+                            // --------------------------------------------------
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primaryRed,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  debugPrint('SEARCH BUTTON PRESSED');
+                                  _searchTemple();
+                                },
+                                child: const Text(
+                                  'Search',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // --------------------------------------------------
+                            // LOCATION
+                            // --------------------------------------------------
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryRedLight,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on,
+                                    color: AppColors.primaryRed,
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Show temples near me',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Support nearby temples',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: _useMyLocation,
+                                    child: const Text(
+                                      'Use My Location',
+                                      style: TextStyle(
+                                        color: AppColors.primaryRed,
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
 
-            const SizedBox(height: 290), // Spacing for floating card
+            // --------------------------------------------------
+            // TRUST BADGES
+            // --------------------------------------------------
+            const SizedBox(height: 100),
 
-            // Trust Badges
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0xFFFDEFF2), Color(0xFFFFFFFF)],
+                  stops: [0.422, 1.0],
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -176,18 +364,28 @@ class DonateHomeScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // Explore by category
+            // --------------------------------------------------
+            // EXPLORE CATEGORY
+            // --------------------------------------------------
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Explore by category', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  const Text(
+                    'Explore by category',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+
                   const SizedBox(height: 12),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildCategoryItem('Popular\nTemples', Icons.temple_hindu),
+                      _buildCategoryItem(
+                        'Popular\nTemples',
+                        Icons.temple_hindu,
+                      ),
                       _buildCategoryItem('Shiv\nTemples', Icons.brightness_low),
                       _buildCategoryItem('Jyotirlingas', Icons.wb_sunny),
                       _buildCategoryItem('Devi\nTemples', Icons.local_florist),
@@ -197,42 +395,75 @@ class DonateHomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-        
           ],
         ),
       ),
     );
   }
 
-  Widget _buildChip(String label, bool isSelected) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: isSelected ? AppColors.primaryRedLight : Colors.grey[200],
-        border: Border.all(color: isSelected ? AppColors.primaryRed : Colors.transparent),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: isSelected ? AppColors.primaryRed : Colors.black,
-          fontSize: 12,
+  // --------------------------------------------------
+  // CHIP
+  // --------------------------------------------------
+  Widget _buildChip(String label) {
+    final bool isSelected = selectedTemple == label;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        setState(() {
+          selectedTemple = label;
+          _searchController.text = label;
+          _searchController.selection = TextSelection.fromPosition(
+            TextPosition(offset: _searchController.text.length),
+          );
+        });
+
+        debugPrint('Chip selected: $label');
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primaryRedLight : Colors.grey[200],
+          border: Border.all(
+            color: isSelected ? AppColors.error: Colors.transparent,
+          ),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isSelected ? AppColors.error: Colors.black,
+            fontSize: 12,
+          ),
         ),
       ),
     );
   }
 
+  // --------------------------------------------------
+  // BADGE
+  // --------------------------------------------------
   Widget _buildBadge(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 20, color: Colors.orange),
+        Icon(icon, size: 24, color: Colors.orange),
         const SizedBox(width: 6),
-        Text(text, style: const TextStyle(fontSize: 11, height: 1.1)),
+        Text(
+          text,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            height: 1.2,
+          ),
+        ),
       ],
     );
   }
 
+  // --------------------------------------------------
+  // CATEGORY
+  // --------------------------------------------------
   Widget _buildCategoryItem(String title, IconData icon) {
     return Column(
       children: [
@@ -242,7 +473,11 @@ class DonateHomeScreen extends StatelessWidget {
           child: Icon(icon, color: Colors.orange),
         ),
         const SizedBox(height: 6),
-        Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 10)),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 10),
+        ),
       ],
     );
   }

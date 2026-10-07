@@ -4,7 +4,8 @@ class AppColors {
   AppColors._();
 
   // Primary
-  static const Color primary = Color(0xFFFF6B00);
+  static const Color primary = Color(0xFFF70000);
+  static const Color primarySecondary = Color(0xFFFF6B00);
   static const Color primaryDark = Color(0xFFE65100);
   static const Color primaryLight = Color(0xFFFFB74D);
 
@@ -41,4 +42,25 @@ class AppColors {
   // Common
   static const Color white = Colors.white;
   static const Color black = Colors.black;
+  static const Color darkGrey = Color(0xFF5F100A);
+
+
+
+
+
+
+
+
+  //..............
+
+static const Color primaryRed = Color(0xFFF70000);
+  static const Color primaryRedLight = Color(0xFFFFF0F0);
+  static const Color backgroundGrey = Color(0xFFF6F6F6);
+  static const Color textDark = Color(0xFF1E1E1E);
+  static const Color textGrey = Color(0xFF757575);
+  static const Color borderGrey = Color(0xFFE0E0E0);
+  static const Color verifiedBlue = Color(0xFF1DA1F2);
+static const Color primaryGreen = Color(0xFF00875A);
+  static const Color primaryGreenLight = Color(0xFFE8F5E9);
+  static const Color discountGreen = Color(0xFF00C853);
 }

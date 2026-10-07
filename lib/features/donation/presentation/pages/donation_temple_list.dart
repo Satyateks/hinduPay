@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hindu_pay/core/widgets/app_img.dart';
 import '../../../../app/theme/app_colors.dart';
+import 'donation_details_page.dart';
 
 class TempleListScreen extends StatelessWidget {
   const TempleListScreen({Key? key}) : super(key: key);
@@ -47,19 +49,29 @@ class TempleListScreen extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Header info
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('All Temples', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(
+                  'All Temples',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
                 Row(
                   children: [
-                    Icon(Icons.location_on, size: 14, color: AppColors.primaryRed),
+                    Icon(
+                      Icons.location_on,
+                      size: 14,
+                      color: AppColors.primaryRed,
+                    ),
                     SizedBox(width: 4),
-                    Text('Kashi Vishwanath', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                    Text(
+                      'Kashi Vishwanath',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
                   ],
                 ),
               ],
@@ -87,13 +99,15 @@ class TempleListScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
         color: isSelected ? AppColors.primaryRedLight : Colors.grey[100],
-        border: Border.all(color: isSelected ? AppColors.primaryRed : Colors.transparent),
+        border: Border.all(
+          color: isSelected ? AppColors.error : Colors.transparent,
+        ),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: isSelected ? AppColors.primaryRed : Colors.black,
+          color: isSelected ? AppColors.error : Colors.black,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           fontSize: 12,
         ),
@@ -114,9 +128,12 @@ class TempleListScreen extends StatelessWidget {
           Stack(
             children: [
               ClipRRect(
-                borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomLeft: Radius.circular(16)),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(16),
+                  bottomLeft: Radius.circular(16),
+                ),
                 child: Image.network(
-                  'https://via.placeholder.com/120',
+                  AppImg.profilePicUrl,
                   height: 120,
                   width: 120,
                   fit: BoxFit.cover,
@@ -126,16 +143,29 @@ class TempleListScreen extends StatelessWidget {
                 top: 8,
                 left: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.check_circle, color: AppColors.verifiedBlue, size: 12),
+                      Icon(
+                        Icons.check_circle,
+                        color: AppColors.verifiedBlue,
+                        size: 12,
+                      ),
                       SizedBox(width: 2),
-                      Text('Verified', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                      Text(
+                        'Verified',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -150,22 +180,30 @@ class TempleListScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Shri Ram Mandir', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                  const Text('Department of Temple Affairs', style: TextStyle(color: Colors.grey, fontSize: 10)),
+                  const Text(
+                    'Shri Ram Mandir',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
+                  const Text(
+                    'Department of Temple Affairs',
+                    style: TextStyle(color: Colors.grey, fontSize: 10),
+                  ),
                   const Row(
                     children: [
-                      Icon(Icons.location_on, size: 12, color: AppColors.primaryRed),
+                      Icon(
+                        Icons.location_on,
+                        size: 12,
+                        color: AppColors.primaryRed,
+                      ),
                       SizedBox(width: 2),
-                      Text('Varanasi, Uttar Pradesh', style: TextStyle(color: Colors.grey, fontSize: 10)),
+                      Text(
+                        'Varanasi, Uttar Pradesh',
+                        style: TextStyle(color: Colors.grey, fontSize: 10),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      _buildTag('Shiva'),
-                      _buildTag('Popular'),
-                    ],
-                  ),
+                  Row(children: [_buildTag('Shiva'), _buildTag('Popular')]),
                   const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
@@ -173,14 +211,30 @@ class TempleListScreen extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryRed,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DonationDetailScreen(),
+                          ),
+                        );
+                      },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Donate Now', style: TextStyle(fontSize: 12, color: Colors.white)),
-                          Icon(Icons.chevron_right, size: 16, color: Colors.white),
+                          Text(
+                            'Donate Now',
+                            style: TextStyle(fontSize: 12, color: Colors.white),
+                          ),
+                          Icon(
+                            Icons.chevron_right,
+                            size: 16,
+                            color: Colors.white,
+                          ),
                         ],
                       ),
                     ),
@@ -202,7 +256,10 @@ class TempleListScreen extends StatelessWidget {
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Text(label, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 10, color: Colors.grey),
+      ),
     );
   }
 }

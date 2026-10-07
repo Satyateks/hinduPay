@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hindu_pay/core/widgets/app_img.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../app/theme/app_colors.dart';
-
-
 
 // ==========================================
 // 2. SHIMMER LOADING PLACEHOLDER WIDGET
@@ -32,9 +31,7 @@ class OrderListShimmerLoading extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-              ),
+              const Padding(padding: EdgeInsets.symmetric(horizontal: 8.0)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,20 +42,12 @@ class OrderListShimmerLoading extends StatelessWidget {
                       color: Colors.white,
                     ),
                     const SizedBox(height: 8),
-                    Container(
-                      width: 120.0,
-                      height: 12.0,
-                      color: Colors.white,
-                    ),
+                    Container(width: 120.0, height: 12.0, color: Colors.white),
                     const SizedBox(height: 8),
-                    Container(
-                      width: 60.0,
-                      height: 14.0,
-                      color: Colors.white,
-                    ),
+                    Container(width: 60.0, height: 14.0, color: Colors.white),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -71,7 +60,7 @@ class OrderListShimmerLoading extends StatelessWidget {
 // 3. PAYMENT SCREEN (Screen 1 in image)
 // ==========================================
 class DonationPaymentScreen extends StatefulWidget {
-  const DonationPaymentScreen({Key? key}) : super(key: key);
+  const DonationPaymentScreen({super.key});
 
   @override
   State<DonationPaymentScreen> createState() => _DonationPaymentScreenState();
@@ -85,7 +74,10 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text('Puja Thali Set', style: TextStyle(color: Colors.black, fontSize: 16)),
+        title: const Text(
+          'Puja Thali Set',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
@@ -108,28 +100,51 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Credit & Debit card', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                      const Text(
+                        'Credit & Debit card',
+                        style: TextStyle(
+                          color: AppColors.error,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
                       const Icon(Icons.keyboard_arrow_up, color: Colors.grey),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  const Text('Card number', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  const Text(
+                    'Card number',
+                    style: TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
                   const SizedBox(height: 4),
                   TextField(
                     decoration: InputDecoration(
                       hintText: 'Card number',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text('Name on card', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                  const Text(
+                    'Name on card',
+                    style: TextStyle(fontSize: 11, color: Colors.grey),
+                  ),
                   const SizedBox(height: 4),
                   TextField(
                     decoration: InputDecoration(
                       hintText: 'Enter name on card',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -139,13 +154,24 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Valid Through', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                            const Text(
+                              'Valid Through',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             TextField(
                               decoration: InputDecoration(
                                 hintText: 'MM/YY',
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 10,
+                                ),
                               ),
                             ),
                           ],
@@ -156,14 +182,25 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('CVV', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                            const Text(
+                              'CVV',
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                              ),
+                            ),
                             const SizedBox(height: 4),
                             TextField(
                               obscureText: true,
                               decoration: InputDecoration(
                                 hintText: 'CVV',
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 10,
+                                ),
                               ),
                             ),
                           ],
@@ -186,9 +223,16 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Select your preferred UPI App', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const Text(
+                    'Select your preferred UPI App',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
                   const SizedBox(height: 12),
-                  _buildUpiOption('PhonePe', Icons.account_balance_wallet, Colors.purple),
+                  _buildUpiOption(
+                    'PhonePe',
+                    Icons.account_balance_wallet,
+                    Colors.purple,
+                  ),
                   _buildUpiOption('Paytm', Icons.payment, Colors.blue),
                   _buildUpiOption('Google Pay', Icons.payment, Colors.red),
                   _buildUpiOption('BHIM', Icons.currency_rupee, Colors.orange),
@@ -202,14 +246,114 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryGreen,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                  backgroundColor: AppColors.error,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                onPressed: () {},
-                child: const Text('Proceed to Pay', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SavedAddressesScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Proceed to Pay',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SavedAddressesScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Saved Addresses',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const OrderHistoryScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Order History',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WishlistScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'Wishlist',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -226,7 +370,10 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
         children: [
           Icon(icon, color: iconColor, size: 24),
           const SizedBox(width: 12),
-          Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
         ],
       ),
       onChanged: (value) {
@@ -249,7 +396,10 @@ class SavedAddressesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text('Saved delivery addresses', style: TextStyle(color: Colors.black, fontSize: 16)),
+        title: const Text(
+          'Saved delivery addresses',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
@@ -260,8 +410,16 @@ class SavedAddressesScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                _buildAddressCard('Raju Sharma', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text.', true),
-                _buildAddressCard('Raju Sharma', 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text.', false),
+                _buildAddressCard(
+                  'Raju Sharma',
+                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text.',
+                  true,
+                ),
+                _buildAddressCard(
+                  'Raju Sharma',
+                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text.',
+                  false,
+                ),
               ],
             ),
           ),
@@ -271,11 +429,19 @@ class SavedAddressesScreen extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 48),
                 side: const BorderSide(color: AppColors.primaryGreen),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
               ),
               onPressed: () {},
               icon: const Icon(Icons.add, color: AppColors.primaryGreen),
-              label: const Text('Add New Address', style: TextStyle(color: AppColors.primaryGreen, fontWeight: FontWeight.bold)),
+              label: const Text(
+                'Add New Address',
+                style: TextStyle(
+                  color: AppColors.primaryGreen,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ],
@@ -290,7 +456,10 @@ class SavedAddressesScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: isSelected ? AppColors.primaryGreen : Colors.transparent, width: 1.5),
+        border: Border.all(
+          color: isSelected ? AppColors.primaryGreen : Colors.transparent,
+          width: 1.5,
+        ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,13 +474,29 @@ class SavedAddressesScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                Text(address, style: const TextStyle(fontSize: 12, color: Colors.grey, height: 1.3)),
+                Text(
+                  address,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                    height: 1.3,
+                  ),
+                ),
               ],
             ),
           ),
-          IconButton(icon: const Icon(Icons.edit, size: 18, color: Colors.grey), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.edit, size: 18, color: Colors.grey),
+            onPressed: () {},
+          ),
         ],
       ),
     );
@@ -322,7 +507,7 @@ class SavedAddressesScreen extends StatelessWidget {
 // 5. ORDERS & HISTORY SCREEN (Screens 4 & 5 with Shimmer)
 // ==========================================
 class OrderHistoryScreen extends StatefulWidget {
-  const OrderHistoryScreen({Key? key}) : super(key: key);
+  const OrderHistoryScreen({super.key});
 
   @override
   State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
@@ -333,7 +518,8 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
   @override
   void initState() {
-    super.initState(); {
+    super.initState();
+    {
       // Simulate network fetch for Shimmer demonstration
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
@@ -350,12 +536,23 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text('Orders', style: TextStyle(color: Colors.black, fontSize: 16)),
+        title: const Text(
+          'Orders',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
         actions: [
-          IconButton(icon: const Icon(Icons.help_outline, color: AppColors.primaryGreen), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: AppColors.primaryGreen),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CouponScreen()),
+              );
+            },
+          ),
         ],
       ),
       body: Column(
@@ -372,7 +569,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               ],
             ),
           ),
-          
+
           // List View OR Shimmer Placeholder
           Expanded(
             child: _isLoading
@@ -422,8 +619,8 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              'https://via.placeholder.com/80',
+            child: Image.asset(
+              AppImg.prasadImg,
               height: 80,
               width: 80,
               fit: BoxFit.cover,
@@ -434,21 +631,48 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Brass Puja Thali Set', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                const Text('Lorem Ipsum is simply dummy text of the printing.', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                const Text(
+                  'Brass Puja Thali Set',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+                const Text(
+                  'Lorem Ipsum is simply dummy text of the printing.',
+                  style: TextStyle(fontSize: 10, color: Colors.grey),
+                ),
                 const SizedBox(height: 8),
-                const Text('₹89,999', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                const Text(
+                  '₹89,999',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
                 const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.primaryGreen),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
                     ),
-                    onPressed: () {},
-                    child: const Text('Order Details', style: TextStyle(color: AppColors.primaryGreen, fontSize: 11)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WishlistScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      'Order Details',
+                      style: TextStyle(
+                        color: AppColors.primaryGreen,
+                        fontSize: 11,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -464,14 +688,17 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 // 6. WISHLIST SCREEN (Screen 8)
 // ==========================================
 class WishlistScreen extends StatelessWidget {
-  const WishlistScreen({Key? key}) : super(key: key);
+  const WishlistScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text('Wishlist', style: TextStyle(color: Colors.black, fontSize: 16)),
+        title: const Text(
+          'Wishlist',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
@@ -491,25 +718,58 @@ class WishlistScreen extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network('https://via.placeholder.com/90', height: 90, width: 90, fit: BoxFit.cover),
+                  child: Image.asset(
+                    AppImg.poojaAnushthanImg,
+                    height: 90,
+                    width: 90,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Brass Puja Thali Set', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                      const Text('Lorem Ipsum is simply dummy text of printing.', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                      const Text(
+                        'Brass Puja Thali Set',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const Text(
+                        'Lorem Ipsum is simply dummy text of printing.',
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
+                      ),
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          const Text('₹89,999', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                          const Text(
+                            '₹89,999',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
                           const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(color: Colors.green[50], borderRadius: BorderRadius.circular(4)),
-                            child: const Text('20% OFF', style: TextStyle(color: Colors.green, fontSize: 10, fontWeight: FontWeight.bold)),
-                          )
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.green[50],
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text(
+                              '20% OFF',
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -519,12 +779,24 @@ class WishlistScreen extends StatelessWidget {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryGreen,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
                           ),
-                          onPressed: () {},
-                          child: const Text('Add to Cart', style: TextStyle(color: Colors.white, fontSize: 12)),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CouponScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Add to Cart',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -548,7 +820,10 @@ class CouponScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text('Coupons', style: TextStyle(color: Colors.black, fontSize: 16)),
+        title: const Text(
+          'Coupons',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
@@ -571,14 +846,22 @@ class CouponScreen extends StatelessWidget {
                     width: 36,
                     decoration: const BoxDecoration(
                       color: AppColors.discountGreen,
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomLeft: Radius.circular(12),
+                      ),
                     ),
                     child: const RotatedBox(
                       quarterTurns: 3,
                       child: Center(
                         child: Text(
                           'DISCOUNT',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 11, letterSpacing: 2),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
+                            letterSpacing: 2,
+                          ),
                         ),
                       ),
                     ),
@@ -589,9 +872,25 @@ class CouponScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Flat ₹125 off*', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                          const Text('PUJA125', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 12)),
-                          const Text('Save ₹125 with this code on order above ₹499.', style: TextStyle(fontSize: 10, color: Colors.grey)),
+                          const Text(
+                            'Flat ₹125 off*',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const Text(
+                            'PUJA125',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const Text(
+                            'Save ₹125 with this code on order above ₹499.',
+                            style: TextStyle(fontSize: 10, color: Colors.grey),
+                          ),
                           const SizedBox(height: 8),
                           Align(
                             alignment: Alignment.centerRight,
@@ -599,10 +898,19 @@ class CouponScreen extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryGreenLight,
                                 elevation: 0,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
                               ),
                               onPressed: () {},
-                              child: const Text('Apply Code', style: TextStyle(color: AppColors.primaryGreen, fontSize: 11, fontWeight: FontWeight.bold)),
+                              child: const Text(
+                                'Apply Code',
+                                style: TextStyle(
+                                  color: AppColors.primaryGreen,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -617,5 +925,4 @@ class CouponScreen extends StatelessWidget {
       ),
     );
   }
-} 
-
+}

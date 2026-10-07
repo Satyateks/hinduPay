@@ -9,7 +9,7 @@ class HomePromoBanner extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 6, 10, 14),
-      height: 150,
+      height: 160,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
         gradient: LinearGradient(
@@ -35,7 +35,7 @@ class HomePromoBanner extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(11),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -185,5 +185,3 @@ class SacredBanner extends StatelessWidget {
     );
   }
 }
-
-

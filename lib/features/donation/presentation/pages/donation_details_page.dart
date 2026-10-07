@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import 'donation_payment_page.dart';
 
 class DonationDetailScreen extends StatefulWidget {
-  const DonationDetailScreen({Key? key}) : super(key: key);
+  const DonationDetailScreen({super.key});
 
   @override
   State<DonationDetailScreen> createState() => _DonationDetailScreenState();
@@ -18,7 +20,10 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text('Donate', style: TextStyle(color: Colors.black, fontSize: 16)),
+        title: const Text(
+          'Donate',
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
@@ -59,14 +64,19 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Donation Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const Text(
+                    'Donation Details',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
                   const SizedBox(height: 12),
 
                   // Tab Selection (One Time / Monthly)
                   Container(
                     height: 40,
                     decoration: const BoxDecoration(
-                      border: Border(bottom: BorderSide(color: AppColors.borderGrey)),
+                      border: Border(
+                        bottom: BorderSide(color: AppColors.borderGrey),
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -74,14 +84,28 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
                           child: Container(
                             alignment: Alignment.center,
                             decoration: const BoxDecoration(
-                              border: Border(bottom: BorderSide(color: AppColors.primaryRed, width: 2)),
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: AppColors.primaryRed,
+                                  width: 2,
+                                ),
+                              ),
                             ),
-                            child: const Text('One Time', style: TextStyle(color: AppColors.primaryRed, fontWeight: FontWeight.bold)),
+                            child: const Text(
+                              'One Time',
+                              style: TextStyle(
+                                color: AppColors.primaryRed,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                         const Expanded(
                           child: Center(
-                            child: Text('Monthly', style: TextStyle(color: Colors.grey)),
+                            child: Text(
+                              'Monthly',
+                              style: TextStyle(color: Colors.grey),
+                            ),
                           ),
                         ),
                       ],
@@ -89,7 +113,10 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
                   ),
 
                   const SizedBox(height: 16),
-                  const Text('Donation Purpose', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  const Text(
+                    'Donation Purpose',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
                   const SizedBox(height: 8),
 
                   SingleChildScrollView(
@@ -105,12 +132,20 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
                   ),
 
                   const SizedBox(height: 20),
-                  const Center(child: Text('Amount', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                  const Center(
+                    child: Text(
+                      'Amount',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ),
                   const SizedBox(height: 4),
                   Center(
                     child: Text(
                       '₹ $selectedAmount',
-                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
 
@@ -141,7 +176,10 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Donor Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const Text(
+                    'Donor Details',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
                   const SizedBox(height: 12),
                   _buildTextField('Full Name', 'Enter Full Name'),
                   const SizedBox(height: 12),
@@ -169,11 +207,18 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColors.primaryRed),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      onPressed: () {},
-                      child: const Text('Cancel', style: TextStyle(color: AppColors.primaryRed)),
+                      onPressed: () {
+                        context.pop();
+                      },
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: AppColors.primaryRed),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -181,17 +226,32 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryRed,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      onPressed: () {},
-                      child: const Text('Proceed to Donate', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const DonationPaymentScreen(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Proceed to Donate',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 94),
           ],
         ),
       ),
@@ -203,7 +263,7 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isSelected ? AppColors.primaryRed : Colors.grey[100],
+        color: isSelected ? AppColors.error : Colors.grey[100],
         borderRadius: BorderRadius.circular(16),
       ),
       child: Text(
@@ -224,13 +284,15 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryRedLight : Colors.grey[100],
-          border: Border.all(color: isSelected ? AppColors.primaryRed : Colors.transparent),
+          border: Border.all(
+            color: isSelected ? AppColors.error : Colors.transparent,
+          ),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
           '₹$amount',
           style: TextStyle(
-            color: isSelected ? AppColors.primaryRed : Colors.black,
+            color: isSelected ? AppColors.error : Colors.black,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -249,7 +311,10 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(color: Colors.grey, fontSize: 13),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 10,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: AppColors.borderGrey),
@@ -273,7 +338,9 @@ class _DonationDetailScreenState extends State<DonationDetailScreen> {
           child: Checkbox(
             value: false,
             onChanged: (val) {},
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
           ),
         ),
         const SizedBox(width: 8),

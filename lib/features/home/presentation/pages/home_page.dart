@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
@@ -30,7 +31,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: AppColors.background,
       body: SafeArea(
         bottom: false,
         child: BlocBuilder<HomeBloc, HomeState>(
@@ -48,7 +49,7 @@ class HomeView extends StatelessWidget {
                 slivers: [
                   const SliverToBoxAdapter(child: HomeHeader()),
                   SliverToBoxAdapter(child: QuickActions(actions: home.quickActions)),
-                  const SliverToBoxAdapter(child: HomePromoBanner()),
+                  // const SliverToBoxAdapter(child: HomePromoBanner()),
                   SliverToBoxAdapter(child: TempleSection(temples: home.temples)),
                   const SliverToBoxAdapter(child: SupportSection()),
                   const SliverToBoxAdapter(child: SacredBanner()),

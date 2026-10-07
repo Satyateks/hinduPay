@@ -8,6 +8,7 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/otp_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/donation/presentation/pages/donation_list_page.dart';
+import '../../features/donation/presentation/pages/donation_temple_list.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/pandit/presentation/bloc/pandit_bloc.dart';
@@ -160,11 +161,17 @@ final GoRouter appRouter = GoRouter(
               path: '/main/donation',
               name: 'donation',
               builder: (context, state) {
-                return BlocProvider<PanditBloc>(
-                  create: (_) => getIt<PanditBloc>(),
-                  child: const DonateHomeScreen(),
-                );
+                return const DonateHomeScreen();
               },
+              routes: [
+                GoRoute(
+                  path: '/donation/templeList',
+                  name: 'donation-templeList',
+                  builder: (context, state) {
+                    return const TempleListScreen();
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -190,7 +197,6 @@ final GoRouter appRouter = GoRouter(
                   name: 'pandit-detail',
                   builder: (context, state) {
                     final panditId = state.pathParameters['id'];
-
                     return _PlaceholderPage(title: 'Pandit: $panditId');
                   },
                 ),
@@ -208,10 +214,7 @@ final GoRouter appRouter = GoRouter(
               path: '/main/pooja',
               name: 'pooja',
               builder: (context, state) {
-                return BlocProvider<PoojaBloc>(
-                  create: (_) => getIt<PoojaBloc>(),
-                  child: const PoojaListPage(),
-                );
+                return BlocProvider<PoojaBloc>(create: (_) => getIt<PoojaBloc>(),child: const PoojaListPage());
               },
 
               routes: [
@@ -220,7 +223,6 @@ final GoRouter appRouter = GoRouter(
                   name: 'pooja-detail',
                   builder: (context, state) {
                     final poojaId = state.pathParameters['id'];
-
                     return _PlaceholderPage(title: 'Pooja Detail: $poojaId');
                   },
                 ),
@@ -230,7 +232,6 @@ final GoRouter appRouter = GoRouter(
                   name: 'pooja-booking',
                   builder: (context, state) {
                     final poojaId = state.pathParameters['id'];
-
                     return _PlaceholderPage(title: 'Pooja Booking: $poojaId');
                   },
                 ),
@@ -257,7 +258,6 @@ final GoRouter appRouter = GoRouter(
                   name: 'product-detail',
                   builder: (context, state) {
                     final productId = state.pathParameters['id'];
-
                     return _PlaceholderPage(title: 'Product: $productId');
                   },
                 ),
@@ -342,9 +342,7 @@ final GoRouter appRouter = GoRouter(
 
 class _PlaceholderPage extends StatelessWidget {
   final String title;
-
   const _PlaceholderPage({required this.title});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
