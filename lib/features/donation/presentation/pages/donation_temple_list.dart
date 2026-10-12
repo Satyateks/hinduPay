@@ -132,8 +132,8 @@ class TempleListScreen extends StatelessWidget {
                   topLeft: Radius.circular(16),
                   bottomLeft: Radius.circular(16),
                 ),
-                child: Image.network(
-                  AppImg.profilePicUrl,
+                child: Image.asset(
+                  AppImg.kashiVvishnathImg,
                   height: 120,
                   width: 120,
                   fit: BoxFit.cover,
@@ -143,10 +143,7 @@ class TempleListScreen extends StatelessWidget {
                 top: 8,
                 left: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
@@ -180,26 +177,15 @@ class TempleListScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Shri Ram Mandir',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  ),
-                  const Text(
-                    'Department of Temple Affairs',
-                    style: TextStyle(color: Colors.grey, fontSize: 10),
-                  ),
+                  const Text('Shri Ram Mandir', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                  const Text('Department of Temple Affairs',style: TextStyle(color: Colors.grey, fontSize: 10)),
                   const Row(
                     children: [
                       Icon(
-                        Icons.location_on,
-                        size: 12,
-                        color: AppColors.primaryRed,
-                      ),
+                        Icons.location_on,size: 12,
+                        color: AppColors.primaryRed),
                       SizedBox(width: 2),
-                      Text(
-                        'Varanasi, Uttar Pradesh',
-                        style: TextStyle(color: Colors.grey, fontSize: 10),
-                      ),
+                      Text('Varanasi, Uttar Pradesh', style: TextStyle(color: Colors.grey, fontSize: 10)),
                     ],
                   ),
                   const SizedBox(height: 6),

@@ -389,7 +389,7 @@ class _DonationPaymentScreenState extends State<DonationPaymentScreen> {
 // 4. SAVED ADDRESSES SCREEN (Screen 2 & 3)
 // ==========================================
 class SavedAddressesScreen extends StatelessWidget {
-  const SavedAddressesScreen({Key? key}) : super(key: key);
+  const SavedAddressesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

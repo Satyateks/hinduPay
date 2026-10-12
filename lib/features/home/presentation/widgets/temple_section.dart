@@ -65,7 +65,7 @@ class _TempleCard extends StatelessWidget {
           SizedBox(
             height: 110,
             width: double.infinity,
-            child: Image.network(
+            child: Image.asset(
               temple.image,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) {

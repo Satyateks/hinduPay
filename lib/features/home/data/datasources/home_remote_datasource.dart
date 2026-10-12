@@ -1,3 +1,5 @@
+import 'package:hindu_pay/core/widgets/app_img.dart';
+
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/api_constants.dart';
 import '../models/home_model.dart';
@@ -32,19 +34,19 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         {
           'id': 't1',
           'name': 'Ram Mandir',
-          'image': 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+          'image': AppImg.ramMandirImg,
           'location': 'Ayodhya, UP',
         },
         {
           'id': 't2',
           'name': 'Kashi Vishwanath',
-          'image': 'https://example.com/kashi.jpg',
+          'image': AppImg.kashiVvishnathImg,
           'location': 'Varanasi, UP',
         },
         {
           'id': 't3',
           'name': 'Somnath Temple',
-          'image': 'https://example.com/somnath.jpg',
+          'image': AppImg.triveniMandirImg,
           'location': 'Gujarat',
         },
       ],
@@ -53,7 +55,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         {
           'id': 'c1',
           'title': 'Support Temple Seva',
-          'image': 'https://example.com/cause.jpg',
+          'image': AppImg.triveniMandirImg,
           'target_amount': 100000,
           'collected_amount': 65000,
         },
@@ -62,26 +64,26 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       'astrology': {
         'title': 'Know Your Destiny',
         'subtitle': 'Get personalized astrology guidance',
-        'image': 'https://example.com/astrology.jpg',
+        'image': AppImg.triveniMandirImg,
       },
 
       'poojas': [
         {
           'id': 'p1',
           'name': 'Satyanarayan Puja',
-          'image': 'https://example.com/satyanarayan.jpg',
+          'image': AppImg.ramMandirImg,
           'price': 1500,
         },
         {
           'id': 'p2',
           'name': 'Rudrabhishek',
-          'image': 'https://example.com/rudrabhishek.jpg',
+          'image':AppImg.kashiVvishnathImg,
           'price': 1800,
         },
         {
           'id': 'p3',
           'name': 'Griha Pravesh',
-          'image': 'https://example.com/griha.jpg',
+          'image': AppImg.triveniMandirImg,
           'price': 2500,
         },
       ],
@@ -91,7 +93,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
           'id': 'a1',
           'title': 'Navratri Puja',
           'date': '2026-10-15',
-          'image': 'https://example.com/navratri.jpg',
+          'image':AppImg.poojaAnushthanImg,
         },
       ],
 
@@ -99,7 +101,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         {
           'id': 'r1',
           'title': 'Book a Pandit',
-          'image': 'https://example.com/pandit.jpg',
+          'image': AppImg.panditjiImg,
           'type': 'pandit',
         },
       ],

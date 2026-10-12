@@ -40,8 +40,6 @@ class HomeView extends StatelessWidget {
             if (state.status == HomeStatus.failure) return _HomeErrorView(message: state.errorMessage ?? 'Something went wrong');
             final home = state.home;
             if (home == null) return const _HomeErrorView(message: 'Home data not available');
-            
-
             return RefreshIndicator(
               onRefresh: () async {context.read<HomeBloc>().add(const RefreshHome());},
               child: CustomScrollView(
@@ -106,3 +104,37 @@ class _HomeErrorView extends StatelessWidget {
     );
   }
 }
+
+
+
+
+// pandit/
+// ├── data/
+// │   ├── datasources/
+// │   │   └── pandit_remote_datasource.dart
+// │   ├── models/
+// │   │   ├── pandit_model.dart
+// │   │   └── booking_model.dart
+// │   └── repositories/
+// │       └── pandit_repository_impl.dart
+// ├── domain/
+// │   ├── entities/
+// │   │   ├── pandit.dart
+// │   │   └── booking.dart
+// │   ├── repositories/
+// │   │   └── pandit_repository.dart
+// │   └── usecases/
+// │       ├── get_pandits.dart
+// │       ├── get_pooja_list.dart
+// │       └── book_pandit.dart
+// └── presentation/
+//     ├── bloc/
+//     │   ├── pandit_bloc.dart
+//     │   ├── pandit_event.dart
+//     │   └── pandit_state.dart
+//     └── pages/
+//         ├── pandits_page.dart
+//         └── pandit_booking_page.dart
+
+
+        

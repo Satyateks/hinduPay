@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:hindu_pay/app/theme/app_colors.dart';
 import '../../domain/entities/home_data.dart';
 
 class PoojaSection extends StatelessWidget {
@@ -9,10 +10,7 @@ class PoojaSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (poojas.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
+    if (poojas.isEmpty) return const SizedBox.shrink();
     final primary = Theme.of(context).colorScheme.primary;
 
     return Column(
@@ -41,11 +39,12 @@ class PoojaSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all( color: AppColors.primaryRedLight,width: 1),
                   boxShadow: [
                     BoxShadow(
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 8,//spreadRadius: 2,
+                      offset: const Offset(0, 4),
+                      color: Colors.black.withValues(alpha: 0.12),
                     ),
                   ],
                 ),
@@ -56,7 +55,7 @@ class PoojaSection extends StatelessWidget {
                     SizedBox(
                       height: 105,
                       width: double.infinity,
-                      child: Image.network(
+                      child: Image.asset(
                         pooja.image,
                         fit: BoxFit.cover,
                         errorBuilder: (_, __, ___) {
@@ -73,7 +72,7 @@ class PoojaSection extends StatelessWidget {
                       padding: const EdgeInsets.all(8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                        children: [const SizedBox(height: 9),
                           Text(
                             pooja.name,
                             maxLines: 2,
@@ -84,15 +83,18 @@ class PoojaSection extends StatelessWidget {
                             ),
                           ),
 
-                          const SizedBox(height: 3),
+                          const SizedBox(height: 5),
 
-                          Text(
-                            '₹${pooja.price.toStringAsFixed(0)}',
-                            style: TextStyle(
-                              color: primary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                '₹${pooja.price.toStringAsFixed(0)}',
+                                style: TextStyle(
+                                  fontSize: 13,color: AppColors.error,
+                                  fontWeight: FontWeight.w500,
+                              )),SizedBox(width: 8),
+                              Text('Onwards',style: TextStyle(fontSize:9),),
+                            ],
                           ),
 
                           const SizedBox(height: 7),
@@ -101,9 +103,9 @@ class PoojaSection extends StatelessWidget {
                             width: double.infinity,
                             height: 27,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {context.push('/main/donation');},
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: primary,
+                                backgroundColor: AppColors.error,
                                 foregroundColor: Colors.white,
                                 elevation: 0,
                                 padding: EdgeInsets.zero,

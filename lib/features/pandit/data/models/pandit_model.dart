@@ -7,6 +7,7 @@ class PanditModel extends Pandit {
     required super.specialization,
     required super.imageUrl,
     required super.rating,
+    required super.location,
     required super.supportedPoojas,
   });
 
@@ -16,6 +17,7 @@ class PanditModel extends Pandit {
       name: json['name'] ?? '',
       specialization: json['specialization'] ?? '',
       imageUrl: json['image_url'] ?? '',
+      location: json['location'] ?? '',
       rating: (json['rating'] ?? 0.0).toDouble(),
       supportedPoojas: List<String>.from(json['supported_poojas'] ?? []),
     );
@@ -28,6 +30,7 @@ class PanditModel extends Pandit {
       'specialization': specialization,
       'image_url': imageUrl,
       'rating': rating,
+      'location': location,
       'supported_poojas': supportedPoojas,
     };
   }

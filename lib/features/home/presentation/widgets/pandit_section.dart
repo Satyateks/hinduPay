@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hindu_pay/app/theme/app_colors.dart';
+import 'package:hindu_pay/core/widgets/app_img.dart';
 
 class PanditSection extends StatelessWidget {
   const PanditSection({super.key});
@@ -21,7 +22,7 @@ class PanditSection extends StatelessWidget {
 
         _PanditCard(
           name: 'Pandit Raj Sharma',
-          image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+          image: AppImg.pandirmanImg,
           rating: '4.9',
           reviews: '320',
           location: 'Delhi NCR',
@@ -33,7 +34,7 @@ class PanditSection extends StatelessWidget {
 
         _PanditCard(
           name: 'Pandit Manoj',
-          image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+          image: AppImg.pandirmanImg,
           rating: '4.9',
           reviews: '210',
           location: 'Delhi NCR',
@@ -43,19 +44,27 @@ class PanditSection extends StatelessWidget {
         const SizedBox(height: 10),
         _PanditCard(
           name: 'Pandit Raj Sharma',
-          image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+          image: AppImg.panditjiImg,
           rating: '4.9',
           reviews: '320',
           location: 'Delhi NCR',
           services: 'Puja • Havan • Vivah • Muhurat',
           primary: primary,
         ),
-
         const SizedBox(height: 10),
-
+        _PanditCard(
+          name: 'Pandit Shivani Sharma',
+          image: AppImg.panditjiImg,
+          rating: '4.9',
+          reviews: '320',
+          location: 'Noida NCR',
+          services: 'Puja • Havan • Vivah • Muhurat',
+          primary: primary,
+        ),
+        const SizedBox(height: 10),
         _PanditCard(
           name: 'Pandit Manoj',
-          image: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+          image: AppImg.pandirmanImg,
           rating: '4.9',
           reviews: '210',
           location: 'Delhi NCR',
@@ -90,13 +99,13 @@ class _PanditCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      padding: const EdgeInsets.all(9),
+      padding: const EdgeInsets.symmetric(horizontal: 9),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(13),
         boxShadow: [
           BoxShadow(
-            blurRadius: 10,
+            blurRadius: 10,spreadRadius: 1,
             offset: const Offset(0, 2),
             color: Colors.black.withValues(alpha: 0.08),
           ),
@@ -104,22 +113,19 @@ class _PanditCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              width: 78,
-              height: 90,
-              child: Image.network(
-                image,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) {
-                  return Icon(Icons.person, size: 40, color: primary);
-                },
-              ),
+          SizedBox(
+            width: 118,
+            height: 162,
+            child: Image.asset(
+              image,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) {
+                return Icon(Icons.person, size: 40, color: primary);
+              },
             ),
           ),
 
-          const SizedBox(width: 10),
+          const SizedBox(width: 11),
 
           Expanded(
             child: Column(
@@ -128,13 +134,11 @@ class _PanditCard extends StatelessWidget {
                 Text(
                   name,
                   style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-
                 const SizedBox(height: 4),
-
                 Row(
                   children: [
                     Container(
@@ -150,68 +154,61 @@ class _PanditCard extends StatelessWidget {
                         '✓ Verified',
                         style: TextStyle(
                           color: Colors.green,
-                          fontSize: 8,
+                          fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
-
                     const SizedBox(width: 5),
-
                     const Text('⭐', style: TextStyle(fontSize: 9)),
-
                     Text(
                       ' $rating ($reviews reviews)',
                       style: TextStyle(
                         color: Colors.grey.shade600,
-                        fontSize: 8,
+                        fontSize: 14,
                       ),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 5),
-
                 Row(
                   children: [
-                    Icon(Icons.location_on, size: 11, color: primary),
+                    Icon(Icons.location_on, size: 13, color: AppColors.primary),
                     const SizedBox(width: 2),
-                    Text(location, style: const TextStyle(fontSize: 9)),
+                    Text(location, style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500)),
                   ],
                 ),
-
                 const SizedBox(height: 3),
-
                 Text(
                   services,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 8, color: Colors.grey.shade600),
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 ),
+                Align(alignment: AlignmentGeometry.bottomRight,
+                  child: SizedBox(
+                    width: 102,
+                    height: 32,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:AppColors.primary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(horizontal: 11),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(44),
+                        ),
+                      ),
+                      child: const Text(
+                        'Book Now',
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                ),
+         
               ],
-            ),
-          ),
-
-          const SizedBox(width: 5),
-
-          SizedBox(
-            width: 80,
-            height: 31,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor:AppColors.primary,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 11),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(17),
-                ),
-              ),
-              child: const Text(
-                'Book Now',
-                style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700),
-              ),
             ),
           ),
         ],

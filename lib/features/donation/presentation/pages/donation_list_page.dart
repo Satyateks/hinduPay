@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hindu_pay/core/widgets/app_img.dart';
 import '../../../../app/theme/app_colors.dart';
 import 'donation_details_page.dart';
 import 'donation_temple_list.dart';
 
 class DonateHomeScreen extends StatefulWidget {
-  const DonateHomeScreen({Key? key}) : super(key: key);
+  const DonateHomeScreen({super.key});
 
   @override
   State<DonateHomeScreen> createState() => _DonateHomeScreenState();
@@ -72,14 +73,12 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
                       width: double.infinity,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
-                          ),
+                          image: AssetImage(AppImg.donatTempleImg),
                           fit: BoxFit.cover,
                         ),
                       ),
                       child: Container(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         padding: const EdgeInsets.only(top: 40, left: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +89,7 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.8),
+                                color: Colors.white.withValues(alpha: 0.8),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: const Row(
@@ -99,7 +98,7 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
                                   Icon(
                                     Icons.arrow_back_ios,
                                     fontWeight: FontWeight.w700,
-                                    size: 21,
+                                    size: 18,
                                     color: AppColors.black,
                                   ),
                                   SizedBox(width: 6),
@@ -159,7 +158,7 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
+                              color: Colors.black.withValues(alpha: 0.08),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -294,8 +293,7 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
                                   const SizedBox(width: 8),
                                   const Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Show temples near me',
@@ -355,9 +353,9 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildBadge(Icons.verified_user, 'Verified\nTemples'),
-                  _buildBadge(Icons.security, 'Secure\nDonations'),
-                  _buildBadge(Icons.analytics, 'Transparent\nImpact'),
+                  _buildBadge(AppImg.verifyedTempleImg, 'Verified\nTemples'),
+                  _buildBadge(AppImg.secureDonationImg, 'Secure\nDonations'),
+                  _buildBadge(AppImg.transparentImpactImg,'Transparent\nImpact'),
                 ],
               ),
             ),
@@ -376,20 +374,15 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
                     'Explore by category',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-
                   const SizedBox(height: 12),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildCategoryItem(
-                        'Popular\nTemples',
-                        Icons.temple_hindu,
-                      ),
-                      _buildCategoryItem('Shiv\nTemples', Icons.brightness_low),
-                      _buildCategoryItem('Jyotirlingas', Icons.wb_sunny),
-                      _buildCategoryItem('Devi\nTemples', Icons.local_florist),
-                      _buildCategoryItem('Vaishnav\nTemples', Icons.star),
+                      _buildCategoryItem('Popular\nTemples',AppImg.yatraImg),
+                      _buildCategoryItem('Shiv\nTemples', AppImg.kashiVvishnathImg),
+                      _buildCategoryItem('Jyotirlingas', AppImg.poojaAnushthanImg),
+                      _buildCategoryItem('Devi\nTemples', AppImg.mandirImg),
+                      _buildCategoryItem('Vaishnav\nTemples',AppImg.verifyedTempleImg),
                     ],
                   ),
                 ],
@@ -426,14 +419,14 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primaryRedLight : Colors.grey[200],
           border: Border.all(
-            color: isSelected ? AppColors.error: Colors.transparent,
+            color: isSelected ? AppColors.error : Colors.transparent,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? AppColors.error: Colors.black,
+            fontWeight: isSelected ? FontWeight.w500: FontWeight.normal,
             fontSize: 12,
           ),
         ),
@@ -444,10 +437,10 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
   // --------------------------------------------------
   // BADGE
   // --------------------------------------------------
-  Widget _buildBadge(IconData icon, String text) {
+  Widget _buildBadge(String icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 24, color: Colors.orange),
+        Image.asset(icon, height: 24, width: 24),
         const SizedBox(width: 6),
         Text(
           text,
@@ -464,13 +457,13 @@ class _DonateHomeScreenState extends State<DonateHomeScreen> {
   // --------------------------------------------------
   // CATEGORY
   // --------------------------------------------------
-  Widget _buildCategoryItem(String title, IconData icon) {
+  Widget _buildCategoryItem(String title, String icon) {
     return Column(
       children: [
         CircleAvatar(
           radius: 26,
-          backgroundColor: Colors.orange[50],
-          child: Icon(icon, color: Colors.orange),
+          backgroundColor:AppColors.primaryRedLight,
+          child: Image.asset(icon),
         ),
         const SizedBox(height: 6),
         Text(

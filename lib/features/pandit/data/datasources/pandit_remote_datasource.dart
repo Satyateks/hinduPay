@@ -14,7 +14,7 @@ class PanditRemoteDataSourceImpl implements PanditRemoteDataSource {
       'name': 'Acharya Sharma',
       'specialization': 'Vedic Puja & Rudrabhishek',
       'image_url': '',
-      'rating': 4.8,
+      'rating': 4.8,'location':'Noida',
       'supportedPoojas': ['Rudrabhishek', 'Satyanarayan Katha', 'Griha Pravesh']
     },
     {
@@ -22,7 +22,7 @@ class PanditRemoteDataSourceImpl implements PanditRemoteDataSource {
       'name': 'Pandit Mishra',
       'specialization': 'Kundali & Maha Mrunjay Jaap',
       'image_url': '',
-      'rating': 4.6,
+      'rating': 4.6,'location':'Noida',
       'supportedpoojas': ['Mahamrityunjay Jaap', 'Navgrah Shanti']
     },
     {
@@ -30,7 +30,15 @@ class PanditRemoteDataSourceImpl implements PanditRemoteDataSource {
       'name': 'Shastri Ji',
       'specialization': 'Vivah Sanskar & Hawan',
       'image_url': '',
-      'rating': 4.9,
+      'rating': 4.9,'location':'Noida',
+      'supportedPoojas': ['Vivah', 'Griha Pravesh', 'Hawan']
+    },
+    {
+      'id': '4',
+      'name': 'Shastri Ji',
+      'specialization': 'Vivah Sanskar & Hawan',
+      'image_url': '',
+      'rating': 4.9,'location':'Noida',
       'supportedPoojas': ['Vivah', 'Griha Pravesh', 'Hawan']
     },
   ];
