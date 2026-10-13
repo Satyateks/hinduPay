@@ -13,7 +13,6 @@ void main() async{
 
 class DharmikApp extends StatefulWidget {
   const DharmikApp({super.key});
-
   @override
   State<DharmikApp> createState() => _DharmikAppState();
 }
@@ -27,9 +26,7 @@ class _DharmikAppState extends State<DharmikApp> {
     themeController.addListener(_onThemeChanged);
   }
 
-  void _onThemeChanged() {
-    setState(() {});
-  }
+  void _onThemeChanged() {setState(() {});}
 
   @override
   void dispose() {
