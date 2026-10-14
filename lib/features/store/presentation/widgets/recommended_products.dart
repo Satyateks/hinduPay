@@ -1,8 +1,10 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/product_details.dart';
+import '../bloc/cart/cart_bloc.dart';
+import '../bloc/cart/cart_event.dart';
 
 class RecommendedProducts extends StatelessWidget {
   final List<StoreProduct> products;
@@ -51,6 +53,7 @@ class RecommendedProducts extends StatelessWidget {
     );
   }
 }
+
 class _RecommendationCard extends StatelessWidget {
   final StoreProduct product;
 
@@ -117,8 +120,16 @@ class _RecommendationCard extends StatelessWidget {
             width: double.infinity,
             height: 29,
             child: OutlinedButton(
-              onPressed: () {context.push('cart');},
-              child: const Text('+ Add to Cart', style: TextStyle(fontSize: 10)),
+              onPressed: () {
+                context.read<CartBloc>().add(
+                  AddProductToCart(productId: product.id, quantity: 1),
+                );
+                context.pushNamed('cart');
+              },
+              child: const Text(
+                '+ Add to Cart',
+                style: TextStyle(fontSize: 10),
+              ),
             ),
           ),
         ],

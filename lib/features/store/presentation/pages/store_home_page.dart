@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection.dart';
+import '../bloc/cart/cart_bloc.dart';
 import '../bloc/store_home/store_home_bloc.dart';
 import '../bloc/store_home/store_home_event.dart';
 import '../bloc/store_home/store_home_state.dart';
@@ -15,8 +16,11 @@ class StoreHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<StoreHomeBloc>()..add(const LoadStoreHome()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<StoreHomeBloc>()..add(const LoadStoreHome())),
+        BlocProvider<CartBloc>(create: (_) => getIt<CartBloc>()),
+      ],
       child: const StoreHomeView(),
     );
   }
@@ -34,18 +38,21 @@ class StoreHomeView extends StatelessWidget {
           builder: (context, state) {
             if (state.status == StoreHomeStatus.initial || state.status == StoreHomeStatus.loading) return const _StoreLoadingView();
             if (state.status == StoreHomeStatus.failure) return _StoreErrorView(message: state.errorMessage ?? 'Something went wrong');
-            
             final storeHome = state.storeHome;
             if (storeHome == null) return const _StoreErrorView(message: 'Store data not available');
-            
+
             return RefreshIndicator(
-              onRefresh: () async {context.read<StoreHomeBloc>().add(const RefreshStoreHome());},
+              onRefresh: () async {
+                context.read<StoreHomeBloc>().add(const RefreshStoreHome());
+              },
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
                   const SliverToBoxAdapter(child: StoreHeader()),
 
-                  SliverToBoxAdapter(child: StoreCategoryList(categories: storeHome.categories)),
+                  SliverToBoxAdapter(
+                    child: StoreCategoryList(categories: storeHome.categories),
+                  ),
                   SliverToBoxAdapter(
                     child: StoreProductSection(
                       title: 'Best Selling Products',
@@ -54,7 +61,9 @@ class StoreHomeView extends StatelessWidget {
                   ),
 
                   if (storeHome.banners.isNotEmpty)
-                    SliverToBoxAdapter(child: StoreBanner(banner: storeHome.banners.first)),
+                    SliverToBoxAdapter(
+                      child: StoreBanner(banner: storeHome.banners.first),
+                    ),
                   SliverToBoxAdapter(
                     child: StoreProductSection(
                       title: 'Shop by Occasion',
@@ -68,7 +77,9 @@ class StoreHomeView extends StatelessWidget {
                     ),
                   ),
                   if (storeHome.banners.length > 1)
-                    SliverToBoxAdapter(child: StoreBanner(banner: storeHome.banners[1])),
+                    SliverToBoxAdapter(
+                      child: StoreBanner(banner: storeHome.banners[1]),
+                    ),
                   SliverToBoxAdapter(
                     child: StoreProductSection(
                       title: 'Best Sellers',
@@ -120,7 +131,9 @@ class _StoreErrorView extends StatelessWidget {
             Text(message, textAlign: TextAlign.center),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {context.read<StoreHomeBloc>().add(const LoadStoreHome());},
+              onPressed: () {
+                context.read<StoreHomeBloc>().add(const LoadStoreHome());
+              },
               child: const Text('Retry'),
             ),
           ],

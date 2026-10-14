@@ -20,7 +20,7 @@ class StoreProductSection extends StatelessWidget {
     final colors = theme.colorScheme;
 
     if (products.isEmpty) return const SizedBox.shrink();
-    
+
     return Padding(
       padding: const EdgeInsets.only(top: 12, bottom: 4),
       child: Column(
@@ -41,7 +41,7 @@ class StoreProductSection extends StatelessWidget {
                 ),
 
                 TextButton(
-                  onPressed: () {context.pushNamed('cart');},
+                  onPressed: () => context.pushNamed('cart'),
                   child: const Text('See all'),
                 ),
               ],
@@ -67,4 +67,3 @@ class StoreProductSection extends StatelessWidget {
     );
   }
 }
-

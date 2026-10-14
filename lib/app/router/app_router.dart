@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hindu_pay/features/store/presentation/pages/cart_page.dart';
 
 import '../../core/di/injection.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
@@ -8,6 +9,7 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/otp_page.dart';
 import '../../features/auth/presentation/pages/splash_page.dart';
 import '../../features/donation/presentation/pages/donation_list_page.dart';
+import '../../features/donation/presentation/pages/donation_payment_page.dart';
 import '../../features/donation/presentation/pages/donation_temple_list.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
 import '../../features/home/presentation/pages/home_page.dart';
@@ -19,6 +21,15 @@ import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/profile/presentation/bloc/profile_event.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 
+import '../../features/store/presentation/bloc/address/address_bloc.dart';
+import '../../features/store/presentation/bloc/address/address_event.dart';
+import '../../features/store/presentation/bloc/store_home/store_home_bloc.dart';
+import '../../features/store/presentation/bloc/store_home/store_home_event.dart';
+import '../../features/store/presentation/pages/product_detail_page.dart';
+import '../../features/store/presentation/pages/store_home_page.dart';
+import '../../features/store/presentation/widgets/coupon_section.dart';
+import '../../features/store/presentation/widgets/price_summary.dart';
+import '../../features/store/presentation/widgets/product_address_page.dart';
 import '../../main_shall.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -206,41 +217,6 @@ final GoRouter appRouter = GoRouter(
         ),
 
         // ------------------------------------------------------
-        // POOJA
-        // ------------------------------------------------------
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/main/pooja',
-              name: 'pooja',
-              builder: (context, state) {
-                return BlocProvider<PoojaBloc>(create: (_) => getIt<PoojaBloc>(),child: const PoojaListPage());
-              },
-
-              routes: [
-                GoRoute(
-                  path: 'detail/:id',
-                  name: 'pooja-detail',
-                  builder: (context, state) {
-                    final poojaId = state.pathParameters['id'];
-                    return _PlaceholderPage(title: 'Pooja Detail: $poojaId');
-                  },
-                ),
-
-                GoRoute(
-                  path: 'detail/:id/booking',
-                  name: 'pooja-booking',
-                  builder: (context, state) {
-                    final poojaId = state.pathParameters['id'];
-                    return _PlaceholderPage(title: 'Pooja Booking: $poojaId');
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-
-        // ------------------------------------------------------
         // STORE / SHOP
         // ------------------------------------------------------
         StatefulShellBranch(
@@ -249,16 +225,20 @@ final GoRouter appRouter = GoRouter(
               path: '/main/store',
               name: 'store',
               builder: (context, state) {
-                return const _PlaceholderPage(title: 'Store');
+                return BlocProvider<StoreHomeBloc>(
+                  create: (_) => getIt<StoreHomeBloc>()..add(LoadStoreHome()),
+                  child: const StoreHomePage(),
+                );
               },
 
               routes: [
                 GoRoute(
-                  path: 'product/:id',
+                  path: 'product/:productId',
                   name: 'product-detail',
                   builder: (context, state) {
-                    final productId = state.pathParameters['id'];
-                    return _PlaceholderPage(title: 'Product: $productId');
+                    final productId = state.pathParameters['productId']!;
+                    // final productId = state.pathParameters['id'];
+                    return ProductDetailPage(productId: productId);
                   },
                 ),
 
@@ -266,8 +246,45 @@ final GoRouter appRouter = GoRouter(
                   path: 'cart',
                   name: 'cart',
                   builder: (context, state) {
-                    return const _PlaceholderPage(title: 'Cart');
+                    return const CartPage();
                   },
+                  routes: [
+                    GoRoute(
+                      path: 'cart/Coupon',
+                      name: 'cart-Coupon',
+                      builder: (context, state) {
+                        return const StoreCouponScreen();
+                      },
+                    ),
+
+                    GoRoute(
+                      path: 'addresses',
+                      name: 'saved-address',
+                      builder: (context, state) {
+                        return BlocProvider(
+                          create: (_) => getIt<AddressBloc>()..add(const LoadAddresses()),
+                          child: const SavedAddressPage(),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: 'addresses/add',
+                      name: 'add-address',
+                      builder: (context, state) {
+                        return BlocProvider(
+                          create: (_) => getIt<AddressBloc>(),
+                          child: const AddAddressPage(),
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: 'cart/address',
+                      name: 'cart-address',
+                      builder: (context, state) {
+                        return const SavedAddressesScreen();
+                      },
+                    ),
+                  ],
                 ),
 
                 GoRoute(
@@ -282,7 +299,7 @@ final GoRouter appRouter = GoRouter(
                   path: 'payment',
                   name: 'payment',
                   builder: (context, state) {
-                    return const _PlaceholderPage(title: 'Payment');
+                    return const  StorePaymentScreen();
                   },
 
                   routes: [
@@ -290,8 +307,7 @@ final GoRouter appRouter = GoRouter(
                       path: 'success',
                       name: 'payment-success',
                       builder: (context, state) {
-                        return const _PlaceholderPage(
-                          title: 'Payment Successful',
+                        return const _PlaceholderPage(title: 'Payment Successful',
                         );
                       },
                     ),
@@ -325,6 +341,44 @@ final GoRouter appRouter = GoRouter(
                   child: const ProfilePage(),
                 );
               },
+            ),
+          ],
+        ),
+
+        // ------------------------------------------------------
+        // POOJA
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/pooja',
+              name: 'pooja',
+              builder: (context, state) {
+                return BlocProvider<PoojaBloc>(
+                  create: (_) => getIt<PoojaBloc>(),
+                  child: const PoojaListPage(),
+                );
+              },
+
+              routes: [
+                GoRoute(
+                  path: 'detail/:id',
+                  name: 'pooja-detail',
+                  builder: (context, state) {
+                    final poojaId = state.pathParameters['id'];
+                    return _PlaceholderPage(title: 'Pooja Detail: $poojaId');
+                  },
+                ),
+
+                GoRoute(
+                  path: 'detail/:id/booking',
+                  name: 'pooja-booking',
+                  builder: (context, state) {
+                    final poojaId = state.pathParameters['id'];
+                    return _PlaceholderPage(title: 'Pooja Booking: $poojaId');
+                  },
+                ),
+              ],
             ),
           ],
         ),

@@ -70,7 +70,7 @@ class ProductCard extends StatelessWidget {
 }
 
 class CouponCard extends StatelessWidget {
-  const CouponCard();
+  const CouponCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class CouponCard extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              context.pushNamed('cart-Coupon');
+              context.pushNamed('Coupon');
             },
             child: const Text('Apply'),
           ),

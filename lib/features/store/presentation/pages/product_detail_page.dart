@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hindu_pay/app/theme/app_colors.dart';
 
 import '../../../../core/di/injection.dart';
@@ -13,22 +14,20 @@ import '../widgets/included_items.dart';
 import '../widgets/product_details_card.dart';
 import '../widgets/product_gallery.dart';
 import '../widgets/recommended_products.dart';
- 
+
 class ProductDetailPage extends StatelessWidget {
   final String productId;
 
-  const ProductDetailPage({
-    super.key,
-    required this.productId,
-  });
+  const ProductDetailPage({super.key, required this.productId});
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ProductDetailBloc>(
-          create: (_) => getIt<ProductDetailBloc>()
-            ..add(LoadProductDetail(productId: productId)),
+          create: (_) =>
+              getIt<ProductDetailBloc>()
+                ..add(LoadProductDetail(productId: productId)),
         ),
         BlocProvider<CartBloc>(
           create: (_) => getIt<CartBloc>()..add(const LoadCart()),
@@ -57,11 +56,16 @@ class ProductDetailView extends StatelessWidget {
       ),
       body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
         builder: (context, state) {
-          if (state.status == ProductDetailStatus.initial || state.status == ProductDetailStatus.loading) return const Center(child: CircularProgressIndicator());
-          if (state.status == ProductDetailStatus.failure) return Center(child: Text(state.errorMessage ?? 'Something went wrong'));
+          if (state.status == ProductDetailStatus.initial ||
+              state.status == ProductDetailStatus.loading)
+            return const Center(child: CircularProgressIndicator());
+          if (state.status == ProductDetailStatus.failure)
+            return Center(
+              child: Text(state.errorMessage ?? 'Something went wrong'),
+            );
           final product = state.product;
-          if (product == null) return const Center(child: Text('Product not available'));
-          
+          if (product == null)
+            return const Center(child: Text('Product not available'));
 
           return Column(
             children: [
@@ -96,29 +100,35 @@ class ProductDetailView extends StatelessWidget {
                   top: false,
                   child: Row(
                     children: [
-
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: () {print('................');
+                          onPressed: () {
                             context.read<CartBloc>().add(
                               AddProductToCart(
-                                productId: product.id, 
+                                productId: product.id,
                                 quantity: 1,
                               ),
                             );
+                            context.pushNamed('cart');
                           },
                           child: const Text(
                             'Add to Cart',
-                            style: TextStyle(
-                              color: AppColors.discountGreen,
-                            ),
+                            style: TextStyle(color: AppColors.discountGreen),
                           ),
                         ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: FilledButton(
-                          onPressed: () { },
+                          onPressed: () {
+                            context.read<CartBloc>().add(
+                              AddProductToCart(
+                                productId: product.id,
+                                quantity: 1,
+                              ),
+                            );
+                            context.pushNamed('payment');
+                          },
                           child: const Text('Buy Now'),
                         ),
                       ),
@@ -134,7 +144,6 @@ class ProductDetailView extends StatelessWidget {
   }
 }
 
- 
 class _ProductPrice extends StatelessWidget {
   final ProductDetail product;
 
@@ -206,7 +215,12 @@ class _ProductDescription extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(product.name, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+          Text(
+            product.name,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 5),
           Text(product.description, style: theme.textTheme.bodySmall),
         ],
@@ -214,7 +228,6 @@ class _ProductDescription extends StatelessWidget {
     );
   }
 }
- 
 
 class _DeliveryTrust extends StatelessWidget {
   final ProductDetail product;
@@ -288,5 +301,3 @@ class _TrustCard extends StatelessWidget {
     );
   }
 }
-
- 

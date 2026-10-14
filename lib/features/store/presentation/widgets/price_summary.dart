@@ -18,10 +18,7 @@ class _StorePaymentScreenState extends State<StorePaymentScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text(
-          'Puja Thali Set',
-          style: TextStyle(color: Colors.black, fontSize: 16),
-        ),
+        title: const Text('Puja Thali Set',style: TextStyle(color: Colors.black, fontSize: 16)),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
@@ -64,14 +61,9 @@ class _StorePaymentScreenState extends State<StorePaymentScreen> {
                   TextField(
                     decoration: InputDecoration(
                       hintText: 'Card number',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                    ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
+                    ), 
                   ),
                   const SizedBox(height: 12),
                   const Text(
@@ -172,7 +164,11 @@ class _StorePaymentScreenState extends State<StorePaymentScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                   const SizedBox(height: 12),
-                  _buildUpiOption('PhonePe',Icons.account_balance_wallet,Colors.purple),
+                  _buildUpiOption(
+                    'PhonePe',
+                    Icons.account_balance_wallet,
+                    Colors.purple,
+                  ),
                   _buildUpiOption('Paytm', Icons.payment, Colors.blue),
                   _buildUpiOption('Google Pay', Icons.payment, Colors.red),
                   _buildUpiOption('BHIM', Icons.currency_rupee, Colors.orange),
@@ -192,9 +188,7 @@ class _StorePaymentScreenState extends State<StorePaymentScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                onPressed: () {
-                  context.pushNamed('cart-address');
-                },
+                onPressed: () => context.pushNamed('payment-success'),
                 child: const Text(
                   'Proceed to Buy',
                   style: TextStyle(
@@ -204,8 +198,6 @@ class _StorePaymentScreenState extends State<StorePaymentScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
-
             const SizedBox(height: 16),
           ],
         ),
@@ -232,10 +224,10 @@ class _StorePaymentScreenState extends State<StorePaymentScreen> {
       ),
       // ignore: deprecated_member_use
       onChanged: (value) {
-        setState(() {
-          _selectedUpi = value!;
-        });
+        setState(()=> _selectedUpi = value!,);
       },
     );
   }
 }
+
+
