@@ -25,25 +25,47 @@ import '../../features/profile/domain/usecases/get_user_profile.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/store/data/datasources/address_remote_datasource.dart';
 import '../../features/store/data/datasources/cart_remote_datasource.dart';
+import '../../features/store/data/datasources/checkout_remote_datasource.dart';
+import '../../features/store/data/datasources/coupon_remote_datasource.dart';
 import '../../features/store/data/datasources/product_remote_datasource.dart';
 import '../../features/store/data/datasources/store_remote_datasource.dart';
+import '../../features/store/data/datasources/support_remote_datasource.dart';
+import '../../features/store/data/datasources/wishlist_remote_datasource.dart';
 import '../../features/store/data/repositories/address_repository_impl.dart';
 import '../../features/store/data/repositories/cart_repository_impl.dart';
+import '../../features/store/data/repositories/checkout_repository_impl.dart';
+import '../../features/store/data/repositories/coupon_repository_impl.dart';
 import '../../features/store/data/repositories/product_repository_impl.dart';
 import '../../features/store/data/repositories/store_repository_impl.dart';
+import '../../features/store/data/repositories/support_repository_impl.dart';
+import '../../features/store/data/repositories/wishlist_repository_impl.dart';
 import '../../features/store/domain/repositories/cart_repository.dart';
+import '../../features/store/domain/repositories/checkout_repository.dart';
+import '../../features/store/domain/repositories/coupon_repository.dart';
 import '../../features/store/domain/repositories/product_repository.dart';
 import '../../features/store/domain/repositories/store_repository.dart';
+import '../../features/store/domain/repositories/support_repository.dart';
+import '../../features/store/domain/repositories/wishlist_repository.dart';
 import '../../features/store/domain/usecases/add_to_cart.dart';
 import '../../features/store/domain/usecases/get_cart.dart';
+import '../../features/store/domain/usecases/get_coupon.dart';
+import '../../features/store/domain/usecases/get_order_details.dart';
 import '../../features/store/domain/usecases/get_product_details.dart';
 import '../../features/store/domain/usecases/get_store_home.dart';
+import '../../features/store/domain/usecases/get_support_ticket.dart';
+import '../../features/store/domain/usecases/get_wishlist.dart';
+import '../../features/store/domain/usecases/place_order.dart';
 import '../../features/store/domain/usecases/remove_from_cart.dart';
 import '../../features/store/domain/usecases/update_cart_quantity.dart';
 import '../../features/store/presentation/bloc/address/address_bloc.dart';
 import '../../features/store/presentation/bloc/cart/cart_bloc.dart';
+import '../../features/store/presentation/bloc/checkout/checkout_bloc.dart';
+import '../../features/store/presentation/bloc/coupon/coupon_bloc.dart';
+import '../../features/store/presentation/bloc/order/orders_bloc.dart';
 import '../../features/store/presentation/bloc/product_detail/product_detail_bloc.dart';
 import '../../features/store/presentation/bloc/store_home/store_home_bloc.dart';
+import '../../features/store/presentation/bloc/support/support_bloc.dart';
+import '../../features/store/presentation/bloc/wishlist/wishlist_bloc.dart';
 import '../network/api_client.dart';
 import '../network/network_info.dart';
 
@@ -202,8 +224,7 @@ getIt.registerFactory<HomeBloc>(() => HomeBloc(getHome: getIt<GetHome>()));
   getIt.registerLazySingleton<UpdateCartQuantity>(() => UpdateCartQuantity(getIt<CartRepository>()));
   getIt.registerLazySingleton<RemoveFromCart>(() => RemoveFromCart(getIt<CartRepository>()));
   getIt.registerFactory<CartBloc>(
-    () => CartBloc(
-      getCart: getIt<GetCart>(),
+    () => CartBloc(getCart: getIt<GetCart>(),
       addToCart: getIt<AddToCart>(),
       updateCartQuantity: getIt<UpdateCartQuantity>(),
       removeFromCart: getIt<RemoveFromCart>(),
@@ -219,6 +240,44 @@ getIt.registerFactory<HomeBloc>(() => HomeBloc(getHome: getIt<GetHome>()));
   getIt.registerFactory<AddressBloc>(() => AddressBloc(repository: getIt<AddressRepository>()));
 
 
+  getIt.registerLazySingleton<CouponRemoteDataSource>(() => CouponRemoteDataSourceImpl());
+  getIt.registerLazySingleton<CouponRepository>(() => CouponRepositoryImpl(remoteDataSource: getIt<CouponRemoteDataSource>()));
+  getIt.registerLazySingleton<GetCoupons>(() => GetCoupons(getIt<CouponRepository>()));
+  getIt.registerFactory<CouponBloc>(() => CouponBloc(getCoupons: getIt<GetCoupons>()));
+
+
+  getIt.registerLazySingleton<CheckoutRemoteDataSource>(() => CheckoutRemoteDataSourceImpl());
+  getIt.registerLazySingleton<CheckoutRepository>(() => CheckoutRepositoryImpl(remoteDataSource: getIt<CheckoutRemoteDataSource>()));
+  getIt.registerLazySingleton<PlaceOrder>(() => PlaceOrder(getIt<CheckoutRepository>()));
+  getIt.registerFactory<CheckoutBloc>(() => CheckoutBloc(placeOrder: getIt<PlaceOrder>()));
+
+
+  getIt.registerLazySingleton<OrderRemoteDataSource>(() => OrderRemoteDataSourceImpl());
+  getIt.registerLazySingleton<OrderRepository>(() => OrderRepositoryImpl(remoteDataSource: getIt<OrderRemoteDataSource>()));
+  getIt.registerLazySingleton<GetOrders>(() => GetOrders(getIt<OrderRepository>()));
+  getIt.registerLazySingleton<GetOrderDetails>(() => GetOrderDetails(getIt<OrderRepository>()));
+  getIt.registerFactory<OrdersBloc>(() => OrdersBloc(getOrders: getIt<GetOrders>(),getOrderDetails: getIt<GetOrderDetails>()));
+
+  getIt.registerLazySingleton<WishlistRemoteDataSource>(() => WishlistRemoteDataSourceImpl());
+  getIt.registerLazySingleton<WishlistRepository>(() => WishlistRepositoryImpl(remoteDataSource: getIt<WishlistRemoteDataSource>()));
+  getIt.registerLazySingleton<GetWishlist>(() => GetWishlist(getIt<WishlistRepository>()));
+  getIt.registerLazySingleton<AddToWishlist>(() => AddToWishlist(getIt<WishlistRepository>()));
+  getIt.registerLazySingleton<RemoveFromWishlist>(() => RemoveFromWishlist(getIt<WishlistRepository>()));
+  getIt.registerFactory<WishlistBloc>(() => WishlistBloc( getWishlist: getIt<GetWishlist>(),addToWishlist: getIt<AddToWishlist>(),removeFromWishlist: getIt<RemoveFromWishlist>()));
+
+
+
+
+  // Add inside setupDependencies():
+
+  getIt.registerLazySingleton<SupportRemoteDataSource>(() => SupportRemoteDataSourceImpl());
+  getIt.registerLazySingleton<SupportRepository>(() => SupportRepositoryImpl(remoteDataSource: getIt<SupportRemoteDataSource>()));
+  getIt.registerLazySingleton<GetSupportFaqs>(() => GetSupportFaqs(getIt<SupportRepository>()));
+  getIt.registerLazySingleton<CreateSupportTicket>(() => CreateSupportTicket(getIt<SupportRepository>()));
+  getIt.registerFactory<SupportBloc>(() => SupportBloc(getSupportFaqs: getIt<GetSupportFaqs>(),createSupportTicket: getIt<CreateSupportTicket>()));
+
+
+  
 
 }
 
