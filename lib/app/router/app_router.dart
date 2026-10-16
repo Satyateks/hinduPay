@@ -21,15 +21,23 @@ import '../../features/profile/presentation/bloc/profile_bloc.dart';
 import '../../features/profile/presentation/bloc/profile_event.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 
+import '../../features/store/domain/entities/cart.dart';
+import '../../features/store/domain/entities/store_order.dart';
 import '../../features/store/presentation/bloc/address/address_bloc.dart';
 import '../../features/store/presentation/bloc/address/address_event.dart';
 import '../../features/store/presentation/bloc/store_home/store_home_bloc.dart';
 import '../../features/store/presentation/bloc/store_home/store_home_event.dart';
+import '../../features/store/presentation/pages/checkout_page.dart';
+import '../../features/store/presentation/pages/coupon_page.dart';
 import '../../features/store/presentation/pages/product_detail_page.dart';
 import '../../features/store/presentation/pages/store_home_page.dart';
-import '../../features/store/presentation/widgets/coupon_section.dart';
+import '../../features/store/presentation/pages/wishlist_page.dart';
+import '../../features/store/presentation/widgets/order_details.dart';
+import '../../features/store/presentation/widgets/order_list.dart';
+import '../../features/store/presentation/widgets/order_success.dart';
 import '../../features/store/presentation/widgets/price_summary.dart';
 import '../../features/store/presentation/widgets/product_address_page.dart';
+import '../../features/store/presentation/widgets/support_help.dart';
 import '../../main_shall.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -120,11 +128,9 @@ final GoRouter appRouter = GoRouter(
                   name: 'order-detail',
                   builder: (context, state) {
                     final orderId = state.pathParameters['id'];
-
                     return _PlaceholderPage(title: 'Order: $orderId');
                   },
                 ),
-
                 GoRoute(
                   path: 'temples',
                   name: 'temples',
@@ -250,10 +256,12 @@ final GoRouter appRouter = GoRouter(
                   },
                   routes: [
                     GoRoute(
-                      path: 'cart/Coupon',
-                      name: 'cart-Coupon',
+                      path: 'coupon',
+                      name: 'coupon',
                       builder: (context, state) {
-                        return const StoreCouponScreen();
+                        final extra = state.extra;
+                        final orderAmount = extra is double ? extra : 0.0;
+                        return CouponPage(orderAmount: orderAmount);
                       },
                     ),
 
@@ -291,10 +299,38 @@ final GoRouter appRouter = GoRouter(
                   path: 'checkout',
                   name: 'checkout',
                   builder: (context, state) {
-                    return const _PlaceholderPage(title: 'Checkout');
+                    final cart = state.extra;
+                    if (cart is! Cart) return const Scaffold(body: Center(child: Text('Checkout details are missing. Please reopen your cart.')));
+                    return CheckoutPage(cart: cart);
                   },
                 ),
-
+                GoRoute(
+                  path: 'wishlist',
+                  name: 'wishlist',
+                  builder: (context, state) => const WishlistPage(),
+                ),
+                
+                GoRoute(
+                  path: 'order-success',
+                  name: 'order-success',
+                  builder: (context, state) {
+                    final order = state.extra;
+                    if (order is! StoreOrder) return const Scaffold(body: Center(child: Text('Order details are unavailable.')));
+                      return OrderSuccessPage(order: order);
+                  },
+                ),
+                GoRoute(
+                  path: 'orders',
+                  name: 'order-list',
+                  builder: (context, state) => const OrderList(),
+                  routes: [
+                    GoRoute(
+                      path: ':orderId',
+                      name: 'order-details',
+                      builder: (context, state) {return OrderDetails(orderId: state.pathParameters['orderId']!);},
+                    ),
+                  ],
+                ),
                 GoRoute(
                   path: 'payment',
                   name: 'payment',
@@ -320,6 +356,12 @@ final GoRouter appRouter = GoRouter(
                       },
                     ),
                   ],
+                ),
+           
+                GoRoute(
+                  path: 'help-support',
+                  name: 'help-support',
+                  builder: (context, state) => const HelpSupportPage(),
                 ),
               ],
             ),
@@ -394,19 +436,20 @@ final GoRouter appRouter = GoRouter(
   },
 );
 
-class _PlaceholderPage extends StatelessWidget {
-  final String title;
-  const _PlaceholderPage({required this.title});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text(
-          title,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+
+  class _PlaceholderPage extends StatelessWidget {
+    final String title;
+    const _PlaceholderPage({required this.title});
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(title: Text(title)),
+        body: Center(
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
