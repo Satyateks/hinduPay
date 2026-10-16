@@ -34,5 +34,10 @@ class AppImg {
   static const String kashiVvishnathImg = "$imageDir/kashiVvishnath.png";
   static const String triveniMandirImg = "$imageDir/triveniMandir.png";
   static const String pandirmanImg = "$imageDir/pandirman.png";
+  static const String ghantiImg = "$imageDir/ghanti.png";
+  static const String diyaImg = "$imageDir/diya.png";
+  static const String pujaThaliImg = "$imageDir/pujaThali.png";
+  static const String damruImg = "$imageDir/damru.png";
+  static const String gangajalImg = "$imageDir/gangajal.png";
   static const String Img = "$imageDir/.png";
 }
