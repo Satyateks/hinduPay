@@ -14,80 +14,79 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
     final Map<String, dynamic> response = {
       'id': productId,
-      'name': 'Puja Thali Set',
-
-      'description':
-          'Lorem ipsum dolor sit amet consectetur. '
-          'Premium traditional puja thali set for your '
-          'daily puja and special occasions.',
-
+      'name': 'Premium Brass Puja Thali Set',
+      'description':'Bring home divine elegance with this premium brass ''puja thali set. Perfect for daily worship, festivals, ' 'aarti, and special religious occasions.',
       'images': [
-        AppImg.prasadImg,
-        AppImg.prasadImg,
-        AppImg.prasadImg,
-        AppImg.prasadImg,
+        AppImg.pujaThaliImg,
+        AppImg.damruImg,
+        AppImg.sacredBannerImg,
+        AppImg.diyaImg,
       ],
 
       'price': 499,
       'original_price': 699,
       'discount_percentage': 29,
-
-      'rating': 4.3,
-      'review_count': 32,
-
+      'rating': 4.5,
+      'review_count': 128,
       'included_items': [
         {
           'id': 'item_1',
-          'name': 'Puja Thali',
-          'image': AppImg.prasadImg,
+          'name': 'Brass Puja Thali',
+          'image': AppImg.pujaThaliImg,
           'quantity': '1 Pc',
         },
         {
           'id': 'item_2',
-          'name': 'Kalash',
-          'image': AppImg.prasadImg,
+          'name': 'Brass Kalash',
+          'image': AppImg.damruImg,
           'quantity': '1 Pc',
         },
         {
           'id': 'item_3',
-          'name': 'Diya',
-          'image': AppImg.prasadImg,
-          'quantity': '1 Pc',
+          'name': 'Brass Diya',
+          'image': AppImg.gangajalImg,
+          'quantity': '2 Pcs',
         },
         {
           'id': 'item_4',
           'name': 'Agarbatti Stand',
-          'image': AppImg.prasadImg,
+          'image': AppImg.ghantiImg,
           'quantity': '1 Pc',
         },
         {
           'id': 'item_5',
           'name': 'Chandan Bowl',
-          'image': AppImg.prasadImg,
+          'image': AppImg.diyaImg,
+          'quantity': '1 Pc',
+        },
+        {
+          'id': 'item_6',
+          'name': 'Puja Bell',
+          'image': AppImg.yatraImg,
           'quantity': '1 Pc',
         },
       ],
 
       'product_information': {
-        'material': 'Pure Brass',
-        'finish': 'Traditional Polish',
+        'material': 'Brass',
+        'finish': 'Premium Golden Polish',
         'diameter': '10 Inches',
-        'usage': 'Daily Puja, Festivals, Gifting',
+        'usage': 'Daily Puja, Aarti, Festivals, Gifting',
         'weight': 'Approx. 850 g',
-        'packaging': 'Safe & Secure Packaging',
+        'packaging': 'Secure Protective Packaging',
       },
 
       'delivery_information': {
-        'delivery_text': 'Pan India Delivery',
+        'delivery_text': 'Delivery Across India',
         'return_text': 'Easy Returns',
-        'trusted_text': 'Trusted by 1 Lakh+ Devotees',
+        'trusted_text': 'Trusted by Devotees',
       },
 
       'recommended_products': [
         {
           'id': 'rec_1',
-          'name': 'Puja Thali Set',
-          'image':AppImg.prasadImg,
+          'name': 'Brass Puja Bell',
+          'image':AppImg.damruImg,
           'price': 499,
           'original_price': 699,
           'discount_percentage': 29,
@@ -96,27 +95,27 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
         },
         {
           'id': 'rec_2',
-          'name': 'Ghanti',
-          'image': AppImg.prasadImg,
-          'price': 499,
-          'original_price': 699,
+          'name': 'Brass Diya Set',
+          'image': AppImg.diyaImg,
+          'price': 249,
+          'original_price': 349,
           'discount_percentage': 29,
-          'rating': 4.4,
-          'review_count': 28,
+          'rating': 4.6,
+          'review_count': 104,
         },
         {
           'id': 'rec_3',
           'name': 'Rudraksha Mala',
-          'image':AppImg.prasadImg,
-          'price': 499,
-          'original_price': 699,
-          'discount_percentage': 29,
+          'image': AppImg.ghantiImg,
+          'price': 299,
+          'original_price': 399,
+          'discount_percentage': 25,
           'rating': 4.7,
-          'review_count': 76,
+          'review_count': 176,
         },
       ],
     };
-
+    
     return ProductDetailModel.fromJson(response);
   }
 }
