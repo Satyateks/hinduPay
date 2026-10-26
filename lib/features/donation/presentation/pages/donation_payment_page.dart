@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hindu_pay/core/widgets/app_img.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -813,7 +814,7 @@ class WishlistScreen extends StatelessWidget {
 // 7. COUPONS SCREEN (Screen 11)
 // ==========================================
 class CouponScreen extends StatelessWidget {
-  const CouponScreen({Key? key}) : super(key: key);
+  const CouponScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -902,7 +903,7 @@ class CouponScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {context.pushNamed('cart-Coupon');},
                               child: const Text(
                                 'Apply Code',
                                 style: TextStyle(
