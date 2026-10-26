@@ -39,7 +39,7 @@ class _DharmikAppState extends State<DharmikApp> {
       case AppThemeMode.light: return AppTheme.lightTheme;
       case AppThemeMode.dark: return AppTheme.darkTheme;
       case AppThemeMode.orange:return AppTheme.orangeTheme;
-      // case AppThemeMode.red:return AppTheme.redTheme;
+      //case AppThemeMode.red:return AppTheme.redTheme;
     }
   }
 
