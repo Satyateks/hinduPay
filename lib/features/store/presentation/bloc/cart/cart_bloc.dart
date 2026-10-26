@@ -25,6 +25,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddProductToCart>(_onAddProduct);
     on<ChangeCartQuantity>(_onChangeQuantity);
     on<RemoveCartItem>(_onRemoveItem);
+    on<ApplyCartCoupon>(_onApplyCartCoupon);
+    on<RemoveCartCoupon>(_onRemoveCartCoupon);
     on<ChangeDeliveryAddress>(_onChangeDeliveryAddress);
   }
 
@@ -146,5 +148,24 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
   }
 
+  void _onApplyCartCoupon(ApplyCartCoupon event, Emitter<CartState> emit) {
+    final cart = state.cart;
+    if (cart == null) return;
+
+    final availableAmount =(cart.subtotal - cart.discount).clamp(0.0, double.infinity);
+    final couponDiscount =event.couponDiscount.clamp(0.0, availableAmount).toDouble();
+    final total = (availableAmount - couponDiscount + cart.deliveryCharge).clamp(0.0, double.infinity).toDouble();
+    // final couponDiscount = event.couponDiscount.clamp(0.0, (cart.subtotal - cart.discount).clamp(0.0, double.infinity)).toDouble();
+    // final total =(cart.subtotal - cart.discount - couponDiscount + cart.deliveryCharge).clamp(0.0, double.infinity).toDouble();
+    emit(CartState.success(cart.copyWith(appliedCouponCode: event.couponCode,couponDiscount: couponDiscount,total: total)));
+  }
+
+  void _onRemoveCartCoupon(RemoveCartCoupon event, Emitter<CartState> emit) {
+    final cart = state.cart;
+    if (cart == null) return;
+    final total = (cart.subtotal - cart.discount + cart.deliveryCharge).clamp(0.0, double.infinity).toDouble();
+    emit(CartState.success(cart.copyWith(clearCoupon: true, couponDiscount: 0, total: total)));
+  }
+ 
 }
 
