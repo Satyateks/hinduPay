@@ -7,7 +7,6 @@ import '../../domain/entities/home_data.dart';
 
 class QuickActions extends StatelessWidget {
   final List<HomeQuickAction> actions;
-
   const QuickActions({super.key, required this.actions});
 
   @override
@@ -25,21 +24,29 @@ class QuickActions extends StatelessWidget {
         ),
       ),
       child: Column(mainAxisSize: MainAxisSize.min,
-        children: [    Text(
+            crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
             'Darmik Seva',
             textAlign: TextAlign.right,
-            style: const TextStyle(fontSize: 15,height: 1.4,letterSpacing: 0.1,color: AppColors.surface, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontFamily: 'Plus Jakarta Sans',
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              height: 1.4, // 28px line-height / 20px font-size
+              letterSpacing: 0,color: AppColors.surface,
+            ),
           ),
-      
+ 
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: items.length,
+            itemCount: items.length,padding: EdgeInsets.zero,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
               mainAxisSpacing: 10,
               crossAxisSpacing: 6,
-              childAspectRatio: 0.95,
+              childAspectRatio: 0.90,
             ),
             itemBuilder: (context, index) {
               final item = items[index];
@@ -56,7 +63,6 @@ class QuickActions extends StatelessWidget {
                     case 'vivah sanskar':context.push('/vivah-sanskar');break;
                     case 'yatra':context.push('/yatra');break;
                   }
-               
                 },
               );
             },
@@ -115,7 +121,7 @@ class _QuickActionItem extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(13),
+              borderRadius: BorderRadius.circular(11),
               child: Image.asset(_getImage(item.icon),// width: 46,height: 46,fit: BoxFit.cover,
               ),
             ),
