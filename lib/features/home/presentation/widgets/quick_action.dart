@@ -14,7 +14,7 @@ class QuickActions extends StatelessWidget {
     final items = actions.isNotEmpty ? actions : _defaultActions;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -67,15 +67,17 @@ class QuickActions extends StatelessWidget {
               );
             },
           ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(21),
-            child: Image.asset(
-              AppImg.bannerImg,
-              fit: BoxFit.cover,
-              width: double.maxFinite,
+          Padding(
+            padding: const EdgeInsets.only(top: 21,bottom: 16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(21),
+              child: Image.asset(
+                AppImg.bannerImg,
+                fit: BoxFit.cover,
+                width: double.maxFinite,
+              ),
             ),
           ),          
-          SizedBox(height: 14),
        ],
       ),
     );
