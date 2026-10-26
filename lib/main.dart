@@ -34,14 +34,14 @@ class _DharmikAppState extends State<DharmikApp> {
     super.dispose();
   }
 
-ThemeData get currentTheme {
-  switch (themeController.themeMode) {
-    case AppThemeMode.light: return AppTheme.lightTheme;
-    case AppThemeMode.dark: return AppTheme.darkTheme;
-    case AppThemeMode.orange:return AppTheme.orangeTheme;
-    // case AppThemeMode.red:return AppTheme.redTheme;
+  ThemeData get currentTheme {
+    switch (themeController.themeMode) {
+      case AppThemeMode.light: return AppTheme.lightTheme;
+      case AppThemeMode.dark: return AppTheme.darkTheme;
+      case AppThemeMode.orange:return AppTheme.orangeTheme;
+      // case AppThemeMode.red:return AppTheme.redTheme;
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
