@@ -47,7 +47,7 @@ class _DharmikAppState extends State<DharmikApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Hindu App',
+      title: 'Hindu Pay',
       theme: AppTheme.lightTheme,
       darkTheme: currentTheme,// AppTheme.darkTheme,
       themeMode: ThemeMode.light,
