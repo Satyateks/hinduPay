@@ -97,15 +97,9 @@ final GoRouter appRouter = GoRouter(
             return MainShell(navigationShell: navigationShell);
           },
 
-
-
-
-
-
       branches: [
         // ------------------------------------------------------
         // HOME
-        
         // ------------------------------------------------------
         StatefulShellBranch(
           routes: [
