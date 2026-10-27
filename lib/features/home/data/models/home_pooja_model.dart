@@ -4,6 +4,7 @@ class HomePoojaModel extends HomePooja {
   const HomePoojaModel({
     required super.id,
     required super.name,
+    required super.subName,
     required super.image,
     required super.price,
   });
@@ -12,16 +13,14 @@ class HomePoojaModel extends HomePooja {
     return HomePoojaModel(
       id: json['id']?.toString() ?? '',
       name: json['name']?.toString() ?? '',
+      subName: json['subName']?.toString() ?? '',
       image: json['image']?.toString() ?? '',
       price: _toDouble(json['price']),
     );
   }
 
   static double _toDouble(dynamic value) {
-    if (value is num) {
-      return value.toDouble();
-    }
-
+    if (value is num) return value.toDouble();
     return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 }
