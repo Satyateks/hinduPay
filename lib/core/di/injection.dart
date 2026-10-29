@@ -104,17 +104,10 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton(() => Logout(repository: getIt<AuthRepository>()));
 
 
-    // ----------------------------------------------------------
+  // ----------------------------------------------------------
   // Bloc (Saari dependencies yahan pass karein)
   // ----------------------------------------------------------
-  getIt.registerFactory<AuthBloc>(
-    () => AuthBloc(
-      login: getIt<Login>(),
-      verifyOtp: getIt<VerifyOtp>(),
-      logout: getIt<Logout>(),
-      checkAuthStatus: getIt<CheckAuthStatus>(),
-    ),
-  );
+  getIt.registerFactory<AuthBloc>(() => AuthBloc(login: getIt<Login>(),verifyOtp: getIt<VerifyOtp>(), logout: getIt<Logout>(), checkAuthStatus: getIt<CheckAuthStatus>()));
 
 
 
@@ -122,28 +115,13 @@ Future<void> setupDependencies() async {
 
 
   // ----------------------------------------------------------
-  // Profile - Data
   // ----------------------------------------------------------
 
-  getIt.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(apiClient: getIt<ApiClient>()));
+  getIt.registerLazySingleton<ProfileRemoteDataSource>(() => ProfileRemoteDataSourceImpl(apiClient: getIt<ApiClient>()));   // Profile - Data
+  getIt.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(remoteDataSource: getIt<ProfileRemoteDataSource>()));   // Profile - Repository
+  getIt.registerLazySingleton<GetProfileDetails>(() => GetProfileDetails(repository: getIt<ProfileRepository>()));   // Profile - UseCase
+  getIt.registerFactory<ProfileBloc>(() => ProfileBloc(getProfileDetails: getIt<GetProfileDetails>()));   // Profile - Bloc
 
-  // ----------------------------------------------------------
-  // Profile - Repository
-  // ----------------------------------------------------------
-
-  getIt.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(remoteDataSource: getIt<ProfileRemoteDataSource>()));
-
-  // ----------------------------------------------------------
-  // Profile - UseCase
-  // ----------------------------------------------------------
-
-  getIt.registerLazySingleton<GetProfileDetails>(() => GetProfileDetails(repository: getIt<ProfileRepository>()));
-
-  // ----------------------------------------------------------
-  // Profile - Bloc
-  // ----------------------------------------------------------
-
-  getIt.registerFactory<ProfileBloc>(() => ProfileBloc(getProfileDetails: getIt<GetProfileDetails>()));
 
 
 
@@ -171,30 +149,22 @@ Future<void> setupDependencies() async {
   // Data Source & Repository
   getIt.registerLazySingleton<PanditRemoteDataSource>(() => PanditRemoteDataSourceImpl());
   getIt.registerLazySingleton<PanditRepository>(() => PanditRepositoryImpl(remoteDataSource: getIt<PanditRemoteDataSource>()));
-  // UseCase
-  getIt.registerLazySingleton(() => GetPandits(repository: getIt<PanditRepository>()));
-  // Bloc
-  getIt.registerFactory(() => PanditBloc(getPandits: getIt<GetPandits>()));
+  getIt.registerLazySingleton(() => GetPandits(repository: getIt<PanditRepository>()));  // UseCase
+  getIt.registerFactory(() => PanditBloc(getPandits: getIt<GetPandits>()));  // Bloc
 
 
 
 
 
 
-// ----------------------------------------------------------
-// Home - Data Source
-// ----------------------------------------------------------
+  // ----------------------------------------------------------
+  // Home - Data Source
+  // ----------------------------------------------------------
 
-getIt.registerLazySingleton<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(apiClient: getIt<ApiClient>()));
-
-// Home - Repository
-getIt.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(remoteDataSource: getIt<HomeRemoteDataSource>()));
-
-// Home - Use Case
-getIt.registerLazySingleton<GetHome>(() => GetHome(getIt<HomeRepository>()));
-
-// Home - BLoC
-getIt.registerFactory<HomeBloc>(() => HomeBloc(getHome: getIt<GetHome>()));
+  getIt.registerLazySingleton<HomeRemoteDataSource>(() => HomeRemoteDataSourceImpl(apiClient: getIt<ApiClient>()));
+  getIt.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(remoteDataSource: getIt<HomeRemoteDataSource>())); // Home - Repository
+  getIt.registerLazySingleton<GetHome>(() => GetHome(getIt<HomeRepository>())); // Home - Use Case
+  getIt.registerFactory<HomeBloc>(() => HomeBloc(getHome: getIt<GetHome>())); // Home - BLoC
 
 
 
@@ -223,13 +193,7 @@ getIt.registerFactory<HomeBloc>(() => HomeBloc(getHome: getIt<GetHome>()));
   getIt.registerLazySingleton<AddToCart>(() => AddToCart(getIt<CartRepository>()));
   getIt.registerLazySingleton<UpdateCartQuantity>(() => UpdateCartQuantity(getIt<CartRepository>()));
   getIt.registerLazySingleton<RemoveFromCart>(() => RemoveFromCart(getIt<CartRepository>()));
-  getIt.registerFactory<CartBloc>(
-    () => CartBloc(getCart: getIt<GetCart>(),
-      addToCart: getIt<AddToCart>(),
-      updateCartQuantity: getIt<UpdateCartQuantity>(),
-      removeFromCart: getIt<RemoveFromCart>(),
-    ),
-  );
+  getIt.registerFactory<CartBloc>(() => CartBloc(getCart: getIt<GetCart>(),addToCart: getIt<AddToCart>(), updateCartQuantity: getIt<UpdateCartQuantity>(),removeFromCart: getIt<RemoveFromCart>()));
 
 
 
