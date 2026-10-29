@@ -17,19 +17,28 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       'id': 'cart_1',
       'product_id': 'p_1',
       'name': 'Puja Thali Set',
-      'image': 'assets/images/store/puja_thali.png',
+      'image': AppImg.pujaThaliImg,
       'price': 499,
       'original_price': 699,
-      'quantity': 1,
+      'quantity': 2,
     },
     {
       'id': 'cart_2',
       'product_id': 'p_2',
       'name': 'Ghanti',
-      'image': 'assets/images/store/ghanti.png',
+      'image': AppImg.ghantiImg,
       'price': 299,
       'original_price': 399,
       'quantity': 1,
+    },
+    {
+      'id': 'cart_3',
+      'product_id': 'p_3',
+      'name': 'Dhamru',
+      'image': AppImg.damruImg,
+      'price': 200,
+      'original_price': 250,
+      'quantity': 4,
     },
   ];
 
@@ -128,24 +137,15 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
 
     for (final item in _items) {
       final price = (item['price'] as num).toDouble();
-      final originalPrice =
-          (item['original_price'] as num).toDouble();
+      final originalPrice = (item['original_price'] as num).toDouble();
       final quantity = item['quantity'] as int;
-
       subtotal += price * quantity;
-
-      discount +=
-          (originalPrice - price) * quantity;
+      discount +=(originalPrice - price) * quantity;
     }
 
     const double deliveryCharge = 0;
-    const double couponDiscount = 0;
-
-    final total =
-        subtotal -
-        discount -
-        couponDiscount +
-        deliveryCharge;
+    const double couponDiscount = 10;
+    final total =subtotal - discount - couponDiscount + deliveryCharge;
 
     return CartModel.fromJson({
       'items': _items,

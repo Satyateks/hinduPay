@@ -61,10 +61,8 @@ class HomePromoBanner extends StatelessWidget {
 
                 const SizedBox(
                   width: 205,
-                  child: Text(
-                    'Your contribution can make a meaningful difference.',
-                    maxLines: 2,
-                    style: TextStyle(color: Colors.white, fontSize: 11),
+                  child: Text('Your contribution can make a meaningful difference.',
+                    maxLines: 2, style: TextStyle(color: Colors.white, fontSize: 11),
                   ),
                 ),
 

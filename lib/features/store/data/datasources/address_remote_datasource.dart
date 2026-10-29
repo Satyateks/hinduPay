@@ -24,7 +24,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   final List<AddressModel> _addresses = [
     const AddressModel(
       id: 'address_1',
-      name: 'Rahul Sharma',
+      name: 'Rajiv Verma',
       phone: '98XXXXXX10',
       addressLine: 'Techzone 4',
       city: 'Greater Noida',
@@ -35,7 +35,18 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
     ),
     const AddressModel(
       id: 'address_2',
-      name: 'Rahul Sharma',
+      name: 'Rohit Sharma',
+      phone: '98XXXXXX10',
+      addressLine: 'Techzone 4',
+      city: 'Greater Noida',
+      state: 'Uttar Pradesh',
+      pincode: '201310',
+      type: 'Home',
+      isDefault: true,
+    ),
+    const AddressModel(
+      id: 'address_3',
+      name: 'K.L Rahul',
       phone: '98XXXXXX10',
       addressLine: 'Sector 18',
       city: 'Noida',
@@ -90,9 +101,7 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   @override
   Future<AddressModel> selectAddress(String id) async {
     final index = _addresses.indexWhere((a) => a.id == id);
-
     if (index == -1) throw Exception('Address not found');
-
     _makeDefaultLocally(id);
     return _addresses.firstWhere((a) => a.id == id);
   }
@@ -100,7 +109,6 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   void _makeDefaultLocally(String id) {
     for (var i = 0; i < _addresses.length; i++) {
       final old = _addresses[i];
-
       _addresses[i] = AddressModel(
         id: old.id,
         name: old.name,
