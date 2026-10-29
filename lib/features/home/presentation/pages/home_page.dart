@@ -32,11 +32,11 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(backgroundColor: AppColors.background,
-      body: SafeArea(
+      body: SafeArea(maintainBottomViewPadding: false,
         bottom: false,
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
-            if (state.status == HomeStatus.loading ||state.status == HomeStatus.initial) return const _HomeLoadingView();
+            if (state.status == HomeStatus.loading || state.status == HomeStatus.initial) return const _HomeLoadingView();
             if (state.status == HomeStatus.failure) return _HomeErrorView(message: state.errorMessage ?? 'Something went wrong');
             final home = state.home;
             if (home == null) return const _HomeErrorView(message: 'Home data not available');
@@ -47,13 +47,13 @@ class HomeView extends StatelessWidget {
                 slivers: [
                   const SliverToBoxAdapter(child: HomeHeader()),
                   SliverToBoxAdapter(child: QuickActions(actions: home.quickActions)),
-                  // const SliverToBoxAdapter(child: HomePromoBanner()),
+                  const SliverToBoxAdapter(child: HomePromoBanner()),
                   SliverToBoxAdapter(child: TempleSection(temples: home.temples)),
                   const SliverToBoxAdapter(child: SupportSection()),
                   const SliverToBoxAdapter(child: SacredBanner()),
                   SliverToBoxAdapter(child: PoojaSection(poojas: home.poojas)),
                   SliverToBoxAdapter(child: PanditSection()),
-                  const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                  const SliverToBoxAdapter(child: SizedBox(height: 111)),
                 ],
               ),
             );

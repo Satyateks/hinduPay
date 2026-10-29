@@ -106,18 +106,20 @@ class HomeAstrology extends Equatable {
 class HomePooja extends Equatable {
   final String id;
   final String name;
+  final String subName;
   final String image;
   final double price;
 
   const HomePooja({
     required this.id,
     required this.name,
+    required this.subName,
     required this.image,
     required this.price,
   });
 
   @override
-  List<Object?> get props => [id, name, image, price];
+  List<Object?> get props => [id, name,subName, image, price];
 }
 
 class HomeActivity extends Equatable {

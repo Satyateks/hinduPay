@@ -191,6 +191,12 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
           'image': AppImg.panditjiImg,
           'type': 'pandit',
         },
+        {
+          'id': 'r2',
+          'title': 'Book your Pandit',
+          'image': AppImg.panditjiImg,
+          'type': 'pandit',
+        },
       ],
     };
 
