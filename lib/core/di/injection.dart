@@ -28,6 +28,7 @@ import '../../features/store/data/datasources/cart_remote_datasource.dart';
 import '../../features/store/data/datasources/checkout_remote_datasource.dart';
 import '../../features/store/data/datasources/coupon_remote_datasource.dart';
 import '../../features/store/data/datasources/product_remote_datasource.dart';
+import '../../features/store/data/datasources/review_remote_datasource.dart';
 import '../../features/store/data/datasources/store_remote_datasource.dart';
 import '../../features/store/data/datasources/support_remote_datasource.dart';
 import '../../features/store/data/datasources/wishlist_remote_datasource.dart';
@@ -36,6 +37,7 @@ import '../../features/store/data/repositories/cart_repository_impl.dart';
 import '../../features/store/data/repositories/checkout_repository_impl.dart';
 import '../../features/store/data/repositories/coupon_repository_impl.dart';
 import '../../features/store/data/repositories/product_repository_impl.dart';
+import '../../features/store/data/repositories/review_repository_impl.dart';
 import '../../features/store/data/repositories/store_repository_impl.dart';
 import '../../features/store/data/repositories/support_repository_impl.dart';
 import '../../features/store/data/repositories/wishlist_repository_impl.dart';
@@ -43,6 +45,7 @@ import '../../features/store/domain/repositories/cart_repository.dart';
 import '../../features/store/domain/repositories/checkout_repository.dart';
 import '../../features/store/domain/repositories/coupon_repository.dart';
 import '../../features/store/domain/repositories/product_repository.dart';
+import '../../features/store/domain/repositories/review_repository.dart';
 import '../../features/store/domain/repositories/store_repository.dart';
 import '../../features/store/domain/repositories/support_repository.dart';
 import '../../features/store/domain/repositories/wishlist_repository.dart';
@@ -51,6 +54,7 @@ import '../../features/store/domain/usecases/get_cart.dart';
 import '../../features/store/domain/usecases/get_coupon.dart';
 import '../../features/store/domain/usecases/get_order_details.dart';
 import '../../features/store/domain/usecases/get_product_details.dart';
+import '../../features/store/domain/usecases/get_product_reviews.dart';
 import '../../features/store/domain/usecases/get_store_home.dart';
 import '../../features/store/domain/usecases/get_support_ticket.dart';
 import '../../features/store/domain/usecases/get_wishlist.dart';
@@ -63,6 +67,7 @@ import '../../features/store/presentation/bloc/checkout/checkout_bloc.dart';
 import '../../features/store/presentation/bloc/coupon/coupon_bloc.dart';
 import '../../features/store/presentation/bloc/order/orders_bloc.dart';
 import '../../features/store/presentation/bloc/product_detail/product_detail_bloc.dart';
+import '../../features/store/presentation/bloc/reviews/reviews_bloc.dart';
 import '../../features/store/presentation/bloc/store_home/store_home_bloc.dart';
 import '../../features/store/presentation/bloc/support/support_bloc.dart';
 import '../../features/store/presentation/bloc/wishlist/wishlist_bloc.dart';
@@ -242,6 +247,12 @@ Future<void> setupDependencies() async {
 
 
   
+  getIt.registerLazySingleton<ReviewRemoteDataSource>(() => ReviewRemoteDataSourceImpl());
+  getIt.registerLazySingleton<ReviewRepository>(() => ReviewRepositoryImpl(remoteDataSource: getIt<ReviewRemoteDataSource>()));
+  getIt.registerLazySingleton<GetProductReviews>(() => GetProductReviews(getIt<ReviewRepository>()));
+  getIt.registerLazySingleton<SubmitProductReview>(() => SubmitProductReview(getIt<ReviewRepository>()));
+  getIt.registerLazySingleton<MarkReviewHelpful>(() => MarkReviewHelpful(getIt<ReviewRepository>()));
+  getIt.registerFactory<ReviewsBloc>(() => ReviewsBloc(getProductReviews: getIt<GetProductReviews>(), submitProductReview: getIt<SubmitProductReview>(), markReviewHelpful: getIt<MarkReviewHelpful>()));
 
 }
 

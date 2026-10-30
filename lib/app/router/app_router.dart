@@ -30,6 +30,7 @@ import '../../features/store/presentation/bloc/store_home/store_home_event.dart'
 import '../../features/store/presentation/pages/checkout_page.dart';
 import '../../features/store/presentation/pages/coupon_page.dart';
 import '../../features/store/presentation/pages/product_detail_page.dart';
+import '../../features/store/presentation/pages/product_reviews_page.dart';
 import '../../features/store/presentation/pages/store_home_page.dart';
 import '../../features/store/presentation/pages/wishlist_page.dart';
 import '../../features/store/presentation/widgets/order_details.dart';
@@ -247,6 +248,13 @@ final GoRouter appRouter = GoRouter(
                     return ProductDetailPage(productId: productId);
                   },
                 ),
+                GoRoute(
+                  path: 'product/:productId/reviews',
+                  name: 'product-reviews',
+                  builder: (context, state) {
+                    return ProductReviewsPage(productId: state.pathParameters['productId']!);
+                  },
+                ),
 
                 GoRoute(
                   path: 'cart',
@@ -288,9 +296,7 @@ final GoRouter appRouter = GoRouter(
                     GoRoute(
                       path: 'cart/address',
                       name: 'cart-address',
-                      builder: (context, state) {
-                        return const SavedAddressesScreen();
-                      },
+                      builder: (context, state) {return const SavedAddressesScreen();},
                     ),
                   ],
                 ),
