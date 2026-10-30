@@ -107,20 +107,11 @@ class ProductDetailView extends StatelessWidget {
 
       body: BlocBuilder<ProductDetailBloc, ProductDetailState>(
         builder: (context, state) {
-          if (state.status == ProductDetailStatus.initial ||
-              state.status == ProductDetailStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == ProductDetailStatus.failure) {
-            return Center(
-              child: Text(state.errorMessage ?? 'Something went wrong'),
-            );
-          }
+          if (state.status == ProductDetailStatus.initial || state.status == ProductDetailStatus.loading) return const Center(child: CircularProgressIndicator());
+          if (state.status == ProductDetailStatus.failure) return Center(child: Text(state.errorMessage ?? 'Something went wrong'));
+          
           final product = state.product;
-          if (product == null) {
-            return const Center(child: Text('Product not available'));
-          }
+          if (product == null) return const Center(child: Text('Product not available'));
 
           return Column(
             children: [
