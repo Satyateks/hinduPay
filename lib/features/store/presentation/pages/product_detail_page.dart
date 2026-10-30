@@ -97,8 +97,7 @@ class ProductDetailView extends StatelessWidget {
             },
           ),
           IconButton(
-            onPressed: () {
-              // Add share functionality here.
+            onPressed: () { // Add share functionality here.
             },
             icon: const Icon(Icons.share_outlined, size: 21),
           ),
@@ -132,29 +131,17 @@ class ProductDetailView extends StatelessWidget {
                     _ProductDescription(product: product),
 
                     // Included items section
-                    _DetailSectionCard(
-                      child: Column(
-                        children: [
-                          IncludedItems(items: product.includedItems),
-                        ],
-                      ),
-                    ),
+                    _DetailSectionCard(child: Column(children: [IncludedItems(items: product.includedItems)])),
 
                     // Product specifications
                     _DetailSectionCard(child: ProductDetails(product: product)),
 
                     // Delivery and trust information
                     _DeliveryTrust(product: product),
-                TextButton.icon(
-                  onPressed: () {
-                    context.pushNamed(
-                      'product-reviews',
-                      pathParameters: {'productId': product.id},
-                    );
-                  },
-                  icon: const Icon(Icons.star_outline),
-                  label: const Text('Ratings & Reviews'),
-                ),
+                    TextButton.icon(
+                      onPressed: ()=> context.pushNamed('product-reviews',pathParameters: {'productId': product.id}),                      icon: const Icon(Icons.star_outline),
+                      label: const Text('Ratings & Reviews'),
+                    ),
                     // Recommended products
                     RecommendedProducts(products: product.recommendedProducts),
                   ],

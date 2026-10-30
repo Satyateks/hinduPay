@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widgets/app_button.dart';
 import '../../domain/entities/store_home.dart';
 import '../bloc/cart/cart_bloc.dart';
 import '../bloc/cart/cart_event.dart';
@@ -195,51 +196,41 @@ class StoreProductCard extends StatelessWidget {
                         ),
 
                         const Spacer(),
+
+                        // Add to Cart button
                         CustomButton(
                           text: 'Add to Cart',
                           // isLoading: state.isLoading,
                           onPressed: () {
-                            context.read<CartBloc>().add(AddProductToCart(productId: product.id,quantity: 1));
+                            context.read<CartBloc>().add(AddProductToCart(productId: product.id,quantity: 2));
                             context.pushNamed('cart');
                           },
                         ),
-
-                        // Add to Cart button
-                        SizedBox(
-                          width: 132,
-                          height: 32,
-                          child: FilledButton(
-                            style: FilledButton.styleFrom(
-                              backgroundColor: const Color(0xFFD0E5D9),
-                              foregroundColor: const Color(0xFF087D3B),
-                              elevation: 0,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-                            ),
+                      /*SizedBox(
+                          width: double.infinity,
+                          height: 31,
+                          child: OutlinedButton(
                             onPressed: () {
-                              context.read<CartBloc>().add(AddProductToCart(productId: product.id,quantity: 1));
+                              context.read<CartBloc>().add(AddProductToCart(productId: product.id, quantity: 1));
                               context.pushNamed('cart');
                             },
-                            child: const FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.add,size: 16),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    'Add to Cart',
-                                    style: TextStyle(
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
+                            style: OutlinedButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              foregroundColor: colors.primary,
+                              side: BorderSide(color: colors.primary),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Text(
+                              '+ Add to Cart',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),
