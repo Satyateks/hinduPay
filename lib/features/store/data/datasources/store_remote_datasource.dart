@@ -1,9 +1,8 @@
 import '../../../../core/widgets/app_img.dart';
+import '../../domain/entities/store_order.dart';
 import '../models/store_home_model.dart';
 
-abstract class StoreRemoteDataSource {
-  Future<StoreHomeModel> getStoreHome();
-}
+abstract class StoreRemoteDataSource {Future<StoreHomeModel> getStoreHome();}
 
 class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
   StoreRemoteDataSourceImpl();
@@ -56,7 +55,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'p_2',
           'name': 'Ghanti',
-          'image': AppImg.dramSevaImg,
+          'image': AppImg.ghantiImg,
           'price': 499,
           'original_price': 699,
           'discount_percentage': 29,
@@ -67,7 +66,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'p_3',
           'name': 'Diya Set',
-          'image': AppImg.vivahSanskarImg,
+          'image': AppImg.diyaImg,
           'price': 299,
           'original_price': 399,
           'discount_percentage': 25,
@@ -123,7 +122,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'new_1',
           'name': 'Puja Thali Set',
-          'image': AppImg.prasadImg,
+          'image': AppImg.pujaThaliImg,
           'price': 499,
           'original_price': 699,
           'discount_percentage': 29,
@@ -134,7 +133,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'new_2',
           'name': 'Ghanti',
-          'image': AppImg.prasadImg,
+          'image': AppImg.ghantiImg,
           'price': 499,
           'original_price': 699,
           'discount_percentage': 29,
@@ -148,7 +147,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'best_1',
           'name': 'Dhamru',
-          'image': AppImg.prasadImg,
+          'image': AppImg.damruImg,
           'price': 499,
           'original_price': 699,
           'discount_percentage': 29,
@@ -159,7 +158,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'best_2',
           'name': 'Rudraksha Mala',
-          'image': AppImg.prasadImg,
+          'image': AppImg.gangajalImg,
           'price': 499,
           'original_price': 699,
           'discount_percentage': 29,
@@ -184,7 +183,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'murti_1',
           'name': 'Shivling',
-          'image': AppImg.prasadImg,
+          'image': AppImg.ramMandirImg,
           'price': 499,
           'original_price': 699,
           'discount_percentage': 29,
@@ -195,7 +194,7 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
         {
           'id': 'murti_2',
           'name': 'Ganesha Murti',
-          'image': AppImg.prasadImg,
+          'image': AppImg.kashiVvishnathImg,
           'price': 699,
           'original_price': 899,
           'discount_percentage': 22,
@@ -203,8 +202,99 @@ class StoreRemoteDataSourceImpl implements StoreRemoteDataSource {
           'review_count': 63,
           'category': 'Murti',
         },
+        {
+          'id': 'murti_3',
+          'name': 'Ganesha Murti',
+          'image': AppImg.triveniMandirImg,
+          'price': 699,
+          'original_price': 899,
+          'discount_percentage': 22,
+          'rating': 4.8,
+          'review_count': 63,
+          'category': 'Murti',
+        },
+        {
+          'id': 'murti_4',
+          'name': 'Shivling',
+          'image': AppImg.ramMandirImg,
+          'price': 499,
+          'original_price': 699,
+          'discount_percentage': 29,
+          'rating': 4.5,
+          'review_count': 30,
+          'category': 'Murti',
+        },
       ],
     };
     return StoreHomeModel.fromJson(response);
   }
 }
+
+
+
+abstract class OrderRemoteDataSource {
+  Future<List<StoreOrder>> getOrders();
+  Future<StoreOrder?> getOrderDetails(String orderId);
+}
+
+class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
+  // In-memory demo data; app restart par reset ho jayega.
+  final List<StoreOrder> _orders = [
+    StoreOrder(
+      id: 'HP10001',
+      productNames: const ['Puja Thali Set', 'Brass Ghanti'],
+      addressName: 'Rahul Sharma',
+      deliveryAddress: 'Techzone 4, Greater Noida, UP - 201310',
+      phone: '98XXXXXX10',
+      totalAmount: 748,
+      paymentMethod: StorePaymentMethod.cashOnDelivery,
+      status: StoreOrderStatus.placed,
+      trackingStatus: StoreOrderStatus.shipped,
+      createdAt: DateTime.now().subtract(const Duration(days: 2)),
+      estimatedDelivery: DateTime.now().add(const Duration(days: 2)),
+    ),
+    StoreOrder(
+      id: 'HP10002',
+      productNames: const ['Brass Diya Set'],
+      addressName: 'Rahul Sharma',
+      deliveryAddress: 'Sector 18, Noida, UP - 201301',
+      phone: '98XXXXXX10',
+      totalAmount: 399,
+      paymentMethod: StorePaymentMethod.upi,
+      status: StoreOrderStatus.paymentPending,
+      trackingStatus: StoreOrderStatus.paymentPending,
+      createdAt: DateTime.now().subtract(const Duration(days: 1)), estimatedDelivery: DateTime.now().add(const Duration(days: 2)),
+    ),
+    StoreOrder(
+      id: 'HP10003',
+      productNames: const ['Cotton Pooja Wicks'],
+      addressName: 'Rahul Sharma',
+      deliveryAddress: 'Techzone 4, Greater Noida, UP - 201310',
+      phone: '98XXXXXX10',
+      totalAmount: 149,estimatedDelivery: DateTime.now().add(const Duration(days: 2)),
+      paymentMethod: StorePaymentMethod.cashOnDelivery,
+      status: StoreOrderStatus.placed,
+      trackingStatus: StoreOrderStatus.delivered,
+      createdAt: DateTime.now().subtract(const Duration(days: 7)),
+    ),
+  ];
+
+  @override
+  Future<List<StoreOrder>> getOrders() async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    return List.unmodifiable(_orders);
+  }
+
+  @override
+  Future<StoreOrder?> getOrderDetails(String orderId) async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+
+    for (final order in _orders) {
+      if (order.id == orderId) return order;
+    }
+
+    return null;
+  }
+}
+
+

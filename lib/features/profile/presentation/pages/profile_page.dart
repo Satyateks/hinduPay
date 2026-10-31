@@ -255,10 +255,10 @@ class ProfilePage extends StatelessWidget {
                             radius: 52,
                             backgroundColor: Colors.grey.shade100,
                             backgroundImage:
-                                user.image != null && user.image!.isNotEmpty
-                                ? NetworkImage(user.image!)
+                                user.image.isNotEmpty
+                                ? NetworkImage(user.image)
                                 : null,
-                            child: user.image == null || user.image!.isEmpty
+                            child: user.image.isEmpty
                                 ? Icon(
                                     Icons.person,
                                     size: 55,
@@ -420,10 +420,10 @@ class ProfilePage extends StatelessWidget {
                             Icons.arrow_forward_ios,
                             size: 16,
                           ),
-                          onTap: () {
-                          },
+                          onTap: () {},
                         ),
-                      const _ThemeSection(), ],
+                        const _ThemeSection(),
+                      ],
                     ),
                   ),
 
@@ -541,21 +541,12 @@ class _ThemeSection extends StatelessWidget {
       animation: themeController,
       builder: (context, _) {
         return ListTile(
-          leading: const Icon(
-            Icons.palette_outlined,
-          ),
+          leading: const Icon(Icons.palette_outlined),
           title: const Text('Theme'),
-          subtitle: Text(
-            _themeName(themeController.themeMode),
-          ),
-          trailing: const Icon(
-            Icons.chevron_right,
-          ),
+          subtitle: Text(_themeName(themeController.themeMode)),
+          trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            _showThemeSelector(
-              context,
-              themeController,
-            );
+            _showThemeSelector(context, themeController);
           },
         );
       },
@@ -590,41 +581,26 @@ class _ThemeSection extends StatelessWidget {
               const ListTile(
                 title: Text(
                   'Choose Theme',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
 
-              ...AppThemeMode.values.map(
-                (theme) {
-                  final selected =
-                      themeController.themeMode == theme;
+              ...AppThemeMode.values.map((theme) {
+                final selected = themeController.themeMode == theme;
 
-                  return ListTile(
-                    leading: Icon(
-                      _themeIcon(theme),
-                    ),
-                    title: Text(
-                      _themeName(theme),
-                    ),
-                    trailing: selected
-                        ? const Icon(
-                            Icons.check_circle,
-                          )
-                        : null,
-                    onTap: () async {
-                      await themeController.setTheme(
-                        theme,
-                      );
+                return ListTile(
+                  leading: Icon(_themeIcon(theme)),
+                  title: Text(_themeName(theme)),
+                  trailing: selected ? const Icon(Icons.check_circle) : null,
+                  onTap: () async {
+                    await themeController.setTheme(theme);
 
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                    },
-                  );
-                },
-              ),
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
+                );
+              }),
 
               const SizedBox(height: 16),
             ],
