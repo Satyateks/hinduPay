@@ -5,6 +5,7 @@ class Cart extends Equatable {
   final CartAddress? deliveryAddress;
   final double subtotal;
   final double discount;
+  final String? appliedCouponCode;
   final double deliveryCharge;
   final double couponDiscount;
   final double total;
@@ -12,6 +13,7 @@ class Cart extends Equatable {
   const Cart({
     this.items = const [],
     this.deliveryAddress,
+    this.appliedCouponCode,
     this.subtotal = 0,
     this.discount = 0,
     this.deliveryCharge = 0,
@@ -26,6 +28,8 @@ class Cart extends Equatable {
     double? deliveryCharge,
     double? couponDiscount,
     double? total,
+    String? appliedCouponCode,
+    bool clearCoupon = false,
   }) {
     return Cart(
       items: items ?? this.items,
@@ -35,6 +39,7 @@ class Cart extends Equatable {
       deliveryCharge: deliveryCharge ?? this.deliveryCharge,
       couponDiscount: couponDiscount ?? this.couponDiscount,
       total: total ?? this.total,
+      appliedCouponCode:clearCoupon ? null : (appliedCouponCode ?? this.appliedCouponCode),
     );
   }
   @override
@@ -42,7 +47,7 @@ class Cart extends Equatable {
     items,
     deliveryAddress,
     subtotal,
-    discount,
+    discount,appliedCouponCode,
     deliveryCharge,
     couponDiscount,
     total,

@@ -4,22 +4,15 @@ class ProductDetail extends Equatable {
   final String id;
   final String name;
   final String description;
-
   final List<String> images;
-
   final double price;
   final double? originalPrice;
   final int? discountPercentage;
-
   final double? rating;
   final int? reviewCount;
-
   final List<ProductIncludedItem> includedItems;
-
   final ProductInformation productInformation;
-
   final DeliveryInformation deliveryInformation;
-
   final List<StoreProduct> recommendedProducts;
 
   const ProductDetail({
