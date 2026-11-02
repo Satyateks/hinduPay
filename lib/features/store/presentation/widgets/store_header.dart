@@ -16,23 +16,19 @@ class StoreHeader extends StatelessWidget {
             child: Text(
               'Shopping',
               style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: colors.onSurface,
+                fontWeight: FontWeight.w800,fontSize:20,
+                color: colors.onSurface,height: 1.5
               ),
             ),
           ),
 
           IconButton(
-            onPressed: () {
-              // TODO: Search
-            },
+            onPressed: () {},
             icon: Icon(Icons.search, color: colors.onSurface),
           ),
 
           IconButton(
-            onPressed: () {
-              // TODO: Menu
-            },
+            onPressed: () {},
             icon: Icon(Icons.menu, color: colors.onSurface),
           ),
         ],

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../../domain/entities/product_details.dart';
 
@@ -9,68 +8,125 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final info = product.productInformation;
 
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Product Details',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            _DetailRow(title: 'Material', value: info.material),
-            _DetailRow(title: 'Finish', value: info.finish),
-            _DetailRow(title: 'Diameter', value: info.diameter),
-            _DetailRow(title: 'Usage', value: info.usage),
-            _DetailRow(title: 'Weight', value: info.weight),
-            _DetailRow(title: 'Packaging', value: info.packaging),
-          ],
-        ),
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.035),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-class _DetailRow extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _DetailRow({required this.title, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Text(title, style: theme.textTheme.labelMedium)),
-          Expanded(
-            child: Text(
-              value,
-              style: theme.textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+          const Text(
+            'Product Details',
+            style: TextStyle(
+              fontFamily: 'Plus Jakarta Sans',
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF333333),
             ),
+          ),
+
+          const SizedBox(height: 10),
+
+          // Two-column details grid
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _DetailItem(title: 'Material', value: info.material),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _DetailItem(title: 'Finish', value: info.finish),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _DetailItem(
+                  title: 'Thali Diameter',
+                  value: info.diameter,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _DetailItem(title: 'Usage', value: info.usage),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _DetailItem(title: 'Weight', value: info.weight),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _DetailItem(title: 'Package', value: info.packaging),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 }
- 
+
+class _DetailItem extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const _DetailItem({required this.title, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontFamily: 'Plus Jakarta Sans',
+            fontSize: 9,
+            height: 1.3,
+            fontWeight: FontWeight.w400,
+            color: Color(0xFF777777),
+          ),
+        ),
+
+        const SizedBox(height: 2),
+
+        Text(
+          value,
+          style: const TextStyle(
+            fontFamily: 'Plus Jakarta Sans',
+            fontSize: 9,
+            height: 1.35,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF292929),
+          ),
+        ),
+      ],
+    );
+  }
+}
