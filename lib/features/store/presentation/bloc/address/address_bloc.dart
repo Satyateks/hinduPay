@@ -9,9 +9,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
 
   AddressBloc({required this.repository}) : super(const AddressState()) {
     on<LoadAddresses>((event, emit) async {
-      emit(
-        AddressState(status: AddressStatus.loading, addresses: state.addresses),
-      );
+      emit(AddressState(status: AddressStatus.loading, addresses: state.addresses));
 
       final result = await repository.getAddresses();
       result.fold(
@@ -22,25 +20,19 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
             errorMessage: failure.message,
           ),
         ),
-        (addresses) => emit(
-          AddressState(status: AddressStatus.success, addresses: addresses),
-        ),
+        (addresses) => emit(AddressState(status: AddressStatus.success, addresses: addresses)),
       );
     });
 
     on<AddAddressRequested>((event, emit) async {
-      emit(
-        AddressState(status: AddressStatus.saving, addresses: state.addresses),
-      );
+      emit(AddressState(status: AddressStatus.saving, addresses: state.addresses));
 
       final result = await repository.addAddress(event.address);
       await _reloadAfterMutation(result, emit);
     });
 
     on<UpdateAddressRequested>((event, emit) async {
-      emit(
-        AddressState(status: AddressStatus.saving, addresses: state.addresses),
-      );
+      emit(AddressState(status: AddressStatus.saving, addresses: state.addresses));
 
       final result = await repository.updateAddress(event.address);
       await _reloadAfterMutation(result, emit);
@@ -100,9 +92,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
                 errorMessage: failure.message,
               ),
             ),
-            (addresses) => emit(
-              AddressState(status: AddressStatus.success, addresses: addresses),
-            ),
+            (addresses) => emit(AddressState(status: AddressStatus.success, addresses: addresses)),
           );
         },
       );
@@ -133,9 +123,7 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
               errorMessage: failure.message,
             ),
           ),
-          (addresses) => emit(
-            AddressState(status: AddressStatus.success, addresses: addresses),
-          ),
+          (addresses) => emit(AddressState(status: AddressStatus.success, addresses: addresses)),
         );
       },
     );
