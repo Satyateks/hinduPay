@@ -38,8 +38,7 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Image.asset(
-                image,
+              child: Image.asset(image,
                 fit: BoxFit.contain,
                 width: double.infinity,
               ),
@@ -50,9 +49,7 @@ class ProductCard extends StatelessWidget {
               '$name   ProductCard',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(
-                context,
-              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(context,).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
             ),
 
             const SizedBox(height: 4),
@@ -102,9 +99,7 @@ class CouponCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Apply Coupon',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.black87,
-                  ),
+                  style: theme.textTheme.bodyMedium?.copyWith(color: Colors.black87),
                 ),
               ),
               if (!isCouponApplied)
