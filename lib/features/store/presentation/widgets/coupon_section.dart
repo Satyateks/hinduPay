@@ -10,10 +10,7 @@ class StoreCouponScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
       appBar: AppBar(
-        title: const Text(
-          'Coupons',
-          style: TextStyle(color: Colors.black, fontSize: 16),
-        ),
+        title: const Text('Coupons',style: TextStyle(color: Colors.black, fontSize: 16)),
         backgroundColor: Colors.white,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
@@ -88,9 +85,7 @@ class StoreCouponScreen extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryGreenLight,
                                 elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                               ),
                               onPressed: () {},
                               child: const Text(
