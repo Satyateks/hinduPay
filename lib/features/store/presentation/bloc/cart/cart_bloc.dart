@@ -36,12 +36,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final result = await getCart();
 
     result.fold(
-      (failure) {
-        emit(CartState.failure(failure.message));
-      },
-      (cart) {
-        emit(CartState.success(cart));
-      },
+      (failure) {emit(CartState.failure(failure.message));},
+      (cart) {emit(CartState.success(cart));}
     );
   }
 
@@ -52,12 +48,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final result = await getCart();
 
     result.fold(
-      (failure) {
-        emit(CartState.failure(failure.message));
-      },
-      (cart) {
-        emit(CartState.success(cart));
-      },
+      (failure) {emit(CartState.failure(failure.message));},
+      (cart) {emit(CartState.success(cart));},
     );
   }
 
@@ -71,12 +63,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
 
     result.fold(
-      (failure) {
-        emit(CartState.failure(failure.message));
-      },
-      (cart) {
-        emit(CartState.success(cart));
-      },
+      (failure) {emit(CartState.failure(failure.message));},
+      (cart) {emit(CartState.success(cart));},
     );
   }
 
@@ -86,9 +74,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     final currentCart = state.cart;
 
-    if (currentCart != null) {
-      emit(CartState.updating(currentCart));
-    }
+    if (currentCart != null) emit(CartState.updating(currentCart));
 
     if (event.quantity <= 0) {
       add(RemoveCartItem(cartItemId: event.cartItemId));
@@ -101,12 +87,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     );
 
     result.fold(
-      (failure) {
-        emit(CartState.failure(failure.message));
-      },
-      (cart) {
-        emit(CartState.success(cart));
-      },
+      (failure) {emit(CartState.failure(failure.message));},
+      (cart) {emit(CartState.success(cart));},
     );
   }
 
@@ -115,37 +97,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     final currentCart = state.cart;
-
-    if (currentCart != null) {
-      emit(CartState.updating(currentCart));
-    }
-
+    if (currentCart != null) emit(CartState.updating(currentCart));
     final result = await removeFromCart(cartItemId: event.cartItemId);
 
     result.fold(
-      (failure) {
-        emit(CartState.failure(failure.message));
-      },
-      (cart) {
-        emit(CartState.success(cart));
-      },
+      (failure) {emit(CartState.failure(failure.message));},
+      (cart) {emit(CartState.success(cart));},
     );
   }
-  void _onChangeDeliveryAddress(
-    ChangeDeliveryAddress event,
-    Emitter<CartState> emit,
-  ) {
+  void _onChangeDeliveryAddress(ChangeDeliveryAddress event,Emitter<CartState> emit) {
     final currentCart = state.cart;
-
     if (currentCart == null) return;
-
-    emit(
-      CartState.success(
-        currentCart.copyWith(
-          deliveryAddress: event.address,
-        ),
-      ),
-    );
+    emit(CartState.success(currentCart.copyWith(deliveryAddress: event.address)));
   }
 
   void _onApplyCartCoupon(ApplyCartCoupon event, Emitter<CartState> emit) {
@@ -166,6 +129,5 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final total = (cart.subtotal - cart.discount + cart.deliveryCharge).clamp(0.0, double.infinity).toDouble();
     emit(CartState.success(cart.copyWith(clearCoupon: true, couponDiscount: 0, total: total)));
   }
- 
 }
 
