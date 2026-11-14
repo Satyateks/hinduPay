@@ -37,13 +37,7 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Image.asset(image,
-                fit: BoxFit.contain,
-                width: double.infinity,
-              ),
-            ),
-
+            Expanded(child: Image.asset(image,fit: BoxFit.contain,width: double.infinity)),
             const SizedBox(height: 8),
             Text(
               '$name   ProductCard',

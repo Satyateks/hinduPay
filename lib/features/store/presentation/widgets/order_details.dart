@@ -64,8 +64,7 @@ class _OrderDetailsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final paymentPending =
-        order.status == StoreOrderStatus.paymentPending;
+    final paymentPending = order.status == StoreOrderStatus.paymentPending;
 
     final trackingSteps = <(StoreOrderStatus, String, String)>[
       (
@@ -95,9 +94,7 @@ class _OrderDetailsContent extends StatelessWidget {
       ),
     ];
 
-    final currentIndex = trackingSteps.indexWhere(
-      (step) => step.$1 == order.trackingStatus,
-    );
+    final currentIndex = trackingSteps.indexWhere((step) => step.$1 == order.trackingStatus);
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -108,19 +105,11 @@ class _OrderDetailsContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Order #${order.id}',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
+                Text('Order #${order.id}',style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Text(
-                  paymentPending
-                      ? 'Payment pending'
-                      : order.trackingStatus.name,
-                  style: TextStyle(
-                    color: paymentPending ? colors.error : colors.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  paymentPending ? 'Payment pending' : order.trackingStatus.name,
+                  style: TextStyle(fontWeight: FontWeight.bold,color: paymentPending ? colors.error : colors.primary),
                 ),
                 if (order.estimatedDelivery != null) ...[
                   const SizedBox(height: 8),
@@ -136,10 +125,7 @@ class _OrderDetailsContent extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        Text(
-          'Track Your Order',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text('Track Your Order',style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 12),
         if (order.trackingStatus == StoreOrderStatus.cancelled)
           const ListTile(
@@ -160,42 +146,27 @@ class _OrderDetailsContent extends StatelessWidget {
               subtitle: Text(trackingSteps[i].$3),
             ),
         const SizedBox(height: 16),
-        Text(
-          'Items',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text('Items',style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         Card(
           child: Column(
             children: [
-              for (final name in order.productNames)
-                ListTile(
-                  leading: const Icon(Icons.shopping_bag_outlined),
-                  title: Text(name),
-                ),
+              for (final name in order.productNames) ListTile(leading: const Icon(Icons.shopping_bag_outlined),title: Text(name)),
             ],
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          'Delivery Address',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text('Delivery Address',style: Theme.of(context).textTheme.titleMedium),
         Card(
           child: ListTile(
             leading: const Icon(Icons.location_on_outlined),
             title: Text(order.addressName),
-            subtitle: Text(
-              '${order.deliveryAddress}\n${order.phone}',
-            ),
+            subtitle: Text('${order.deliveryAddress}\n${order.phone}'),
             isThreeLine: true,
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          'Payment Summary',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text('Payment Summary',style: Theme.of(context).textTheme.titleMedium),
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -211,9 +182,7 @@ class _OrderDetailsContent extends StatelessWidget {
                 if (paymentPending)
                   const Padding(
                     padding: EdgeInsets.only(top: 8),
-                    child: Text(
-                      'Payment has not been verified yet.',
-                    ),
+                    child: Text('Payment has not been verified yet.'),
                   ),
               ],
             ),
@@ -223,3 +192,5 @@ class _OrderDetailsContent extends StatelessWidget {
     );
   }
 }
+
+
