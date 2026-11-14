@@ -25,9 +25,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        context.pushNamed('product-detail',pathParameters: {'productId': productId});
-      },
+      onTap: () => context.pushNamed('product-detail',pathParameters: {'productId': productId}),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -37,7 +35,7 @@ class ProductCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: Image.asset(image,fit: BoxFit.contain,width: double.infinity)),
+            Expanded(child: Image.asset(image,fit: BoxFit.contain,width: double.infinity)),   
             const SizedBox(height: 8),
             Text(
               '$name   ProductCard',
