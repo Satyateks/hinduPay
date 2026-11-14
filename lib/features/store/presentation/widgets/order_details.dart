@@ -175,10 +175,7 @@ class _OrderDetailsContent extends StatelessWidget {
               children: [
                 Text('Method: ${order.paymentMethod.name}'),
                 const SizedBox(height: 8),
-                Text(
-                  'Total: ₹${order.totalAmount.toStringAsFixed(0)}',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+                Text('Total: ₹${order.totalAmount.toStringAsFixed(0)}',style: Theme.of(context).textTheme.titleLarge),
                 if (paymentPending)
                   const Padding(
                     padding: EdgeInsets.only(top: 8),
