@@ -9,12 +9,15 @@ class StoreCouponScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundGrey,
-      appBar: AppBar(backgroundColor: Colors.white,elevation: 0,
+      appBar: AppBar(
         title: const Text('Coupons',style: TextStyle(color: Colors.black, fontSize: 16)),
+        backgroundColor: Colors.white,
+        elevation: 0,
         leading: const BackButton(color: Colors.black),
       ),
-      body: ListView.builder(itemCount: 4,
+      body: ListView.builder(
         padding: const EdgeInsets.all(16),
+        itemCount: 4,
         itemBuilder: (context, index) {
           return Container(
             margin: const EdgeInsets.only(bottom: 12),
@@ -23,7 +26,8 @@ class StoreCouponScreen extends StatelessWidget {
               child: Row(
                 children: [
                   // Green Discount Ribbon Accent on left
-                  Container(width: 36,
+                  Container(
+                    width: 36,
                     decoration: const BoxDecoration(
                       color: AppColors.discountGreen,
                       borderRadius: BorderRadius.only(
@@ -34,7 +38,8 @@ class StoreCouponScreen extends StatelessWidget {
                     child: const RotatedBox(
                       quarterTurns: 3,
                       child: Center(
-                        child: Text('DISCOUNT',
+                        child: Text(
+                          'DISCOUNT',
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
