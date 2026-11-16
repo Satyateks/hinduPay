@@ -27,7 +27,6 @@ class StoreCategoryList extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final category = categories[index];
-
           return SizedBox(
             width: 72,height: 92,
             child: Column(
@@ -49,11 +48,9 @@ class StoreCategoryList extends StatelessWidget {
                 Text(
                   category.name,
                   maxLines: 2,
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.center,                
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: colors.onSurface,fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                  style: theme.textTheme.labelSmall?.copyWith(color: colors.onSurface,fontSize: 12,fontWeight: FontWeight.w600
                   ),
                 ),
               ],
