@@ -16,46 +16,35 @@ class StoreCategoryList extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
-    if (categories.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    if (categories.isEmpty) return const SizedBox.shrink(); 
 
     return SizedBox(
-      height: 108,
+      height: 100,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
-        separatorBuilder: (_, __) =>
-            const SizedBox(width: 12),
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final category = categories[index];
 
           return SizedBox(
-            width: 62,
+            width: 72,height: 92,
             child: Column(
               children: [
                 Container(
-                  width: 58,
-                  height: 58,
+                  width: 56, height: 56,
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: colors.surfaceContainerHighest,
-                    border: Border.all(
-                      color: colors.outlineVariant,
-                    ),
+                    color: const Color(0xFFE1F5E9),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: const Color(0x7CB7931F),width: 1),
                   ),
-                  child: ClipOval(
-                    child: StoreImage(
-                      image: category.image,
-                      icon: Icons.category_outlined,
-                    ),
+                  child: ClipRRect(borderRadius: BorderRadius.circular(15),
+                    child: StoreImage(image: category.image,icon: Icons.category_outlined),
                   ),
                 ),
 
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
 
                 Text(
                   category.name,
@@ -63,8 +52,8 @@ class StoreCategoryList extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: colors.onSurface,
-                    fontWeight: FontWeight.w500,
+                    color: colors.onSurface,fontSize: 12,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -75,3 +64,4 @@ class StoreCategoryList extends StatelessWidget {
     );
   }
 }
+
