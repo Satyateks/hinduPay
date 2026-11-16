@@ -58,20 +58,12 @@ class IncludedItems extends StatelessWidget {
                     // Item image
                     ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: Image.asset(
-                          item.image,
-                          fit: BoxFit.cover,
+                      child: SizedBox(width: 40,height: 40,
+                        child: Image.asset(item.image,fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) {
                             return Container(
                               color: const Color(0xFFF1EEE9),
-                              child: const Icon(
-                                Icons.inventory_2_outlined,
-                                size: 18,
-                                color: Color(0xFF8A7765),
-                              ),
+                              child: const Icon(Icons.inventory_2_outlined, size: 18,color: Color(0xFF8A7765)),
                             );
                           },
                         ),
