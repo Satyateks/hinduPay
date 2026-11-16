@@ -33,22 +33,10 @@ class _OrderDetailsView extends StatelessWidget {
       appBar: AppBar(title: const Text('Order Details')),
       body: BlocBuilder<OrdersBloc, OrdersState>(
         builder: (context, state) {
-          if (state.status == OrdersStatus.loading ||
-              state.status == OrdersStatus.initial) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.status == OrdersStatus.failure) {
-            return Center(
-              child: Text(state.errorMessage ?? 'Order not found'),
-            );
-          }
-
+          if (state.status == OrdersStatus.loading || state.status == OrdersStatus.initial) return const Center(child: CircularProgressIndicator());
+          if (state.status == OrdersStatus.failure) return Center(child: Text(state.errorMessage ?? 'Order not found'));
           final order = state.selectedOrder;
-          if (order == null) {
-            return const Center(child: Text('Order not found'));
-          }
-
+          if (order == null) return const Center(child: Text('Order not found'));
           return _OrderDetailsContent(order: order);
         },
       ),
@@ -107,10 +95,8 @@ class _OrderDetailsContent extends StatelessWidget {
               children: [
                 Text('Order #${order.id}',style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                Text(
-                  paymentPending ? 'Payment pending' : order.trackingStatus.name,
-                  style: TextStyle(fontWeight: FontWeight.bold,color: paymentPending ? colors.error : colors.primary),
-                ),
+                Text(paymentPending ? 'Payment pending' : order.trackingStatus.name,
+                  style: TextStyle(fontWeight: FontWeight.bold,color: paymentPending ? colors.error : colors.primary)),
                 if (order.estimatedDelivery != null) ...[
                   const SizedBox(height: 8),
                   Text(
@@ -177,13 +163,10 @@ class _OrderDetailsContent extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text('Total: ₹${order.totalAmount.toStringAsFixed(0)}',style: Theme.of(context).textTheme.titleLarge),
                 if (paymentPending)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Text('Payment has not been verified yet.'),
-                  ),
+                  const Padding(padding: EdgeInsets.only(top: 8),child: Text('Payment has not been verified yet.')),
               ],
             ),
-          ),
+          ),     
         ),
       ],
     );
