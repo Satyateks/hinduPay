@@ -16,34 +16,17 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     on<SubmitSupportTicket>(_onSubmitTicket);
   }
 
-  Future<void> _onLoadFaqs(
-    LoadSupportFaqs event,
-    Emitter<SupportState> emit,
-  ) async {
-    emit(state.copyWith(
-      status: SupportStatus.loading,
-      clearError: true,
-    ));
-
+  Future<void> _onLoadFaqs(LoadSupportFaqs event,Emitter<SupportState> emit) async {
+    emit(state.copyWith(status: SupportStatus.loading,clearError: true));
     final result = await getSupportFaqs();
 
     result.fold(
-      (failure) => emit(state.copyWith(
-        status: SupportStatus.failure,
-        errorMessage: failure.message,
-      )),
-      (faqs) => emit(state.copyWith(
-        status: SupportStatus.success,
-        faqs: faqs,
-        clearError: true,
-      )),
+      (failure) => emit(state.copyWith(status: SupportStatus.failure,errorMessage: failure.message)),
+      (faqs) => emit(state.copyWith(status: SupportStatus.success,faqs: faqs,clearError: true)),
     );
   }
 
-  Future<void> _onSubmitTicket(
-    SubmitSupportTicket event,
-    Emitter<SupportState> emit,
-  ) async {
+  Future<void> _onSubmitTicket(SubmitSupportTicket event,Emitter<SupportState> emit) async {
     emit(state.copyWith(
       status: SupportStatus.submitting,
       clearTicket: true,
@@ -58,15 +41,8 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     );
 
     result.fold(
-      (failure) => emit(state.copyWith(
-        status: SupportStatus.failure,
-        errorMessage: failure.message,
-      )),
-      (ticket) => emit(state.copyWith(
-        status: SupportStatus.ticketCreated,
-        ticket: ticket,
-        clearError: true,
-      )),
+      (failure) => emit(state.copyWith(status: SupportStatus.failure,errorMessage: failure.message)),
+      (ticket) => emit(state.copyWith(status: SupportStatus.ticketCreated,ticket: ticket,clearError: true)),
     );
   }
 }
