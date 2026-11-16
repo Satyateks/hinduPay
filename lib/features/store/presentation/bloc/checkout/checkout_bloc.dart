@@ -7,8 +7,7 @@ import 'checkout_state.dart';
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final PlaceOrder placeOrder;
 
-  CheckoutBloc({required this.placeOrder})
-      : super(const CheckoutState()) {
+  CheckoutBloc({required this.placeOrder}) : super(const CheckoutState()) {
     on<PlaceStoreOrder>(_onPlaceOrder);
   }
 
@@ -28,22 +27,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     );
 
     result.fold(
-      (failure) {
-        emit(
-          CheckoutState(
-            status: CheckoutStatus.failure,
-            errorMessage: failure.message,
-          ),
-        );
-      },
-      (order) {
-        emit(
-          CheckoutState(
-            status: CheckoutStatus.success,
-            order: order,
-          ),
-        );
-      },
+      (failure) {emit(CheckoutState(status: CheckoutStatus.failure,errorMessage: failure.message));},
+      (order) {emit(CheckoutState(status: CheckoutStatus.success,order: order));},
     );
   }
 }
