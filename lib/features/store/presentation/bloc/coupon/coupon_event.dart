@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 abstract class CouponEvent extends Equatable {
-  const CouponEvent();
+  const CouponEvent(); 
   @override
   List<Object?> get props => [];
 }
