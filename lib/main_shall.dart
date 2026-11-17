@@ -7,8 +7,9 @@ import 'core/widgets/app_bottom_navigation.dart';
 class MainShell extends StatelessWidget {
   static const Set<String> _rootTabRoutes = {
     '/main/home',
-    '/main/donation',
     '/main/pandits',
+    '/main/upi',
+    '/main/donation',
     '/main/store',
     '/main/profile',
     '/main/pooja',
