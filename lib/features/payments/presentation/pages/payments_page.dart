@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/widgets/app_img.dart';
@@ -33,11 +34,57 @@ class _PaymentsPageView extends StatefulWidget {
 
 class _PaymentsPageViewState extends State<_PaymentsPageView> {
   final TextEditingController _searchController = TextEditingController();
+  
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+    _initSpeech();
+  }
 
+  Future<void> _initSpeech() async {
+    await _speech.initialize(
+      onStatus: (status) {if (mounted) setState(() {_isListening = _speech.isListening;});},
+      onError: (error) {debugPrint('Speech error: $error');},
+    );
+  }
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _toggleListening() async {
+    if (_speech.isListening) {
+      await _speech.stop();
+      return;
+    }
+
+    bool available = await _speech.initialize();
+    if (!available) return;
+    await _speech.listen(
+      localeId: 'en_IN',
+      onResult: (result) {
+        setState(() {
+          _searchController.value = TextEditingValue(
+            text: result.recognizedWords,
+            selection: TextSelection.collapsed(offset: result.recognizedWords.length),
+          );
+        });
+      },
+    );
+    // await _speech.listen(
+    //   localeId: 'en_IN',
+    //   onResult: (result) {
+    //     setState(() {
+    //       _searchController.text = result.recognizedWords;
+    //       _searchController.selection = TextSelection.collapsed(offset: _searchController.text.length);
+    //     });
+    //   },
+    // );
   }
 
   void _handleViewBalance(
@@ -82,12 +129,9 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0.0, 0.15, 0.4, 1.0],
-            colors: [
-              Color(0xFFFFEDE1), // Subtle warm peach tint at the top
-              Color(0xFFFFF7F0),
-              Color(0xFFFFFDFB),
-              Color(0xFFFFFDF9),
-            ],
+            // colors: [Color(0xFFFFEDE1), // Subtle warm peach tint at the top
+            //   Color(0xFFFFF7F0),Color(0xFFFFFDFB),Color(0xFFFFFDF9)],
+             colors: [Color(0xFFF36B21),Color(0xFFF58344),Color(0xFFFFF8EF),Color(0xFFFFFDF9)],
           ),
         ),
         child: SafeArea(
@@ -109,10 +153,10 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                           height: 48,
                           padding: const EdgeInsets.symmetric(horizontal: 14),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.88),
+                            color:const Color(0xFFF9B378),
                             borderRadius: BorderRadius.circular(26),
                             border: Border.all(
-                              color: const Color(0xFFFFD9C2),
+                              color: const Color(0xFFFFDFC2),
                               width: 1.2,
                             ),
                             boxShadow: [
@@ -125,11 +169,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                           ),
                           child: Row(
                             children: [
-                              const Icon(
-                                Icons.search,
-                                color: Color(0xFF757575),
-                                size: 22,
-                              ),
+                              const Icon(Icons.search,color: Color(0xFF757575),size: 22),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: TextField(
@@ -138,22 +178,31 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                                     fontSize: 14,
                                     color: Color(0xFF212121),
                                   ),
-                                  decoration: const InputDecoration(
+                                 decoration: const InputDecoration(
                                     hintText: 'Search',
-                                    hintStyle: TextStyle(
-                                      color: Color(0xFF9E9E9E),
-                                      fontSize: 14,
-                                    ),
+                                    hintStyle: TextStyle(fontSize: 14,color: Color(0xFF9E9E9E)),
+                                    filled: true,
+                                    fillColor: Color(0xFFF9B378),
                                     border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
                                     isDense: true,
                                     contentPadding: EdgeInsets.zero,
                                   ),
                                 ),
                               ),
-                              const Icon(
-                                Icons.mic_none_outlined,
-                                color: Color(0xFF616161),
-                                size: 22,
+                              // const Icon(Icons.mic_none_outlined,color: Color(0xFF616161),size: 22),
+                              IconButton(
+                                onPressed: _toggleListening,
+                                icon: Icon(
+                                  _isListening? Icons.mic : Icons.mic_none_outlined,
+                                  color: _isListening? Colors.red : const Color(0xFF616161),
+                                  size: 22,
+                                ),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
                               ),
                             ],
                           ),
@@ -170,7 +219,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                           height: 44,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white,
+                            color:const Color(0xFFF9B378),
                             border: Border.all(
                               color: const Color(0xFFFFD9C2),
                               width: 1.2,
@@ -200,10 +249,24 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
               // ----------------------------------------------------
               // 2. PROMOTIONAL HERO BANNER
               // ----------------------------------------------------
+              SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),child: _buildHeroBanner(context))),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  child: _buildHeroBanner(context),
+                  child: Image.asset(
+                AppImg.bannerImg,
+                width: 170,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 140,
+                  alignment: Alignment.centerRight,
+                  child: const Icon(
+                    Icons.temple_hindu_rounded,
+                    size: 110,
+                    color: Color(0xFFD48B55),
+                  ),
+                ),
+              ),
                 ),
               ),
 
@@ -218,32 +281,32 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                     children: [
                       _buildQuickActionCircle(
                         label: 'Scan & Pay',
-                        icon: Icons.qr_code_scanner_rounded,
+                        icon: AppImg.scanPayImg,
                         gradient: const [Color(0xFFFF7043), Color(0xFFD84315)],
                         onTap: () => context.push('/upi/scan'),
                       ),
                       _buildQuickActionCircle(
                         label: 'Pay to Mobile',
-                        icon: Icons.phone_android_rounded,
+                        icon: AppImg.payTransferImg,
                         gradient: const [Color(0xFF8E24AA), Color(0xFF5E35B1)],
                         onTap: () => context.push('/upi/mobile'),
                       ),
                       _buildQuickActionCircle(
                         label: 'Bank Transfer',
-                        icon: Icons.account_balance_rounded,
+                        icon: AppImg.banktransferImg,
                         gradient: const [Color(0xFF1E88E5), Color(0xFF0D47A1)],
                         onTap: () => context.push('/upi/bank'),
                       ),
                       _buildQuickActionCircle(
                         label: 'Recharge',
-                        icon: Icons.bolt_rounded,
+                        icon: AppImg.mobileRechargeImg,
                         gradient: const [Color(0xFFE91E63), Color(0xFFC2185B)],
                         onTap: () => BillRechargeSheet.show(
                           context,
                           serviceTitle: 'Mobile Recharges',
                           category: 'Recharges',
-                          icon: Icons.phone_android_rounded,
-                          gradientColors: const [Color(0xFFE91E63), Color(0xFFC2185B)],
+                          icon: AppImg.electricityImg,
+                          // gradientColors: const [Color(0xFFE91E63), Color(0xFFC2185B)],
                         ),
                       ),
                     ],
@@ -342,9 +405,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
               ),
 
               // Bottom padding for navigation bar clearance
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 110),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 110)),
             ],
           ),
         ),
@@ -404,7 +465,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
             child: Opacity(
               opacity: 0.95,
               child: Image.asset(
-                AppImg.ramMandirImg,
+                AppImg.bannerImg,
                 width: 170,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) => Container(
@@ -532,7 +593,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
   Widget _buildQuickActionCircle({
     required String label,
-    required IconData icon,
+    required String icon,
     required List<Color> gradient,
     required VoidCallback onTap,
   }) {
@@ -543,42 +604,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
         width: 78,
         child: Column(
           children: [
-            Container(
-              width: 58,
-              height: 58,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: gradient.first.withValues(alpha: 0.12),
-                    blurRadius: 10,
-                    spreadRadius: 1,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                      colors: gradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: Icon(icon, color: Colors.white, size: 21),
-                ),
-              ),
-            ),
-            const SizedBox(height: 7),
+            Image.asset(icon),
             Text(
               label,
               textAlign: TextAlign.center,
@@ -614,7 +640,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                 logoIcon: Icons.check_circle_outline_rounded,
                 revealedBalance: state.revealedBalances['bank_yes_01'],
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 11),
 
               // AXIS BANK Card
               _buildBankCard(
@@ -630,12 +656,8 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
               // Add Account Card
               InkWell(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('UPI Bank Link feature available')),
-                  );
-                },
-                borderRadius: BorderRadius.circular(24),
+                onTap: ()=> ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('UPI Bank Link feature available'))),
+                  borderRadius: BorderRadius.circular(24),
                 child: Container(
                   height: 52,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -683,7 +705,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(27),
         border: Border.all(
-          color: Colors.black.withValues(alpha: 0.06),
+          color: Colors.black.withValues(alpha: 0.2),
           width: 1,
         ),
         boxShadow: [
@@ -698,13 +720,8 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // Logo circle
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: logoColor,
-            ),
+          Container(width: 36,height: 36,
+            decoration: BoxDecoration(shape: BoxShape.circle,color: logoColor),
             child: Icon(logoIcon, color: Colors.white, size: 20),
           ),
           const SizedBox(width: 10),
@@ -791,7 +808,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
         Expanded(
           child: _buildCrimsonCard(
             title: 'Referrals',
-            icon: Icons.card_giftcard_rounded,
+            icon: AppImg.referralsImg,
             onTap: () => OffersRewardsSheet.show(context, initialTab: 0),
           ),
         ),
@@ -799,7 +816,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
         Expanded(
           child: _buildCrimsonCard(
             title: 'Offers',
-            icon: Icons.percent_rounded,
+            icon: AppImg.offersImg,
             onTap: () => OffersRewardsSheet.show(context, initialTab: 1),
           ),
         ),
@@ -807,7 +824,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
         Expanded(
           child: _buildCrimsonCard(
             title: 'Rewards',
-            icon: Icons.military_tech_rounded,
+            icon: AppImg.rewardsImg,
             onTap: () => OffersRewardsSheet.show(context, initialTab: 2),
           ),
         ),
@@ -817,14 +834,14 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
   Widget _buildCrimsonCard({
     required String title,
-    required IconData icon,
+    required String icon,
     required VoidCallback onTap,
   }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(18),
       child: Container(
-        height: 104,
+        height: 105,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           gradient: const LinearGradient(
@@ -847,34 +864,26 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
+            Text(title,
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w700,
+                fontFamily: 'SF Pro',
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
                 color: Colors.white,
                 letterSpacing: 0.2,
+                height: 1.2,
               ),
             ),
             // Decorative 3D-styled icon inside
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.18),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.35),
-                  width: 1.5,
-                ),
-              ),
-              child: Center(
-                child: Icon(
-                  icon,
-                  size: 26,
-                  color: const Color(0xFFFFE082), // Golden warm icon
-                ),
-              ),
+            SizedBox(
+              width: 111,
+              height: 55,
+              // decoration: BoxDecoration(shape: BoxShape.circle,
+              //   color: Colors.white.withValues(alpha: 0.18),
+              //   border: Border.all(color: Colors.white.withValues(alpha: 0.35),width: 1.5),
+              // ),
+              child: Center(child: Image.asset(icon)),
             ),
           ],
         ),
@@ -888,31 +897,11 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
   Widget _buildRechargesGrid(BuildContext context) {
     final items = [
-      {
-        'title': 'Mobile\nRecharges',
-        'icon': Icons.phone_android_rounded,
-        'gradient': [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)],
-      },
-      {
-        'title': 'DTH / Cable\nTV',
-        'icon': Icons.tv_rounded,
-        'gradient': [const Color(0xFF5C6BC0), const Color(0xFF3949AB)],
-      },
-      {
-        'title': 'FASTag\nRecharges',
-        'icon': Icons.directions_car_rounded,
-        'gradient': [const Color(0xFFFFA726), const Color(0xFFF57C00)],
-      },
-      {
-        'title': 'NCMC\nRecharge',
-        'icon': Icons.credit_card_rounded,
-        'gradient': [const Color(0xFF26A69A), const Color(0xFF00897B)],
-      },
-      {
-        'title': 'EV\nRecharge',
-        'icon': Icons.ev_station_rounded,
-        'gradient': [const Color(0xFF66BB6A), const Color(0xFF43A047)],
-      },
+      {'title': 'Mobile\nRecharges', 'icon': AppImg.mobileRechargeImg},
+      {'title': 'DTH / Cable\nTV', 'icon': AppImg.dthImg},
+      {'title': 'FASTag\nRecharges', 'icon': AppImg.fasTagImg},
+      {'title': 'NCMC\nRecharge', 'icon': AppImg.ncmcImg},
+      {'title': 'EV\nRecharge', 'icon': AppImg.evImg},
     ];
 
     return _buildServiceGrid(context, items, 'Recharges');
@@ -920,41 +909,13 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
   Widget _buildUtilityBillsGrid(BuildContext context) {
     final items = [
-      {
-        'title': 'Electricity\nBill',
-        'icon': Icons.electric_bolt_rounded,
-        'gradient': [const Color(0xFFFFB300), const Color(0xFFFF8F00)],
-      },
-      {
-        'title': 'Broadband /\nLandline',
-        'icon': Icons.router_rounded,
-        'gradient': [const Color(0xFF42A5F5), const Color(0xFF1E88E5)],
-      },
-      {
-        'title': 'Postpaid\nMobile',
-        'icon': Icons.receipt_long_rounded,
-        'gradient': [const Color(0xFFEC407A), const Color(0xFFD81B60)],
-      },
-      {
-        'title': 'Gas Cylinder\nBooking',
-        'icon': Icons.propane_tank_rounded,
-        'gradient': [const Color(0xFFEF5350), const Color(0xFFE53935)],
-      },
-      {
-        'title': 'Water Bill',
-        'icon': Icons.water_drop_rounded,
-        'gradient': [const Color(0xFF29B6F6), const Color(0xFF0288D1)],
-      },
-      {
-        'title': 'Education',
-        'icon': Icons.school_rounded,
-        'gradient': [const Color(0xFF7E57C2), const Color(0xFF5E35B1)],
-      },
-      {
-        'title': 'Piped Gas',
-        'icon': Icons.local_fire_department_rounded,
-        'gradient': [const Color(0xFFFF7043), const Color(0xFFF4511E)],
-      },
+      {'title': 'Electricity\nBill', 'icon': AppImg.electricityImg},
+      {'title': 'Broadband /\nLandline', 'icon': AppImg.broadbandImg},
+      {'title': 'Postpaid\nMobile', 'icon': AppImg.postpaidBilesImg},
+      {'title': 'Gas Cylinder\nBooking', 'icon': AppImg.gasCylinderImg},
+      {'title': 'Water Bill', 'icon': AppImg.waterImg},
+      {'title': 'Education', 'icon': AppImg.educationImg},
+      {'title': 'Piped Gas', 'icon': AppImg.pipedGasImg},
     ];
 
     return _buildServiceGrid(context, items, 'Utility Bills');
@@ -962,36 +923,12 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
   Widget _buildFinanceTaxGrid(BuildContext context) {
     final items = [
-      {
-        'title': 'Loan EMI',
-        'icon': Icons.account_balance_wallet_rounded,
-        'gradient': [const Color(0xFF26A69A), const Color(0xFF00796B)],
-      },
-      {
-        'title': 'Credit Cards',
-        'icon': Icons.credit_card_rounded,
-        'gradient': [const Color(0xFF3F51B5), const Color(0xFF283593)],
-      },
-      {
-        'title': 'Municipal\nTaxes',
-        'icon': Icons.apartment_rounded,
-        'gradient': [const Color(0xFF78909C), const Color(0xFF455A64)],
-      },
-      {
-        'title': 'Traffic\nChallan',
-        'icon': Icons.traffic_rounded,
-        'gradient': [const Color(0xFFE53935), const Color(0xFFC62828)],
-      },
-      {
-        'title': 'LIC /\nInsurance',
-        'icon': Icons.health_and_safety_rounded,
-        'gradient': [const Color(0xFF8E24AA), const Color(0xFF6A1B9A)],
-      },
-      {
-        'title': 'NPS',
-        'icon': Icons.savings_rounded,
-        'gradient': [const Color(0xFFFFB300), const Color(0xFFF57F17)],
-      },
+      {'title': 'Loan EMI', 'icon': AppImg.loanImg},
+      {'title': 'Credit Cards', 'icon': AppImg.creditImg},
+      {'title': 'Municipal\nTaxes', 'icon': AppImg.municipalImg},
+      {'title': 'Traffic\nChallan', 'icon': AppImg.trafficImg},
+      {'title': 'LIC /\nInsurance', 'icon': AppImg.licImg},
+      {'title': 'NPS', 'icon': AppImg.npsImg},
     ];
 
     return _buildServiceGrid(context, items, 'Finance & Tax');
@@ -999,41 +936,13 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
   Widget _buildOthersGrid(BuildContext context) {
     final items = [
-      {
-        'title': 'LIC /\nInsurance',
-        'icon': Icons.verified_user_rounded,
-        'gradient': [const Color(0xFFAB47BC), const Color(0xFF7B1FA2)],
-      },
-      {
-        'title': 'Housing\nSociety',
-        'icon': Icons.location_city_rounded,
-        'gradient': [const Color(0xFF42A5F5), const Color(0xFF1976D2)],
-      },
-      {
-        'title': 'Fleet Card\nRecharge',
-        'icon': Icons.local_shipping_rounded,
-        'gradient': [const Color(0xFFFF9800), const Color(0xFFF57C00)],
-      },
-      {
-        'title': 'Subscriptions',
-        'icon': Icons.subscriptions_rounded,
-        'gradient': [const Color(0xFFEC407A), const Color(0xFFC2185B)],
-      },
-      {
-        'title': 'Donation',
-        'icon': Icons.volunteer_activism_rounded,
-        'gradient': [const Color(0xFFE53935), const Color(0xFFB71C1C)],
-      },
-      {
-        'title': 'Clubs &\nAssociations',
-        'icon': Icons.groups_rounded,
-        'gradient': [const Color(0xFFFFB300), const Color(0xFFE65100)],
-      },
-      {
-        'title': 'Retail',
-        'icon': Icons.storefront_rounded,
-        'gradient': [const Color(0xFF7E57C2), const Color(0xFF512DA8)],
-      },
+      {'title': 'LIC /\nInsurance', 'icon': AppImg.licImg},
+      {'title': 'Housing\nSociety', 'icon': AppImg.housingSocietyImg},
+      {'title': 'Fleet Card\nRecharge', 'icon': AppImg.fleetCardImg},
+      {'title': 'Subscriptions', 'icon': AppImg.subscriptionsImg},
+      {'title': 'Donation', 'icon': AppImg.donationImg},
+      {'title': 'Clubs &\nAssociations', 'icon': AppImg.cludsAssociationsImg},
+      {'title': 'Retail', 'icon': AppImg.retalImg},
     ];
 
     return _buildServiceGrid(context, items, 'Others');
@@ -1041,7 +950,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
   Widget _buildServiceGrid(
     BuildContext context,
-    List<Map<String, dynamic>> items,
+    List<Map<String, String>> items,
     String category,
   ) {
     return GridView.builder(
@@ -1050,38 +959,25 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
       itemCount: items.length,
       padding: const EdgeInsets.symmetric(vertical: 4),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: 8,
-        crossAxisSpacing: 6,
-        childAspectRatio: 0.78,
+        crossAxisCount: 4,mainAxisSpacing: 8,
+        crossAxisSpacing: 6,childAspectRatio: 0.78,
       ),
       itemBuilder: (context, index) {
         final item = items[index];
         final title = (item['title'] as String).replaceAll('\n', ' ');
-        final icon = item['icon'] as IconData;
-        final gradient = item['gradient'] as List<Color>;
+        final icon = item['icon']as String;
+        // final gradient = item['gradient'] as List<Color>;
 
         return UpiServiceIcon(
           label: item['title'] as String,
-          iconWidget: ServiceIconGraphic(
-            icon: icon,
-            gradientColors: gradient,
-          ),
+          iconWidget: ServiceIconGraphic(icon: icon),
           onTap: () {
-            if (title.toLowerCase().contains('donation')) {
-              context.push('/main/donation');
-            } else {
-              BillRechargeSheet.show(
-                context,
-                serviceTitle: title,
-                category: category,
-                icon: icon,
-                gradientColors: gradient,
-              );
-            }
+            if (title.toLowerCase().contains('donation')) {context.push('/main/donation');} 
+            else {BillRechargeSheet.show(context,serviceTitle: title,category: category,icon: icon,);}
           },
         );
       },
     );
   }
 }
+
