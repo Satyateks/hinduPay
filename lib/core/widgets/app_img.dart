@@ -39,5 +39,38 @@ class AppImg {
   static const String pujaThaliImg = "$imageDir/pujaThali.png";
   static const String damruImg = "$imageDir/damru.png";
   static const String gangajalImg = "$imageDir/gangajal.png";
+
+
+  //// DONATION IMAGE
+  static const String broadbandImg = "$imageDir/broadband.png";
+  static const String postpaidBilesImg = "$imageDir/prepaidBiles.png";
+  static const String electricityImg = "$imageDir/electricity.png";
+  static const String gasCylinderImg = "$imageDir/gasCylinder.png";
+  static const String educationImg = "$imageDir/education.png";
+  static const String waterImg = "$imageDir/water.png";
+  static const String pipedGasImg = "$imageDir/pipedGas.png";
+  static const String municipalImg = "$imageDir/municipal.png";
+  static const String creditImg = "$imageDir/credit.png";
+  static const String loanImg = "$imageDir/loan.png";
+  static const String trafficImg = "$imageDir/traffic.png";
+  static const String npsImg = "$imageDir/nps.png";
+  static const String licImg = "$imageDir/lic.png";
+  static const String housingSocietyImg = "$imageDir/housingSociety.png";
+  static const String donationImg = "$imageDir/donation.png";
+  static const String subscriptionsImg = "$imageDir/subscriptions.png";
+  static const String fleetCardImg = "$imageDir/fleetCard.png";
+  static const String retalImg = "$imageDir/retail.png";
+  static const String cludsAssociationsImg = "$imageDir/cludsAssociations.png";
+  static const String referralsImg = "$imageDir/referrals.png";
+  static const String offersImg = "$imageDir/offers.png";
+  static const String rewardsImg = "$imageDir/rewards.png";
+  static const String mobileRechargeImg = "$imageDir/mobileRecharge.png";
+  static const String dthImg = "$imageDir/dth.png";
+  static const String fasTagImg = "$imageDir/fasTag.png";
+  static const String evImg = "$imageDir/ev.png";
+  static const String ncmcImg = "$imageDir/ncmc.png";
+  static const String scanPayImg = "$imageDir/scanPay.png";
+  static const String banktransferImg = "$imageDir/banktransfer.png";
+  static const String payTransferImg = "$imageDir/payTransfer.png";
   static const String Img = "$imageDir/.png";
 }
