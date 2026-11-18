@@ -405,6 +405,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  mobile_scanner:
+    dependency: "direct main"
+    description:
+      name: mobile_scanner
+      sha256: "175c62fc813c2bd762757359a2088f8cbdb72020cf85d4cd27fc4d3fe59be058"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.5.0"
   nested:
     dependency: transitive
     description:
@@ -626,6 +634,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
+  torch_light:
+    dependency: "direct main"
+    description:
+      name: torch_light
+      sha256: "6a2659cf413d11b838540d15f2a18ead0e7736250cecdacb153cff654beb5c4a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
