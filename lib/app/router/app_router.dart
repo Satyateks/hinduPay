@@ -15,6 +15,17 @@ import '../../features/home/presentation/bloc/home_bloc.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/pandit/presentation/bloc/pandit_bloc.dart';
 import '../../features/pandit/presentation/pages/pandit_page.dart';
+import '../../features/payments/domain/entities/payment.dart';
+import '../../features/payments/presentation/pages/add_beneficiary_page.dart';
+import '../../features/payments/presentation/pages/bank_transfer_page.dart';
+import '../../features/payments/presentation/pages/mobile_pay_page.dart';
+import '../../features/payments/presentation/pages/payment_status_page.dart';
+import '../../features/payments/presentation/pages/payments_page.dart';
+import '../../features/payments/presentation/pages/scan_pay_page.dart';
+import '../../features/payments/presentation/pages/send_money_page.dart';
+import '../../features/payments/presentation/pages/transaction_history_page.dart';
+import '../../features/payments/presentation/pages/upi_pin_page.dart';
+import '../../features/payments/presentation/pages/upi_settings_page.dart';
 import '../../features/pooja/presentation/bloc/pooja_bloc.dart';
 import '../../features/pooja/presentation/pages/pooja_list_page.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
@@ -82,6 +93,84 @@ final GoRouter appRouter = GoRouter(
           create: (_) => getIt<AuthBloc>(),
           child: OtpPage(mobile: mobile),
         );
+      },
+    ),
+
+    // ----------------------------------------------------------
+    // UPI SUBMODULE ROUTES
+    // ----------------------------------------------------------
+    GoRoute(
+      path: '/upi/history',
+      name: 'upi-history',
+      builder: (context, state) => const TransactionHistoryPage(),
+    ),
+
+    GoRoute(
+      path: '/upi/scan',
+      name: 'upi-scan',
+      builder: (context, state) => const ScanPayPage(),
+    ),
+
+    GoRoute(
+      path: '/upi/settings',
+      name: 'upi-settings',
+      builder: (context, state) => const UpiSettingsPage(),
+    ),
+
+    GoRoute(
+      path: '/upi/mobile',
+      name: 'upi-mobile',
+      builder: (context, state) => const MobilePayPage(),
+    ),
+
+    GoRoute(
+      path: '/upi/bank',
+      name: 'upi-bank',
+      builder: (context, state) => const BankTransferPage(),
+    ),
+
+    GoRoute(
+      path: '/upi/bank/add',
+      name: 'upi-bank-add',
+      builder: (context, state) => const AddBeneficiaryPage(),
+    ),
+
+    GoRoute(
+      path: '/upi/pay',
+      name: 'upi-pay',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return SendMoneyPage(
+          recipientName: extra?['name'] as String?,
+          recipientPhone: extra?['phone'] as String?,
+          initialAmount: (extra?['amount'] as num?)?.toDouble(),
+          initialNote: extra?['note'] as String?,
+        );
+      },
+    ),
+
+    GoRoute(
+      path: '/upi/pin',
+      name: 'upi-pin',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        return UpiPinPage(
+          recipientName: extra?['name'] as String?,
+          recipientPhone: extra?['phone'] as String?,
+          amount: (extra?['amount'] as num?)?.toDouble(),
+          note: extra?['note'] as String?,
+          bankName: extra?['bankName'] as String?,
+          maskedAccount: extra?['maskedAccount'] as String?,
+        );
+      },
+    ),
+
+    GoRoute(
+      path: '/upi/status',
+      name: 'upi-status',
+      builder: (context, state) {
+        final payment = state.extra as Payment?;
+        return PaymentStatusPage(payment: payment);
       },
     ),
 
@@ -171,31 +260,7 @@ final GoRouter appRouter = GoRouter(
         ),
 
         // ------------------------------------------------------
-        // DONATION
-        // ------------------------------------------------------
-        StatefulShellBranch(
-          routes: [
-            GoRoute(
-              path: '/main/donation',
-              name: 'donation',
-              builder: (context, state) {
-                return const DonateHomeScreen();
-              },
-              routes: [
-                GoRoute(
-                  path: '/donation/templeList',
-                  name: 'donation-templeList',
-                  builder: (context, state) {
-                    return const TempleListScreen();
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-
-        // ------------------------------------------------------
-        // PANDITS / ASTROLOGY
+        // PANDITS / ASTROLOGY (TAB 1)
         // ------------------------------------------------------
         StatefulShellBranch(
           routes: [
@@ -216,6 +281,45 @@ final GoRouter appRouter = GoRouter(
                   builder: (context, state) {
                     final panditId = state.pathParameters['id'];
                     return _PlaceholderPage(title: 'Pandit: $panditId');
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // ------------------------------------------------------
+        // UPI DASHBOARD (TAB 2 - CENTER ACTIVE TAB)
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/upi',
+              name: 'upi',
+              builder: (context, state) {
+                return const PaymentsPage();
+              },
+            ),
+          ],
+        ),
+
+        // ------------------------------------------------------
+        // DONATION / DAAN (TAB 3)
+        // ------------------------------------------------------
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/main/donation',
+              name: 'donation',
+              builder: (context, state) {
+                return const DonateHomeScreen();
+              },
+              routes: [
+                GoRoute(
+                  path: '/donation/templeList',
+                  name: 'donation-templeList',
+                  builder: (context, state) {
+                    return const TempleListScreen();
                   },
                 ),
               ],
