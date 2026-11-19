@@ -13,6 +13,18 @@ import '../../features/pandit/data/repositories/pandit_repository_impl.dart';
 import '../../features/pandit/domain/repositories/pandit_repository.dart';
 import '../../features/pandit/domain/usecases/get_pandits.dart';
 import '../../features/pandit/presentation/bloc/pandit_bloc.dart';
+import '../../features/payments/data/datasources/payment_remote_datasource.dart';
+import '../../features/payments/data/repositories/payment_repository_impl.dart';
+import '../../features/payments/domain/repositories/payment_repository.dart';
+import '../../features/payments/domain/usecases/bank_transfer.dart';
+import '../../features/payments/domain/usecases/check_balance.dart';
+import '../../features/payments/domain/usecases/get_bank_accounts.dart';
+import '../../features/payments/domain/usecases/get_payment_status.dart';
+import '../../features/payments/domain/usecases/get_recent_contacts.dart';
+import '../../features/payments/domain/usecases/mobile_pay.dart';
+import '../../features/payments/domain/usecases/pay_bill.dart';
+import '../../features/payments/domain/usecases/scan_pay.dart';
+import '../../features/payments/presentation/bloc/payment_bloc.dart';
 import '../../features/pooja/data/datasources/pooja_remote_datasource.dart';
 import '../../features/pooja/data/repositories/pooja_repository_impl.dart';
 import '../../features/pooja/domain/usecases/get_pooja_categories.dart';
@@ -254,6 +266,26 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton<MarkReviewHelpful>(() => MarkReviewHelpful(getIt<ReviewRepository>()));
   getIt.registerFactory<ReviewsBloc>(() => ReviewsBloc(getProductReviews: getIt<GetProductReviews>(), submitProductReview: getIt<SubmitProductReview>(), markReviewHelpful: getIt<MarkReviewHelpful>()));
 
+  // ==================== PAYMENTS / UPI ====================
+  getIt.registerLazySingleton<PaymentRemoteDataSource>(() => PaymentRemoteDataSourceImpl());
+  getIt.registerLazySingleton<PaymentRepository>(() => PaymentRepositoryImpl(remoteDataSource: getIt<PaymentRemoteDataSource>()));
+  getIt.registerLazySingleton<ScanPay>(() => ScanPay(getIt<PaymentRepository>()));
+  getIt.registerLazySingleton<MobilePay>(() => MobilePay(getIt<PaymentRepository>()));
+  getIt.registerLazySingleton<BankTransfer>(() => BankTransfer(getIt<PaymentRepository>()));
+  getIt.registerLazySingleton<PayBill>(() => PayBill(getIt<PaymentRepository>()));
+  getIt.registerLazySingleton<CheckBalance>(() => CheckBalance(getIt<PaymentRepository>()));
+  getIt.registerLazySingleton<GetBankAccounts>(() => GetBankAccounts(getIt<PaymentRepository>()));
+  getIt.registerLazySingleton<GetRecentContacts>(() => GetRecentContacts(getIt<PaymentRepository>()));
+  getIt.registerLazySingleton<GetPaymentStatus>(() => GetPaymentStatus(getIt<PaymentRepository>()));
+  getIt.registerFactory<PaymentBloc>(() => PaymentBloc(
+    scanPay: getIt<ScanPay>(),
+    mobilePay: getIt<MobilePay>(),
+    bankTransfer: getIt<BankTransfer>(),
+    payBill: getIt<PayBill>(),
+    checkBalance: getIt<CheckBalance>(),
+    getBankAccounts: getIt<GetBankAccounts>(),
+    getRecentContacts: getIt<GetRecentContacts>(),
+  ));
 }
 
 

@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import 'app_img.dart';
-
 class AppBottomNavigation extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
@@ -15,41 +13,64 @@ class AppBottomNavigation extends StatelessWidget {
   });
 
   static const List<_BottomNavItem> _items = [
-    _BottomNavItem(label: 'Dharm Seva', image: AppImg.dramSevaImg),
-    _BottomNavItem(label: 'UPI', image: AppImg.upiImg),
-    _BottomNavItem(label: 'Astrology', image: AppImg.qrImg),
-    _BottomNavItem(label: 'Shopping', image: AppImg.shoppingImg),
-    _BottomNavItem(label: 'Profile', image: AppImg.profileImg),
+    _BottomNavItem(
+      label: 'Home',
+      icon: Icons.home_outlined,
+      activeIcon: Icons.home_rounded,
+    ),
+    _BottomNavItem(
+      label: 'Astrology',
+      icon: Icons.auto_awesome_outlined,
+      activeIcon: Icons.auto_awesome_rounded,
+    ),
+    _BottomNavItem(
+      label: 'UPI',
+      icon: Icons.qr_code_scanner_rounded,
+      activeIcon: Icons.qr_code_scanner_rounded,
+      isUpi: true,
+    ),
+    _BottomNavItem(
+      label: 'Daan',
+      icon: Icons.volunteer_activism_outlined,
+      activeIcon: Icons.volunteer_activism_rounded,
+    ),
+    _BottomNavItem(
+      label: 'Remedies',
+      icon: Icons.shopping_cart_outlined,
+      activeIcon: Icons.shopping_cart_rounded,
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: Container(margin: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        bottom: Platform.isAndroid ? 16 : 8,
-      ),
-        child: Container(
-          height: 74,  decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.black.withValues(alpha: 0.04), width: 1),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              blurRadius: 25,
-              spreadRadius: 0,
-              offset: const Offset(0, 8),
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
+      child: Container(
+        margin: EdgeInsets.only(
+          left: 14,
+          right: 14,
+          bottom: Platform.isAndroid ? 12 : 6,
         ),
+        child: Container(
+          height: 68,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(28),
+            border: Border.all(color: Colors.black.withValues(alpha: 0.05),width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 20,
+                spreadRadius: 0,
+                offset: const Offset(0, 6),
+              ),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 4,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
           child: Row(
             children: List.generate(_items.length, (index) {
               final item = _items[index];
@@ -79,87 +100,52 @@ class _BottomNavButton extends StatelessWidget {
     required this.onTap,
   });
 
-  static const Color activeColor = Color(0xFFF70101);
-  static const Color inactiveColor = Color(0xFF777777);
-
   @override
   Widget build(BuildContext context) {
+    final isUpiPill = item.isUpi && isSelected;
+    final primaryColor = item.isUpi
+        ? const Color(0xFFE65100)
+        : const Color(0xFF1E1E1E);
+    final inactiveColor = const Color(0xFF6E6E6E);
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Center(
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 280),
+          duration: const Duration(milliseconds: 240),
           curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          padding: EdgeInsets.symmetric(
+            horizontal: isUpiPill ? 14 : 6,
+            vertical: isUpiPill ? 6 : 4,
+          ),
           decoration: BoxDecoration(
-            color: isSelected
-                ? activeColor.withValues(alpha: 0.08)
+            color: isUpiPill
+                ? const Color(0xFFFFE5D3) // Peach / orange pill container
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              /// Icon
-              AnimatedScale(
-                scale: isSelected ? 1.08 : 0.92,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOutBack,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 280),
-                  curve: Curves.easeOutCubic,
-                  width: isSelected ? 42 : 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? activeColor.withValues(alpha: 0.12)
-                        : Colors.transparent,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Image.asset(
-                      item.image,
-                      width: isSelected ? 23 : 21,
-                      height: isSelected ? 23 : 21,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
+              Icon(
+                isSelected ? item.activeIcon : item.icon,
+                size: item.isUpi ? 23 : 21,
+                color: isSelected ? primaryColor : inactiveColor,
               ),
-
               const SizedBox(height: 3),
-
-              /// Label
-              AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeOut,
+              Text(
+                item.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: isSelected ? 11.5 : 10.5,
+                  fontSize: 10.5,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  color: isSelected ? activeColor : inactiveColor,
-                  letterSpacing: isSelected ? 0 : -0.1,
+                  color: isSelected ? primaryColor : inactiveColor,
+                  letterSpacing: -0.1,
                   height: 1.1,
-                ),
-                child: Text(
-                  item.label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
-              /// Active indicator
-              const SizedBox(height: 3),
-
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 280),
-                curve: Curves.easeOutBack,
-                width: isSelected ? 18 : 0,
-                height: 3,
-                decoration: BoxDecoration(
-                  color: activeColor,
-                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ],
@@ -172,13 +158,14 @@ class _BottomNavButton extends StatelessWidget {
 
 class _BottomNavItem {
   final String label;
-  final String image;
+  final IconData icon;
+  final IconData activeIcon;
+  final bool isUpi;
 
-  const _BottomNavItem({required this.label, required this.image});
+  const _BottomNavItem({
+    required this.label,
+    required this.icon,
+    required this.activeIcon,
+    this.isUpi = false,
+  });
 }
-
-
-
-
-
- 
