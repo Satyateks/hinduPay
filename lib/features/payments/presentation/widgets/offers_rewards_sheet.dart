@@ -364,19 +364,14 @@ class _OffersRewardsSheetState extends State<OffersRewardsSheet>
 
           // Interactive Scratch Card
           GestureDetector(
-            onTap: () {
-              setState(() => _cardScratched = true);
-            },
+            onTap: ()=> setState(() => _cardScratched = true),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              width: double.infinity,
-              height: 180,
+              width: double.infinity, height: 180,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
                 gradient: _cardScratched
-                    ? const LinearGradient(
-                        colors: [Color(0xFFFFF7EA), Color(0xFFFFE8C2)],
-                      )
+                    ? const LinearGradient(colors: [Color(0xFFFFF7EA), Color(0xFFFFE8C2)])
                     : const LinearGradient(
                         colors: [Color(0xFFE5094C), Color(0xFF90002F)],
                         begin: Alignment.topLeft,
@@ -397,8 +392,7 @@ class _OffersRewardsSheetState extends State<OffersRewardsSheet>
                         children: [
                           const Icon(Icons.stars_rounded, size: 48, color: Colors.amber),
                           const SizedBox(height: 8),
-                          const Text(
-                            '🎉 ₹51 CASHBACK WON! 🎉',
+                          const Text('🎉 ₹51 CASHBACK WON! 🎉',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w800,
@@ -417,8 +411,7 @@ class _OffersRewardsSheetState extends State<OffersRewardsSheet>
                         children: [
                           const Icon(Icons.touch_app_outlined, size: 40, color: Colors.white),
                           const SizedBox(height: 8),
-                          const Text(
-                            'TAP TO SCRATCH CARD',
+                          const Text('TAP TO SCRATCH CARD',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w800,
@@ -427,8 +420,7 @@ class _OffersRewardsSheetState extends State<OffersRewardsSheet>
                             ),
                           ),
                           const SizedBox(height: 4),
-                          const Text(
-                            'Win up to ₹500 cashback',
+                          const Text('Win up to ₹500 cashback',
                             style: TextStyle(fontSize: 12, color: Colors.white70),
                           ),
                         ],
