@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum PaymentStatus { pending, processing, success, failed, cancelled }
+enum PaymentStatus {pending, processing, success, failed, cancelled}
 
 enum PaymentType {
   scanAndPay,
