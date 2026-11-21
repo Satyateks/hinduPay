@@ -7,9 +7,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../../core/di/injection.dart';
 import '../bloc/payment_bloc.dart';
 import '../bloc/payment_event.dart';
-import '../bloc/payment_state.dart';
-import '../widgets/amount_input.dart';
-import '../widgets/upi_pin_sheet.dart';
 
 /// Parsed UPI QR Code payload data
 class UpiQrData {
@@ -34,39 +31,61 @@ class UpiQrData {
         final uri = Uri.parse(clean);
         final params = uri.queryParameters;
         final pa = params['pa'] ?? '';
-        final pn = params['pn'] != null ? Uri.decodeComponent(params['pn']!) : '';
+        final pn = params['pn'] != null
+            ? Uri.decodeComponent(params['pn']!)
+            : '';
         final am = params['am'] != null ? double.tryParse(params['am']!) : null;
-        final tn = params['tn'] != null ? Uri.decodeComponent(params['tn']!) : null;
+        final tn = params['tn'] != null
+            ? Uri.decodeComponent(params['tn']!)
+            : null;
 
         String displayName = pn;
         if (displayName.isEmpty && pa.isNotEmpty) {
-          displayName = pa.split('@').first.replaceAll('.', ' ').replaceAll('_', ' ');
-          displayName = displayName.split(' ').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
+          displayName = pa
+              .split('@')
+              .first
+              .replaceAll('.', ' ')
+              .replaceAll('_', ' ');
+          displayName = displayName
+              .split(' ')
+              .map(
+                (s) => s.isNotEmpty
+                    ? '${s[0].toUpperCase()}${s.substring(1)}'
+                    : '',
+              )
+              .join(' ');
         }
 
         return UpiQrData(
           upiId: pa.isNotEmpty ? pa : clean,
           payeeName: displayName.isNotEmpty ? displayName : 'Verified Merchant',
-          amount: am,note: tn,
+          amount: am,
+          note: tn,
           rawData: clean,
         );
       } catch (_) {}
     }
 
     if (clean.contains('@')) {
-      final name = clean.split('@').first.replaceAll('.', ' ').replaceAll('_', ' ');
-      final titleName = name.split(' ').map((s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '').join(' ');
+      final name = clean
+          .split('@')
+          .first
+          .replaceAll('.', ' ')
+          .replaceAll('_', ' ');
+      final titleName = name
+          .split(' ')
+          .map(
+            (s) => s.isNotEmpty ? '${s[0].toUpperCase()}${s.substring(1)}' : '',
+          )
+          .join(' ');
       return UpiQrData(
-        upiId: clean,rawData: clean,
+        upiId: clean,
+        rawData: clean,
         payeeName: titleName.isNotEmpty ? titleName : 'Verified Payee',
       );
     }
 
-    return UpiQrData(
-      upiId: clean,
-      payeeName: 'Verified Payee',
-      rawData: clean,
-    );
+    return UpiQrData(upiId: clean, payeeName: 'Verified Payee', rawData: clean);
   }
 }
 
@@ -97,9 +116,48 @@ class _ScanPayViewState extends State<_ScanPayView>
 
   bool _isTorchOn = false;
   bool _isProcessing = false;
+  // ignore: unused_field
   bool _hasDetected = false;
-  
-  final TextEditingController _upiIdController = TextEditingController();
+
+  final TextEditingController _searchController = TextEditingController();
+
+  final List<Map<String, dynamic>> _recentContacts = const [
+    {
+      'name': 'Sonal',
+      'phone': '+91 98112 34567',
+      'avatar':
+          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+      'color': Color(0xFFFF8A65),
+    },
+    {
+      'name': 'Sumit',
+      'phone': '+91 98765 43210',
+      'avatar':
+          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+      'color': Color(0xFF4DB6AC),
+    },
+    {
+      'name': 'Harshit',
+      'phone': '+91 98123 45678',
+      'avatar':
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+      'color': Color(0xFF7986CB),
+    },
+    {
+      'name': 'Ansh',
+      'phone': '+91 98987 65432',
+      'avatar':
+          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+      'color': Color(0xFFFFB74D),
+    },
+    {
+      'name': 'Radhika',
+      'phone': '+91 98234 56789',
+      'avatar':
+          'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
+      'color': Color(0xFFBA68C8),
+    },
+  ];
 
   @override
   void initState() {
@@ -113,14 +171,17 @@ class _ScanPayViewState extends State<_ScanPayView>
       vsync: this,
       duration: const Duration(milliseconds: 1800),
     )..repeat(reverse: true);
-    _scanAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animController);
+    _scanAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_animController);
   }
 
   @override
   void dispose() {
     cameraController.dispose();
     _animController.dispose();
-    _upiIdController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -130,14 +191,6 @@ class _ScanPayViewState extends State<_ScanPayView>
       setState(() => _isTorchOn = !_isTorchOn);
     } catch (e) {
       debugPrint('Torch toggle error: $e');
-    }
-  }
-
-  Future<void> _switchCamera() async {
-    try {
-      await cameraController.switchCamera();
-    } catch (e) {
-      debugPrint('Switch camera error: $e');
     }
   }
 
@@ -164,327 +217,28 @@ class _ScanPayViewState extends State<_ScanPayView>
     });
 
     HapticFeedback.mediumImpact();
-    _showPaymentModal(context, upiData);
-  }
 
-  void _showPaymentModal(BuildContext context, UpiQrData data) async {
-    final amountController = TextEditingController(text: data.amount != null ? data.amount!.toStringAsFixed(0) : '500');
-    final noteController = TextEditingController(text: data.note ?? 'Temple Seva');
-    String selectedBank = 'Yes Bank (XX 3287)';
-
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (sheetContext) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-              ),
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 14,
-                bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 24,
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 44,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Payee Info Card
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF7F2),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFFFFD9C2)),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [Color(0xFFFF7043), Color(0xFFD84315)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                            ),
-                            child: const Center(child: Icon(Icons.qr_code_2_rounded, color: Colors.white, size: 26)),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        data.payeeName,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800,
-                                          color: Color(0xFF1E1E1E),
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    const Icon(Icons.verified, color: Color(0xFF2E7D32), size: 16),
-                                  ],
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  data.upiId,
-                                  style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Amount Input
-                    const Text(
-                      'Enter Amount',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF2C2C2C),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    AmountInput(controller: amountController),
-
-                    const SizedBox(height: 16),
-
-                    // Note / Remarks
-                    const Text(
-                      'Add a Note',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF2C2C2C),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF9F9F9),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: Colors.grey[300]!),
-                      ),
-                      child: TextField(
-                        controller: noteController,
-                        decoration: const InputDecoration(
-                          hintText: 'e.g. Mandir Seva, Daan, Dakshina',
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 18),
-
-                    // Debit Bank Selector
-                    const Text(
-                      'Pay From Account',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF2C2C2C),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => setModalState(() => selectedBank = 'Yes Bank (XX 3287)'),
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: selectedBank.contains('Yes')? const Color(0xFFFFF3EC): Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: selectedBank.contains('Yes') ? const Color(0xFFFF6B00): Colors.grey[300]!,
-                                  width: selectedBank.contains('Yes') ? 1.5 : 1,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF003B73),
-                                    ),
-                                    child: const Center(
-                                      child: Text('Y',
-                                        style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Yes Bank', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
-                                        Text('XX 3287', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => setModalState(() => selectedBank = 'Axis Bank (XX 4398)'),
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: selectedBank.contains('Axis')
-                                    ? const Color(0xFFFFF3EC)
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: selectedBank.contains('Axis')
-                                      ? const Color(0xFFFF6B00)
-                                      : Colors.grey[300]!,
-                                  width: selectedBank.contains('Axis') ? 1.5 : 1,
-                                ),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF97144D),
-                                    ),
-                                    child: const Center(
-                                      child: Text('A',style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Axis Bank', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
-                                        Text('XX 4398', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Proceed Button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final amount = double.tryParse(amountController.text) ?? 500;
-                          Navigator.pop(sheetContext);
-
-                          final pinSuccess = await UpiPinSheet.show(
-                            context,
-                            title: 'ENTER UPI PIN',
-                            subtitle: 'To pay ₹$amount to ${data.payeeName}',
-                            amount: amount,
-                            bankName: selectedBank.contains('Yes') ? 'Yes Bank' : 'Axis Bank',
-                            accountNumber: selectedBank.contains('Yes') ? 'XX 3287' : 'XX 4398',
-                            onPinSubmit: (pin) async {
-                              await Future.delayed(const Duration(milliseconds: 650));
-                              return true;
-                            },
-                          );
-
-                          if (pinSuccess == true && context.mounted) {
-                            context.read<PaymentBloc>().add(
-                              ScanAndPaySubmitted(
-                                qrData: data.upiId,
-                                amount: amount,
-                                note: noteController.text,
-                                bankAccount: selectedBank,
-                              ),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFE65100),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 2,
-                        ),
-                        child: Text(
-                          'Proceed to Pay ₹${amountController.text}',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+    // Directly navigate to SendMoneyPage (Screen 7) with the parsed QR information
+    context
+        .push(
+          '/upi/pay',
+          extra: {
+            'name': upiData.payeeName,
+            'phone': upiData.upiId,
+            'amount': upiData.amount ?? 14000.0,
+            'note': upiData.note ?? 'Temple Seva',
           },
-        );
-      },
-    );
-
-    // Reset processing state when bottom sheet closes
-    if (mounted) {
-      setState(() {
-        _isProcessing = false;
-        _hasDetected = false;
-      });
-    }
+        )
+        .then((_) {
+          if (mounted)
+            setState(() {
+              _isProcessing = false;
+              _hasDetected = false;
+            });
+        });
   }
 
-  void _showGalleryOrDemoSheet() {
+  void _showSimulateDialog() {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -511,86 +265,34 @@ class _ScanPayViewState extends State<_ScanPayView>
             ),
             const SizedBox(height: 16),
             const Text(
-              'Quick Pay & Test QR Codes',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFF1E1E1E)),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'Select a temple or test QR code to simulate a scan',
-              style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 16),
-            _buildDemoQrTile(
-              title: 'Shri Ram Mandir Trust',
-              subtitle: 'shriram.mandir.trust@yesbank',
-              amount: 500,
-              icon: Icons.temple_hindu,
-              color: const Color(0xFFFF6B00),
-              onTap: () {
-                Navigator.pop(sheetContext);
-                _handleDetectedData(
-                  UpiQrData(
-                    upiId: 'shriram.mandir.trust@yesbank',
-                    payeeName: 'Shri Ram Mandir Trust',
-                    amount: 500,
-                    note: 'Temple Seva & Daan',
-                    rawData: 'shriram.mandir.trust@yesbank',
-                  ),
-                );
-              },
-            ),
-            _buildDemoQrTile(
-              title: 'Kashi Vishwanath Mandir',
-              subtitle: 'kashivishwanath@sbi',
-              amount: 250,
-              icon: Icons.brightness_high,
-              color: const Color(0xFFE5094C),
-              onTap: () {
-                Navigator.pop(sheetContext);
-                _handleDetectedData(
-                  UpiQrData(
-                    upiId: 'kashivishwanath@sbi',
-                    payeeName: 'Kashi Vishwanath Mandir',
-                    amount: 250,
-                    note: 'Ganga Aarti Seva',
-                    rawData: 'kashivishwanath@sbi',
-                  ),
-                );
-              },
-            ),
-            _buildDemoQrTile(
-              title: 'Pandit Rajesh Sharma',
-              subtitle: 'rajesh.pandit@ybl',
-              amount: 1100,
-              icon: Icons.person_outline,
-              color: const Color(0xFF1E88E5),
-              onTap: () {
-                Navigator.pop(sheetContext);
-                _handleDetectedData(
-                  UpiQrData(
-                    upiId: 'rajesh.pandit@ybl',
-                    payeeName: 'Pandit Rajesh Sharma',
-                    amount: 1100,
-                    note: 'Pooja Dakshina',
-                    rawData: 'rajesh.pandit@ybl',
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton.icon(
-              onPressed: () {
-                Navigator.pop(sheetContext);
-                _showManualUpiDialog();
-              },
-              icon: const Icon(Icons.edit_note_rounded, size: 20),
-              label: const Text('Enter UPI ID / Mobile Number'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: const Color(0xFFE65100),
-                side: const BorderSide(color: Color(0xFFFFCCAA)),
-                minimumSize: const Size.fromHeight(48),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              'Select Demo Payee / Scan Simulation',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF1E1E1E),
               ),
+            ),
+            const SizedBox(height: 14),
+            _demoTile(
+              name: 'Shri Ram Mandir Trust',
+              upiId: 'shriram.mandir@yesbank',
+              amount: 501,
+              icon: Icons.temple_hindu_rounded,
+              color: const Color(0xFFFF6B00),
+            ),
+            _demoTile(
+              name: 'Janice Wyman',
+              upiId: '+91 70810 00705',
+              amount: 14000,
+              icon: Icons.person_rounded,
+              color: const Color(0xFF97144D),
+            ),
+            _demoTile(
+              name: 'Rohan Kumar',
+              upiId: '+91 70826 60755',
+              amount: 14000,
+              icon: Icons.person_outline_rounded,
+              color: const Color(0xFF1E88E5),
             ),
           ],
         ),
@@ -598,415 +300,534 @@ class _ScanPayViewState extends State<_ScanPayView>
     );
   }
 
-  Widget _buildDemoQrTile({
-    required String title,
-    required String subtitle,
+  Widget _demoTile({
+    required String name,
+    required String upiId,
     required double amount,
     required IconData icon,
     required Color color,
-    required VoidCallback onTap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFAFAFA),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.grey[200]!),
+    return ListTile(
+      onTap: () {
+        Navigator.pop(context);
+        _handleDetectedData(
+          UpiQrData(
+            upiId: upiId,
+            payeeName: name,
+            amount: amount,
+            note: 'Payment to $name',
+            rawData: upiId,
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(shape: BoxShape.circle,
-                  color: color.withValues(alpha: 0.15),
-                ),
-                child: Icon(icon, color: color, size: 22),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-                    Text(subtitle, style: TextStyle(fontSize: 11.5, color: Colors.grey[600])),
-                  ],
-                ),
-              ),
-              Text('₹${amount.toInt()}',
-                style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: Color(0xFFE65100)),
-              ),
-              const SizedBox(width: 4),
-              const Icon(Icons.chevron_right, color: Colors.grey),
-            ],
-          ),
-        ),
+        );
+      },
+      leading: CircleAvatar(
+        backgroundColor: color.withValues(alpha: 0.15),
+        child: Icon(icon, color: color),
       ),
-    );
-  }
-
-  void _showManualUpiDialog() {
-    showDialog(
-      context: context,
-      builder: (dialogCtx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Enter UPI ID / Phone Number', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17)),
-        content: TextField(
-          controller: _upiIdController,
-          autofocus: true,
-          decoration: InputDecoration(
-            hintText: 'e.g. pujariji@upi or 9876543210@ybl',
-            hintStyle: TextStyle(fontSize: 13, color: Colors.grey[400]),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          ),
+      title: Text(
+        name,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      ),
+      subtitle: Text(
+        upiId,
+        style: const TextStyle(fontSize: 12, color: Colors.grey),
+      ),
+      trailing: Text(
+        '₹${amount.toStringAsFixed(0)}',
+        style: const TextStyle(
+          fontWeight: FontWeight.w800,
+          fontSize: 15,
+          color: Color(0xFFE65100),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogCtx),
-            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final id = _upiIdController.text.trim();
-              Navigator.pop(dialogCtx);
-              if (id.isNotEmpty) _handleDetectedData(UpiQrData.parse(id));
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFE65100),
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-            child: const Text('Continue'),
-          ),
-        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<PaymentBloc, PaymentState>(
-      listener: (context, state) {
-        if (state.status == PaymentBlocStatus.success && state.currentPayment != null) {
-          context.pushReplacement('/upi/status', extra: state.currentPayment);
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: SafeArea(
-          child: Column(
-            children: [
-              // Top Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
-                      onPressed: () => context.pop(),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ----------------------------------------------------
+            // TOP BAR: < SCAN ANY UPI QR [Flash]
+            // ----------------------------------------------------
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Colors.black87,
+                      size: 20,
                     ),
-                    const Text(
-                      'Scan & Pay',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    onPressed: () => context.pop(),
+                  ),
+                  const Text(
+                    'SCAN ANY UPI QR',
+                    style: TextStyle(
+                      color: Color(0xFF212121),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
                     ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            _isTorchOn ? Icons.flash_on : Icons.flash_off,
-                            color: _isTorchOn ? Colors.amber : Colors.white,
-                          ),
-                          onPressed: _toggleTorch,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.flip_camera_ios_outlined, color: Colors.white),
-                          onPressed: _switchCamera,
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.photo_library_outlined, color: Colors.white),
-                          onPressed: _showGalleryOrDemoSheet,
-                        ),
-                      ],
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      _isTorchOn
+                          ? Icons.flash_on_rounded
+                          : Icons.flash_off_rounded,
+                      color: _isTorchOn
+                          ? const Color(0xFFFF6B00)
+                          : Colors.black87,
+                      size: 22,
                     ),
-                  ],
-                ),
+                    onPressed: _toggleTorch,
+                  ),
+                ],
               ),
+            ),
 
-              const SizedBox(height: 12),
-              const Text(
-                'Align QR code inside the box to pay',
-                style: TextStyle(color: Colors.white70, fontSize: 13),
-              ),
-              const SizedBox(height: 16),
+            const SizedBox(height: 10),
 
-              // Scanner Viewfinder Area
-              Expanded(
-                child: Center(
-                  child: Container(
-                    width: 280,
-                    height: 280,
+            // ----------------------------------------------------
+            // VIEWFINDER BOX WITH ORANGE ROUNDED CORNERS
+            // ----------------------------------------------------
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 270,height: 270,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(26),
-                      border: Border.all(
-                        color: _hasDetected ? const Color(0xFF00C853): const Color(0xFFFF6B00),
-                        width: 2.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: (_hasDetected ? const Color(0xFF00C853) : const Color(0xFFFF6B00)).withValues(alpha: 0.35),
-                          blurRadius: 18,
-                          spreadRadius: 2,
-                        ),
-                      ],
+                      color: const Color(0xFFF2F2F2),
+                      borderRadius: BorderRadius.circular(28),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // Live Camera Scanner
-                          MobileScanner(
+                    child: Stack(
+                      children: [
+                        // Live Scanner Preview
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(28),
+                          child: MobileScanner(
                             controller: cameraController,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error) {
                               return Container(
-                                color: const Color(0xFF1E1E1E),
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.videocam_off_outlined,color: Colors.white54,size: 46),
-                                    const SizedBox(height: 10),
-                                    const Text(
-                                      'Camera Not Available',
-                                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 14),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    const Text(
-                                      'Use the simulate button below to test scanner',
-                                      textAlign: TextAlign.center,style: TextStyle(color: Colors.white60,fontSize: 11),
-                                    ),
-                                  ],
+                                color: const Color(0xFFEEEEEE),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.qr_code_2_rounded,
+                                    size: 110,
+                                    color: Colors.grey[400],
+                                  ),
                                 ),
                               );
                             },
                             onDetect: _onBarcodeDetected,
                           ),
+                        ),
 
-                          // 4 Corner brackets
-                          _CornerBrackets(color: _hasDetected ? const Color(0xFF00C853) : const Color(0xFFFF6B00)),
+                        // Corner Brackets with bold orange rounded corners
+                        const _BoldCornerBrackets(color: Color(0xFFFF6B00)),
 
-                          // Animated Scan Laser Line
-                          if (!_hasDetected)
-                            AnimatedBuilder(
-                              animation: _scanAnimation,
-                              builder: (context, child) {
-                                return Positioned(
-                                  top: _scanAnimation.value * 260,
-                                  left: 12,
-                                  right: 12,
-                                  child: Container(
-                                    height: 3,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFF6B00),
-                                      borderRadius: BorderRadius.circular(2),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: const Color(0xFFFF6B00)
-                                              .withValues(alpha: 0.85),
-                                          blurRadius: 12,
-                                          spreadRadius: 3,
-                                        ),
-                                      ],
+                        // Scanning Laser Line
+                        AnimatedBuilder(
+                          animation: _scanAnimation,
+                          builder: (context, child) {
+                            return Positioned(
+                              top: _scanAnimation.value * 250,
+                              left: 16,
+                              right: 16,
+                              child: Container(
+                                height: 3,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFF6B00),
+                                  borderRadius: BorderRadius.circular(2),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(
+                                        0xFFFF6B00,
+                                      ).withValues(alpha: 0.8),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-
-                          // Subtle watermark icon
-                          if (!_hasDetected)
-                            Icon(
-                              Icons.qr_code_2_rounded,
-                              size: 110,
-                              color: Colors.white.withValues(alpha: 0.12),
-                            ),
-                        ],
-                      ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ),
 
-              // Bottom Section: Manual Enter UPI ID / Demo QR trigger
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-                decoration: const BoxDecoration(
-                  color: Color(0xFF181818),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Simulate Scan button
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          _handleDetectedData(
-                            UpiQrData(
-                              upiId: 'shriram.mandir.trust@yesbank',
-                              payeeName: 'Shri Ram Mandir Trust',
-                              amount: 500,
-                              note: 'Temple Seva & Daan',
-                              rawData: 'upi://pay?pa=shriram.mandir.trust@yesbank&pn=Shri%20Ram%20Mandir%20Trust&am=500&tn=Temple%20Seva%20Daan',
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.qr_code_scanner_rounded, size: 20),
-                        label: const Text(
-                          'Simulate Scan Mandir QR',
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                  const SizedBox(height: 20),
+
+                  // ----------------------------------------------------
+                  // BHIM UPI LOGO ROW & ACTIONS
+                  // ----------------------------------------------------
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: _showSimulateDialog,
+                        icon: const Icon(
+                          Icons.photo_library_outlined,
+                          color: Color(0xFF616161),
+                          size: 24,
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFF6B00),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 2,
-                        ),
+                        tooltip: 'Upload QR from gallery',
                       ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Manual UPI ID button
-                    InkWell(
-                      onTap: _showManualUpiDialog,
-                      borderRadius: BorderRadius.circular(12),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      const SizedBox(width: 16),
+                      // BHIM UPI branding badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.grey[300]!),
+                        ),
                         child: Row(
-                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.edit_note, color: Colors.white70, size: 18),
-                            SizedBox(width: 6),
-                            Text(
-                              'Or enter UPI ID / Mobile Number manually',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 13,
-                                decoration: TextDecoration.underline,
+                            RichText(
+                              text: const TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'BHIM ',
+                                    style: TextStyle(
+                                      color: Color(0xFF1E88E5),
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 14,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'UPI ',
+                                    style: TextStyle(
+                                      color: Color(0xFF2E7D32),
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
+                            ),
+                            const SizedBox(width: 4),
+                            // Iconic dual arrows
+                            const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 10,
+                              color: Color(0xFFFF6B00),
+                            ),
+                            const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 10,
+                              color: Color(0xFF2E7D32),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: 16),
+                      IconButton(
+                        onPressed: _toggleTorch,
+                        icon: Icon(
+                          _isTorchOn
+                              ? Icons.flashlight_on_rounded
+                              : Icons.flashlight_off_rounded,
+                          color: _isTorchOn
+                              ? const Color(0xFFFF6B00)
+                              : const Color(0xFF616161),
+                          size: 24,
+                        ),
+                        tooltip: 'Toggle Flashlight',
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // ----------------------------------------------------
+            // BOTTOM SHEET: RECENT CONTACTS
+            // ----------------------------------------------------
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFFAFAFA),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(28),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 16,
+                    offset: const Offset(0, -4),
+                  ),
+                ],
+              ),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Handle
+                  Center(
+                    child: Container(
+                      width: 36,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  const Center(
+                    child: Text(
+                      'Recent Contacts',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF616161),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Search Bar with search icon and mic
+                  Container(
+                    height: 44,
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.grey[200]!),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.search,
+                          color: Color(0xFF9E9E9E),
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            style: const TextStyle(fontSize: 13.5),
+                            decoration: const InputDecoration(
+                              hintText: 'Search...',
+                              hintStyle: TextStyle(
+                                color: Color(0xFFBDBDBD),
+                                fontSize: 13.5,
+                              ),
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                            ),
+                            onSubmitted: (query) {
+                              if (query.trim().isNotEmpty) {
+                                context.push(
+                                  '/upi/pay',
+                                  extra: {
+                                    'name': query.trim(),
+                                    'phone': query.trim(),
+                                    'amount': 14000.0,
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                        const Icon(
+                          Icons.mic_none_outlined,
+                          color: Color(0xFF757575),
+                          size: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Horizontal Recent Contacts Avatar List
+                  SizedBox(
+                    height: 80,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: _recentContacts.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 14),
+                      itemBuilder: (context, index) {
+                        final contact = _recentContacts[index];
+                        final name = contact['name'] as String;
+                        final phone = contact['phone'] as String;
+                        final color = contact['color'] as Color;
+
+                        return InkWell(
+                          onTap: () {
+                            context.push(
+                              '/upi/pay',
+                              extra: {
+                                'name': name,
+                                'phone': phone,
+                                'amount': 14000.0,
+                              },
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(30),
+                          child: SizedBox(
+                            width: 60,
+                            child: Column(
+                              children: [
+                                Container(
+                                  width: 48,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: color,
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 2,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: color.withValues(alpha: 0.35),
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      name.isNotEmpty ? name[0] : 'U',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  name,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF212121),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-/// 4 Corner Brackets for Scanner viewfinder
-class _CornerBrackets extends StatelessWidget {
+/// 4 Corner Brackets for Scanner Viewfinder matching Screen 2
+class _BoldCornerBrackets extends StatelessWidget {
   final Color color;
-  const _CornerBrackets({required this.color});
+  const _BoldCornerBrackets({required this.color});
 
   @override
   Widget build(BuildContext context) {
-    const size = 32.0;
-    const thickness = 4.0;
-    const radius = 12.0;
+    const size = 36.0;
+    const thickness = 4.5;
+    const radius = 24.0;
 
     return Stack(
       children: [
         // Top-left
         Positioned(
-          top: 8,
-          left: 8,
+          top: 0,
+          left: 0,
           child: Container(
             width: size,
             height: size,
             decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: color, width: thickness),
-                left: BorderSide(color: color, width: thickness),
-              ),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(radius),
               ),
+              border: Border(
+                top: BorderSide(color: color, width: thickness),
+                left: BorderSide(color: color, width: thickness),
+              ),
             ),
           ),
         ),
+
         // Top-right
         Positioned(
-          top: 8,
-          right: 8,
+          top: 0,
+          right: 0,
           child: Container(
             width: size,
             height: size,
             decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(radius),
+              ),
               border: Border(
                 top: BorderSide(color: color, width: thickness),
                 right: BorderSide(color: color, width: thickness),
               ),
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(radius),
-              ),
             ),
           ),
         ),
+
         // Bottom-left
         Positioned(
-          bottom: 8,
-          left: 8,
+          bottom: 0,
+          left: 0,
           child: Container(
             width: size,
             height: size,
             decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(radius),
+              ),
               border: Border(
                 bottom: BorderSide(color: color, width: thickness),
                 left: BorderSide(color: color, width: thickness),
               ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(radius),
-              ),
             ),
           ),
         ),
+
         // Bottom-right
         Positioned(
-          bottom: 8,
-          right: 8,
+          bottom: 0,
+          right: 0,
           child: Container(
             width: size,
             height: size,
             decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomRight: Radius.circular(radius),
+              ),
               border: Border(
                 bottom: BorderSide(color: color, width: thickness),
                 right: BorderSide(color: color, width: thickness),
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(radius),
               ),
             ),
           ),
