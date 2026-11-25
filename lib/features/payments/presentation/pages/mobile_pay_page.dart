@@ -106,11 +106,7 @@ class _MobilePayPageState extends State<MobilePayPage> {
       if (query.isEmpty) {
         _filteredContacts = _allContacts;
       } else {
-        _filteredContacts = _allContacts
-            .where((c) =>
-                c.name.toLowerCase().contains(query) ||
-                c.phoneOrUpi.toLowerCase().contains(query))
-            .toList();
+        _filteredContacts = _allContacts.where((c) =>c.name.toLowerCase().contains(query) || c.phoneOrUpi.toLowerCase().contains(query)).toList();
       }
     });
   }
