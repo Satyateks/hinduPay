@@ -30,10 +30,8 @@ class UpiServiceIcon extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             iconWidget,//const SizedBox(height: 6),
-            SizedBox(
-              height: 32,
-              child: Text(
-                label,
+            SizedBox(height: 32,
+              child: Text(label,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -42,8 +40,7 @@ class UpiServiceIcon extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF2C2C2C),
-                  height: 1.2,
-                  letterSpacing: -0.2,
+                  height: 1.2,letterSpacing: -0.2,
                 ),
               ),
             ),
@@ -72,8 +69,7 @@ class ServiceIconGraphic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 61,
-      height: 61,
+      width: 61,height: 61,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -95,8 +91,7 @@ class ServiceIconGraphic extends StatelessWidget {
           //  ),
           if (secondaryIcon != null)
             Positioned(
-              right: 0,
-              bottom: 0,
+              right: 0,bottom: 0,
               child: Container(
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
