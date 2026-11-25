@@ -210,16 +210,49 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                       ),
                       const SizedBox(width: 12),
 
-                      // User profile button
+                      // Transaction History button
                       InkWell(
-                        onTap: () => context.push('/main/profile'),
+                        onTap: () => context.push('/upi/history'),
                         borderRadius: BorderRadius.circular(24),
                         child: Container(
                           width: 44,
                           height: 44,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color:const Color(0xFFF9B378),
+                            color: const Color(0xFFF9B378),
+                            border: Border.all(
+                              color: const Color(0xFFFFDFC2),
+                              width: 1.2,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.history_rounded,
+                              color: Color(0xFF424242),
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+
+                      // UPI Settings / Profile button
+                      InkWell(
+                        onTap: () => context.push('/upi/settings'),
+                        borderRadius: BorderRadius.circular(24),
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFFF9B378),
                             border: Border.all(
                               color: const Color(0xFFFFD9C2),
                               width: 1.2,
@@ -305,8 +338,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
                           context,
                           serviceTitle: 'Mobile Recharges',
                           category: 'Recharges',
-                          icon: AppImg.electricityImg,
-                          // gradientColors: const [Color(0xFFE91E63), Color(0xFFC2185B)],
+                          icon: AppImg.mobileRechargeImg,
                         ),
                       ),
                     ],
@@ -656,8 +688,8 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
 
               // Add Account Card
               InkWell(
-                onTap: ()=> ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('UPI Bank Link feature available'))),
-                  borderRadius: BorderRadius.circular(24),
+                onTap: () => context.push('/upi/settings'),
+                borderRadius: BorderRadius.circular(24),
                 child: Container(
                   height: 52,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
