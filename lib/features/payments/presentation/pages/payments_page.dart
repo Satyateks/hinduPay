@@ -286,20 +286,18 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  child: Image.asset(
-                AppImg.bannerImg,
-                width: 170,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 140,
-                  alignment: Alignment.centerRight,
-                  child: const Icon(
-                    Icons.temple_hindu_rounded,
-                    size: 110,
-                    color: Color(0xFFD48B55),
+                  child: InkWell( onTap: () => context.push('/main/donation'),
+                    child: Image.asset(AppImg.bannerImg,width: 170,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 140,alignment: Alignment.centerRight,
+                      child: const Icon(
+                        Icons.temple_hindu_rounded,
+                        size: 110, color: Color(0xFFD48B55),
+                      ),
+                    ),
+                   ),
                   ),
-                ),
-              ),
                 ),
               ),
 
@@ -450,8 +448,7 @@ class _PaymentsPageViewState extends State<_PaymentsPageView> {
   // ================================================================
 
   Widget _buildSectionHeader(String title) {
-    return Text(
-      title,
+    return Text(title,
       style: const TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.w700,
