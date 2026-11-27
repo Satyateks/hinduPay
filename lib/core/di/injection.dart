@@ -14,6 +14,12 @@ import '../../features/astrologer/domain/repositories/astrologer_repository.dart
 import '../../features/astrologer/domain/usecases/get_astrologer_by_id.dart';
 import '../../features/astrologer/domain/usecases/get_astrologers.dart';
 import '../../features/astrologer/presentation/bloc/astrologer_bloc.dart';
+import '../../features/horoscope/data/datasources/horoscope_remote_datasource.dart';
+import '../../features/horoscope/data/repositories/horoscope_repository_impl.dart';
+import '../../features/horoscope/domain/repositories/horoscope_repository.dart';
+import '../../features/horoscope/domain/usecases/get_horoscope.dart';
+import '../../features/horoscope/domain/usecases/get_zodiac_signs.dart';
+import '../../features/horoscope/presentation/bloc/horoscope_bloc.dart';
 import '../../features/pandit/data/datasources/pandit_remote_datasource.dart';
 import '../../features/pandit/data/repositories/pandit_repository_impl.dart';
 import '../../features/pandit/domain/repositories/pandit_repository.dart';
@@ -173,7 +179,8 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton<PanditRemoteDataSource>(() => PanditRemoteDataSourceImpl());
   getIt.registerLazySingleton<PanditRepository>(() => PanditRepositoryImpl(remoteDataSource: getIt<PanditRemoteDataSource>()));
   getIt.registerLazySingleton(() => GetPandits(repository: getIt<PanditRepository>()));  // UseCase
-  getIt.registerFactory(() => PanditBloc(getPandits: getIt<GetPandits>()));  // Bloc
+  getIt.registerLazySingleton(() => GetPoojaServices(repository: getIt<PanditRepository>()));  // UseCase
+  getIt.registerFactory(() => PanditBloc(getPandits: getIt<GetPandits>(), getPoojaServices: getIt<GetPoojaServices>(), repository: getIt<PanditRepository>()));  // Bloc
 
   // ==================== ASTROLOGER ====================
   getIt.registerLazySingleton<AstrologerRemoteDataSource>(() => AstrologerRemoteDataSourceImpl());
@@ -184,6 +191,17 @@ Future<void> setupDependencies() async {
     getAstrologers: getIt<GetAstrologers>(),
     getAstrologerById: getIt<GetAstrologerById>(),
     repository: getIt<AstrologerRepository>(),
+  ));
+
+  // ==================== HOROSCOPE ====================
+  getIt.registerLazySingleton<HoroscopeRemoteDataSource>(() => HoroscopeRemoteDataSourceImpl());
+  getIt.registerLazySingleton<HoroscopeRepository>(() => HoroscopeRepositoryImpl(remoteDataSource: getIt<HoroscopeRemoteDataSource>()));
+  getIt.registerLazySingleton<GetZodiacSigns>(() => GetZodiacSigns(repository: getIt<HoroscopeRepository>()));
+  getIt.registerLazySingleton<GetHoroscope>(() => GetHoroscope(repository: getIt<HoroscopeRepository>()));
+  getIt.registerFactory<HoroscopeBloc>(() => HoroscopeBloc(
+    getZodiacSigns: getIt<GetZodiacSigns>(),
+    getHoroscope: getIt<GetHoroscope>(),
+    repository: getIt<HoroscopeRepository>(),
   ));
 
 
