@@ -18,7 +18,14 @@ import '../../features/astrologer/presentation/bloc/astrologer_bloc.dart';
 import '../../features/astrologer/presentation/bloc/astrologer_event.dart';
 import '../../features/astrologer/presentation/pages/astrologer_list_page.dart';
 import '../../features/astrologer/presentation/pages/astrologer_profile_page.dart';
+import '../../features/horoscope/presentation/bloc/horoscope_bloc.dart';
+import '../../features/horoscope/presentation/bloc/horoscope_event.dart';
+import '../../features/horoscope/presentation/pages/horoscope_page.dart';
+import '../../features/pandit/domain/entities/pandit.dart';
 import '../../features/pandit/presentation/bloc/pandit_bloc.dart';
+import '../../features/pandit/presentation/bloc/pandit_event.dart';
+import '../../features/pandit/presentation/pages/pandit_booking_page.dart';
+import '../../features/pandit/presentation/pages/pandit_cart_page.dart';
 import '../../features/pandit/presentation/pages/pandit_page.dart';
 import '../../features/payments/domain/entities/payment.dart';
 import '../../features/payments/presentation/pages/add_beneficiary_page.dart';
@@ -180,6 +187,20 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // ----------------------------------------------------------
+    // HOROSCOPE
+    // ----------------------------------------------------------
+    GoRoute(
+      path: '/main/horoscope',
+      name: 'horoscope',
+      builder: (context, state) {
+        return BlocProvider<HoroscopeBloc>(
+          create: (_) => getIt<HoroscopeBloc>()..add(const LoadHoroscope()),
+          child: const HoroscopePage(),
+        );
+      },
+    ),
+
+    // ----------------------------------------------------------
     // PANDITS (BOOKING FLOW FROM HOME QUICK ACTION)
     // ----------------------------------------------------------
     GoRoute(
@@ -187,10 +208,34 @@ final GoRouter appRouter = GoRouter(
       name: 'pandits',
       builder: (context, state) {
         return BlocProvider<PanditBloc>(
-          create: (_) => getIt<PanditBloc>(),
+          create: (_) => getIt<PanditBloc>()..add(const LoadPoojaServicesEvent()),
           child: const PanditsPage(),
         );
       },
+      routes: [
+        GoRoute(
+          path: 'booking',
+          name: 'pandit-booking',
+          builder: (context, state) {
+            final service = state.extra as PanditPoojaService;
+            return BlocProvider<PanditBloc>(
+              create: (_) => getIt<PanditBloc>()..add(InitBookingFlowEvent(service)),
+              child: PanditBookingPage(service: service),
+            );
+          },
+        ),
+        GoRoute(
+          path: 'cart',
+          name: 'pandit-cart',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>?;
+            return BlocProvider<PanditBloc>(
+              create: (_) => getIt<PanditBloc>()..add(LoadSamagriEvent(service: extra?['service'] as PanditPoojaService?)),
+              child: PanditCartPage(bookingData: extra),
+            );
+          },
+        ),
+      ],
     ),
 
     // ----------------------------------------------------------
@@ -294,6 +339,17 @@ final GoRouter appRouter = GoRouter(
                 );
               },
               routes: [
+                GoRoute(
+                  path: 'horoscope',
+                  name: 'astrologers-horoscope',
+                  builder: (context, state) {
+                    return BlocProvider<HoroscopeBloc>(
+                      create: (_) =>
+                          getIt<HoroscopeBloc>()..add(const LoadHoroscope()),
+                      child: const HoroscopePage(),
+                    );
+                  },
+                ),
                 GoRoute(
                   path: 'profile/:id',
                   name: 'astrologer-profile',
