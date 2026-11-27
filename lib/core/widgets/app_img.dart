@@ -72,5 +72,15 @@ class AppImg {
   static const String scanPayImg = "$imageDir/scanPay.png";
   static const String banktransferImg = "$imageDir/banktransfer.png";
   static const String payTransferImg = "$imageDir/payTransfer.png";
+
+
+  ///astrologer
+
+  static const String astrologerImg = "$imageDir/astrologer.png";
+  static const String astrologer1Img = "$imageDir/astrologer1.png";
+  static const String astrologer2Img = "$imageDir/astrologer2.png";
+  static const String astrologer3Img = "$imageDir/astrologer3.png";
+  static const String astrologer4Img = "$imageDir/astrologer4.png";  
   static const String Img = "$imageDir/.png";
+  
 }
