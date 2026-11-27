@@ -13,6 +13,11 @@ import '../../features/donation/presentation/pages/donation_payment_page.dart';
 import '../../features/donation/presentation/pages/donation_temple_list.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
 import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/astrologer/domain/entities/astrologer.dart';
+import '../../features/astrologer/presentation/bloc/astrologer_bloc.dart';
+import '../../features/astrologer/presentation/bloc/astrologer_event.dart';
+import '../../features/astrologer/presentation/pages/astrologer_list_page.dart';
+import '../../features/astrologer/presentation/pages/astrologer_profile_page.dart';
 import '../../features/pandit/presentation/bloc/pandit_bloc.dart';
 import '../../features/pandit/presentation/pages/pandit_page.dart';
 import '../../features/payments/domain/entities/payment.dart';
@@ -175,6 +180,20 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // ----------------------------------------------------------
+    // PANDITS (BOOKING FLOW FROM HOME QUICK ACTION)
+    // ----------------------------------------------------------
+    GoRoute(
+      path: '/main/pandits',
+      name: 'pandits',
+      builder: (context, state) {
+        return BlocProvider<PanditBloc>(
+          create: (_) => getIt<PanditBloc>(),
+          child: const PanditsPage(),
+        );
+      },
+    ),
+
+    // ----------------------------------------------------------
     // MAIN APPLICATION
     // ----------------------------------------------------------
     StatefulShellRoute.indexedStack(
@@ -260,27 +279,61 @@ final GoRouter appRouter = GoRouter(
         ),
 
         // ------------------------------------------------------
-        // PANDITS / ASTROLOGY (TAB 1)
+        // ASTROLOGERS / ASTROLOGY (TAB 1)
         // ------------------------------------------------------
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: '/main/pandits',
-              name: 'pandits',
+              path: '/main/astrologers',
+              name: 'astrologers',
               builder: (context, state) {
-                return BlocProvider<PanditBloc>(
-                  create: (_) => getIt<PanditBloc>(),
-                  child: const PanditsPage(),
+                return BlocProvider<AstrologerBloc>(
+                  create: (_) =>
+                      getIt<AstrologerBloc>()..add(const LoadAstrologers()),
+                  child: const AstrologerListPage(),
                 );
               },
-
               routes: [
                 GoRoute(
-                  path: 'pandit/:id',
-                  name: 'pandit-detail',
+                  path: 'profile/:id',
+                  name: 'astrologer-profile',
                   builder: (context, state) {
-                    final panditId = state.pathParameters['id'];
-                    return _PlaceholderPage(title: 'Pandit: $panditId');
+                    final astrologerId = state.pathParameters['id']!;
+                    final extra = state.extra;
+                    Astrologer? initialAstrologer;
+                    AstrologerBloc? existingBloc;
+
+                    if (extra is Map<String, dynamic>) {
+                      final candidateAstrologer = extra['astrologer'];
+                      final candidateBloc = extra['bloc'];
+                      if (candidateAstrologer is Astrologer) {
+                        initialAstrologer = candidateAstrologer;
+                      }
+                      if (candidateBloc is AstrologerBloc) {
+                        existingBloc = candidateBloc;
+                      }
+                    } else if (extra is Astrologer) {
+                      initialAstrologer = extra;
+                    }
+
+                    final page = AstrologerProfilePage(
+                      astrologerId: astrologerId,
+                      initialAstrologer: initialAstrologer,
+                    );
+
+                    if (existingBloc != null) {
+                      return BlocProvider<AstrologerBloc>.value(
+                        value: existingBloc,
+                        child: page,
+                      );
+                    }
+
+                    return BlocProvider<AstrologerBloc>(
+                      create: (_) =>
+                          getIt<AstrologerBloc>()
+                            ..add(LoadAstrologerProfile(astrologerId)),
+                      child: page,
+                    );
                   },
                 ),
               ],

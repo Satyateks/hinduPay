@@ -8,6 +8,12 @@ import '../../features/home/data/repositories/home_repository_impl.dart';
 import '../../features/home/domain/repositories/home_repository.dart';
 import '../../features/home/domain/usecases/get_home_data.dart';
 import '../../features/home/presentation/bloc/home_bloc.dart';
+import '../../features/astrologer/data/datasources/astrologer_remote_datasource.dart';
+import '../../features/astrologer/data/repositories/astrologer_repository_impl.dart';
+import '../../features/astrologer/domain/repositories/astrologer_repository.dart';
+import '../../features/astrologer/domain/usecases/get_astrologer_by_id.dart';
+import '../../features/astrologer/domain/usecases/get_astrologers.dart';
+import '../../features/astrologer/presentation/bloc/astrologer_bloc.dart';
 import '../../features/pandit/data/datasources/pandit_remote_datasource.dart';
 import '../../features/pandit/data/repositories/pandit_repository_impl.dart';
 import '../../features/pandit/domain/repositories/pandit_repository.dart';
@@ -168,6 +174,17 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton<PanditRepository>(() => PanditRepositoryImpl(remoteDataSource: getIt<PanditRemoteDataSource>()));
   getIt.registerLazySingleton(() => GetPandits(repository: getIt<PanditRepository>()));  // UseCase
   getIt.registerFactory(() => PanditBloc(getPandits: getIt<GetPandits>()));  // Bloc
+
+  // ==================== ASTROLOGER ====================
+  getIt.registerLazySingleton<AstrologerRemoteDataSource>(() => AstrologerRemoteDataSourceImpl());
+  getIt.registerLazySingleton<AstrologerRepository>(() => AstrologerRepositoryImpl(remoteDataSource: getIt<AstrologerRemoteDataSource>()));
+  getIt.registerLazySingleton<GetAstrologers>(() => GetAstrologers(repository: getIt<AstrologerRepository>()));
+  getIt.registerLazySingleton<GetAstrologerById>(() => GetAstrologerById(repository: getIt<AstrologerRepository>()));
+  getIt.registerFactory<AstrologerBloc>(() => AstrologerBloc(
+    getAstrologers: getIt<GetAstrologers>(),
+    getAstrologerById: getIt<GetAstrologerById>(),
+    repository: getIt<AstrologerRepository>(),
+  ));
 
 
 
