@@ -27,10 +27,7 @@ void main() {
   group('Astrologer module', () {
     test('MainShell shows bottom bar on astrologer list and profile routes', () {
       expect(MainShell.shouldShowBottomBar('/main/astrologers'), isTrue);
-      expect(
-        MainShell.shouldShowBottomBar('/main/astrologers/profile/sivaguru'),
-        isTrue,
-      );
+      expect(MainShell.shouldShowBottomBar('/main/astrologers/profile/sivaguru'),isTrue);
     });
 
     test('AstrologerBloc loads, filters by category and search, and toggles favorite', () async {
@@ -39,35 +36,20 @@ void main() {
 
       await expectLater(
         bloc.stream,
-        emitsThrough(
-          isA<AstrologerState>()
+        emitsThrough(isA<AstrologerState>()
               .having((s) => s.status, 'status', AstrologerStatus.loaded)
               .having((s) => s.filteredAstrologers.length, 'count', 6),
         ),
       );
 
       bloc.add(const SelectAstrologerCategory('Vedic'));
-      await expectLater(
-        bloc.stream,
-        emits(isA<AstrologerState>()
-              .having((s) => s.selectedCategory, 'selectedCategory', 'Vedic')
-              .having((s) => s.filteredAstrologers.map((a) => a.name).toList(),'names',['Chajapathi']),
-        ),
-      );
-
+      await expectLater(bloc.stream,emits(isA<AstrologerState>().having((s) => s.selectedCategory, 'selectedCategory', 'Vedic').having((s) => s.filteredAstrologers.map((a) => a.name).toList(),'names',['Chajapathi'])));
       bloc.add(const SelectAstrologerCategory('All'));
       bloc.add(const SearchAstrologers('Bengali'));
-      await expectLater(bloc.stream,
-        emitsThrough(isA<AstrologerState>().having((s) => s.filteredAstrologers.map((a) => a.name).toList(),'bengali astrologers',['Maishaa', 'Prakhar'])),
-      );
+      await expectLater(bloc.stream,emitsThrough(isA<AstrologerState>().having((s) => s.filteredAstrologers.map((a) => a.name).toList(),'bengali astrologers',['Maishaa', 'Prakhar'])));
 
       bloc.add(const ToggleFavoriteAstrologer('sivaguru'));
-      await expectLater(
-        bloc.stream,
-        emitsThrough(
-          isA<AstrologerState>().having((s) => s.astrologers.firstWhere((a) => a.id == 'sivaguru').isFavorite,'sivaguru favorite',isTrue),
-        ),
-      );
+      await expectLater(bloc.stream,emitsThrough(isA<AstrologerState>().having((s) => s.astrologers.firstWhere((a) => a.id == 'sivaguru').isFavorite,'sivaguru favorite',isTrue)));
 
       await bloc.close();
     });
@@ -108,11 +90,7 @@ void main() {
     testWidgets('AstrologerProfilePage renders profile banner, bio, and consultation sheet', (tester) async {
       final bloc = _createTestBloc()..add(const LoadAstrologers());
       await tester.pumpWidget(
-        MaterialApp(
-          home: BlocProvider<AstrologerBloc>.value(value: bloc,
-            child: const AstrologerProfilePage(astrologerId: 'sivaguru')
-          ),
-        ),
+        MaterialApp(home: BlocProvider<AstrologerBloc>.value(value: bloc,child: const AstrologerProfilePage(astrologerId: 'sivaguru'))),
       );
 
       await tester.pumpAndSettle();
