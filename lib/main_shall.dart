@@ -7,6 +7,8 @@ import 'core/widgets/app_bottom_navigation.dart';
 class MainShell extends StatelessWidget {
   static const Set<String> _rootTabRoutes = {
     '/main/home',
+    '/main/astrologers',
+    '/main/horoscope',
     '/main/pandits',
     '/main/upi',
     '/main/donation',
@@ -21,7 +23,9 @@ class MainShell extends StatelessWidget {
   static bool shouldShowBottomBar(String? matchedLocation) {
     if (matchedLocation == null || matchedLocation.isEmpty) return false;
     final normalizedLocation = matchedLocation.split('?').first;
-    return _rootTabRoutes.contains(normalizedLocation);
+    if (_rootTabRoutes.contains(normalizedLocation)) return true;
+    return normalizedLocation.startsWith('/main/astrologers/profile/') ||
+        normalizedLocation.startsWith('/main/astrologers/horoscope');
   }
 
   void _onTabSelected(int index) {navigationShell.goBranch(index,initialLocation: index == navigationShell.currentIndex);}
