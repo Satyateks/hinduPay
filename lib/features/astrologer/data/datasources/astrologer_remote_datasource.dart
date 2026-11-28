@@ -170,11 +170,9 @@ class AstrologerRemoteDataSourceImpl implements AstrologerRemoteDataSource {
   @override
   Future<bool> toggleFavorite(String astrologerId) async {
     if (_favoriteIds.contains(astrologerId)) {
-      _favoriteIds.remove(astrologerId);
-      return false;
+      _favoriteIds.remove(astrologerId); return false;
     }
-    _favoriteIds.add(astrologerId);
-    return true;
+    _favoriteIds.add(astrologerId); return true;
   }
 
   AstrologerModel _toModelWithFavorite(Map<String, dynamic> raw) {
