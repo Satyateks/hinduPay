@@ -2,15 +2,9 @@ import '../../../../core/widgets/app_img.dart';
 import '../models/astrologer_model.dart';
 
 abstract class AstrologerRemoteDataSource {
-  Future<List<AstrologerModel>> getAstrologers({
-    String? category,
-    String? query,
-  });
-
+  Future<List<AstrologerModel>> getAstrologers({String? category,String? query});
   Future<List<String>> getCategories();
-
   Future<AstrologerModel> getAstrologerById(String id);
-
   Future<bool> toggleFavorite(String astrologerId);
 }
 
@@ -18,12 +12,9 @@ class AstrologerRemoteDataSourceImpl implements AstrologerRemoteDataSource {
   final Set<String> _favoriteIds = <String>{};
 
   static const List<String> _categories = [
-    'All',
-    'Numerology',
-    'Nadi',
-    'Vedic',
-    'Prashana',
-    'Palmistry',
+    'All','Numerology',
+    'Nadi','Vedic',
+    'Prashana','Palmistry',
     'Tarot',
   ];
 
@@ -141,8 +132,7 @@ class AstrologerRemoteDataSourceImpl implements AstrologerRemoteDataSource {
 
   @override
   Future<List<AstrologerModel>> getAstrologers({
-    String? category,
-    String? query,
+    String? category,String? query,
   }) async {
     await Future.delayed(const Duration(milliseconds: 250));
     final normalizedCategory = category?.trim().toLowerCase();
@@ -153,15 +143,11 @@ class AstrologerRemoteDataSourceImpl implements AstrologerRemoteDataSource {
       final languages = List<String>.from(raw['languages'] ?? const []);
       final name = (raw['name']?.toString() ?? '').toLowerCase();
 
-      final matchesCategory =
-          normalizedCategory == null ||
-          normalizedCategory.isEmpty ||
-          normalizedCategory == 'all' ||
+      final matchesCategory = normalizedCategory == null ||
+          normalizedCategory.isEmpty || normalizedCategory == 'all' ||
           specialties.any((s) => s.toLowerCase() == normalizedCategory);
 
-      final matchesQuery =
-          normalizedQuery.isEmpty ||
-          name.contains(normalizedQuery) ||
+      final matchesQuery = normalizedQuery.isEmpty || name.contains(normalizedQuery) ||
           specialties.any((s) => s.toLowerCase().contains(normalizedQuery)) ||
           languages.any((l) => l.toLowerCase().contains(normalizedQuery));
 
@@ -175,8 +161,7 @@ class AstrologerRemoteDataSourceImpl implements AstrologerRemoteDataSource {
   @override
   Future<AstrologerModel> getAstrologerById(String id) async {
     await Future.delayed(const Duration(milliseconds: 150));
-    final match = _mockAstrologers.firstWhere(
-      (item) => item['id'] == id,
+    final match = _mockAstrologers.firstWhere((item) => item['id'] == id,
       orElse: () => throw Exception('Astrologer not found'),
     );
     return _toModelWithFavorite(match);
@@ -194,10 +179,7 @@ class AstrologerRemoteDataSourceImpl implements AstrologerRemoteDataSource {
 
   AstrologerModel _toModelWithFavorite(Map<String, dynamic> raw) {
     final id = raw['id']?.toString() ?? '';
-    return AstrologerModel.fromJson({
-      ...raw,
-      'is_favorite': _favoriteIds.contains(id),
-    });
+    return AstrologerModel.fromJson({...raw,'is_favorite': _favoriteIds.contains(id)});
   }
 }
 
