@@ -35,13 +35,9 @@ class _AstrologerListPageState extends State<AstrologerListPage> {
     try {
       await _speech.initialize(
         onStatus: (_) {
-          if (mounted) {
-            setState(() => _isListening = _speech.isListening);
-          }
+          if (mounted) setState(() => _isListening = _speech.isListening);
         },
-        onError: (error) {
-          debugPrint('Astrologer speech error: $error');
-        },
+        onError: (error) {debugPrint('Astrologer speech error: $error');},
       );
     } catch (_) {
       // Speech recognition may be unavailable in tests or unsupported platforms.
@@ -85,8 +81,7 @@ class _AstrologerListPageState extends State<AstrologerListPage> {
 
   void _openProfile(Astrologer astrologer) {
     final bloc = context.read<AstrologerBloc>();
-    context.pushNamed(
-      'astrologer-profile',
+    context.pushNamed('astrologer-profile',
       pathParameters: {'id': astrologer.id},
       extra: {'astrologer': astrologer, 'bloc': bloc},
     );
@@ -123,8 +118,7 @@ class _AstrologerListPageState extends State<AstrologerListPage> {
                     isListening: _isListening,
                     onChanged: (query) {
                       context.read<AstrologerBloc>().add(
-                        SearchAstrologers(query),
-                      );
+                        SearchAstrologers(query));
                     },
                     onMicTap: _toggleListening,
                     onClearTap: () {
